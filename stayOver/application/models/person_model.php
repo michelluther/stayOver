@@ -3,7 +3,7 @@
 class Person_model extends CI_Model{
 	
 	public function __construct(){
-		SO_ModelInterface::$personModel = $this;
+		SO_DateFactory::setModel($this);
 	}
 	
 	public function getPersonName($id){

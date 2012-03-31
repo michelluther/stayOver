@@ -1,7 +1,5 @@
 <?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 // Data base abstraction for dates
-
-require_once 'classes/So_modelInterface.php';
 require_once 'interfaces/Mpm_jsondata.php';
 require_once 'classes/So_jsonData.php';
 require_once 'classes/So_personFactory.php';
@@ -12,12 +10,12 @@ require_once 'classes/So_dateChild.php';
 class Termin_model extends CI_Model{
 	
 	public function __construct(){
-		SO_ModelInterface::$terminModel = $this;
+		SO_DateFactory::setModel($this);
 	}
 	
 	public function getDatesByDate($beginDate, $endDate){
 		$where = array(	'begda >=' => $beginDate,
-					   	'endda <=' => $endDate);
+					   		  	'endda <=' => $endDate);
 		$this->db->select('id');
 		$this->db->from('tts_dates');
 		$this->db->where($where);

@@ -1,19 +1,35 @@
 <?php
 
 class SO_Person extends SO_JSONData{
+	// Model is injected
+	protected static $model;
+
 	protected $id;
 	protected $name;
 	protected $isHelper;
 	protected $isParent;
 	
-	public function __construct($id){
-		$this->id = $id; 
-		$this->name = $this->person_model->getPersonName($id);
+	public function __construct($id = null){
+		if($id != null){
+			$this->id = $id;
+		}
 	}
 	
+	public static function setModel($model){
+		self::$model = $model;
+	}
+
 	public function getIsHelper(){
 		if (!isset($this->isHelper)){
-			$this->isHelper = $this->person_model->getPersonIsHelper($this->id);
+			$this->isHelper = self::$model->getPersonIsHelper($this->id);
+		}
+	}
+
+	public function init(){
+		if(isset($this->id)){
+			self::$model->getPersonData($this->id);
+		} else {
+			throw new Exception("No ID set, so cannot initialize");
 		}
 	}
 }

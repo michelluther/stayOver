@@ -1,10 +1,13 @@
 <?php
 
 abstract class SO_DateBase extends SO_JSONData {
+	// Model is injected
+	private static $model;
+	
 	private $title;
 	private $beginDate;
-	private $endDate;
 	private $beginTime;
+	private $endDate;
 	private $endTime;
 	private $note;
 	private $children = array();
@@ -12,24 +15,29 @@ abstract class SO_DateBase extends SO_JSONData {
 	private $isPersistent;
 	private $isChanged;
 	
-	public function __construct($id){
-		SO_ModelInterface::$terminModel->getDateFromDB($id);
-		$this->beginDate = $beginDate;
-		$this->endDate = $endDate;
-		$this->beginTime = $beginTime;
-		$this->endTime = $endTime;
-		$this->child = SO_PeopleFactory::getPerson($childID);
+	public function __construct($id = null){
+		if($id != null){
+			$this->id = $id;
+		}
+	}
+	
+	public static function setModel($model){
+		self::$model = $model;
+	}
+	
+	public function init(){
+		$this->model->initData($this);
 	}
 	
 	public function save(){
-		SO_ModelInterface::$terminModel->saveDate($this);
+		$this->model->saveDate($this);
 	}
 	
-	public function setPersistent($persistent){
+	private function setPersistent($persistent){
 		$this->isPersistent = $persistent;
 	}
 	
-	// Setter
+	// Begin Setters
 	public function setTitle($title){
 		$this->title = $title;
 	}
@@ -57,8 +65,8 @@ abstract class SO_DateBase extends SO_JSONData {
 	public function addChild($child){
 		array_push($this->children, $child);	
 	}
-	
-	// Getter
+	// End Setters
+	// Begin Getters
 	public function getTitle($title){
 		return $this->title;
 	}
@@ -82,6 +90,7 @@ abstract class SO_DateBase extends SO_JSONData {
 	public function getNote($note){
 		return $this->note;
 	}
+	// End Getters
 }
 
 

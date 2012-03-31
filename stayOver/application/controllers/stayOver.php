@@ -12,7 +12,7 @@ class StayOver extends SO_BaseController{
 		parent::submit_login();
 		$this->content['view'] = 'home';
 		$nextDates = $this->Termin_model->getDatesByDate('1.1.2012', '31.3.2012');
-		$this->content['data']['nextDates'] = $dates;
+		$this->content['data']['nextDates'] = $nextDates;
 		$this->_callView();
 	}
 	
