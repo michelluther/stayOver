@@ -26,11 +26,11 @@ abstract class SO_DateBase extends SO_JSONData {
 	}
 	
 	public function init(){
-		$this->model->initData($this);
+		self::$model->initData($this);
 	}
 	
 	public function save(){
-		$this->model->saveDate($this);
+		self::$model->saveDate($this);
 	}
 	
 	private function setPersistent($persistent){
@@ -67,7 +67,12 @@ abstract class SO_DateBase extends SO_JSONData {
 	}
 	// End Setters
 	// Begin Getters
-	public function getTitle($title){
+	
+	public function getId(){
+		return $this->id;
+	}
+	
+	public function getTitle(){
 		return $this->title;
 	}
 	
@@ -75,6 +80,9 @@ abstract class SO_DateBase extends SO_JSONData {
 		return $this->beginDate;
 	}
 	
+	public function getBeginDateString(){
+		return $this->beginDate;
+	}
 	public function getEndDate($endDate){
 		return $this->endDate;
 	}

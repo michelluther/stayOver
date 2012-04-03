@@ -50,4 +50,17 @@ class Termin_model extends CI_Model{
 	public function getDateFromDB($id){
 		
 	}
+	
+	public function initData($dateObject){
+		$where = array('id' => $dateObject->getId());
+		$this->db->select('*');
+		$this->db->from('tts_dates');
+		$this->db->where($where);
+		$query = $this->db->get();
+		if($query != false){
+			foreach ($query->result() as $value) {
+				$dateObject->setTitle($value->title);
+			}
+		}
+	}
 }

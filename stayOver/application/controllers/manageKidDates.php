@@ -2,7 +2,7 @@
 
 include_once 'so_base_controller.php';
 
-class ManageKidDates extends ML_Controller{
+class ManageKidDates extends SO_BaseController{
 	public function __construct(){
 		parent::__construct();
 	}

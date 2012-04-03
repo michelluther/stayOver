@@ -13,6 +13,7 @@ class SO_DateFactory{
 	public static function getDate($id){
 		if(!isset($dates[$id])){
 			$dates[$id] = new SO_DateChild($id);
+			$dates[$id]->init();
 		} 
 		return $dates[$id];
 	}
