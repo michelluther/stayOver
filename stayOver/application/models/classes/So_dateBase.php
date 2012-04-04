@@ -76,26 +76,23 @@ abstract class SO_DateBase extends SO_JSONData {
 		return $this->title;
 	}
 	
-	public function getBeginDate($beginDate){
+	public function getBeginDate(){
 		return $this->beginDate;
 	}
 	
-	public function getBeginDateString(){
-		return $this->beginDate;
-	}
-	public function getEndDate($endDate){
+	public function getEndDate(){
 		return $this->endDate;
 	}
 	
-	public function getBeginTime($beginTime){
+	public function getBeginTime(){
 		return $this->beginTime;
 	}
 	
-	public function getEndTime($endTime){
+	public function getEndTime(){
 		return $this->endTime;
 	}
 		
-	public function getNote($note){
+	public function getNote(){
 		return $this->note;
 	}
 	// End Getters

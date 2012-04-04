@@ -60,6 +60,7 @@ class Termin_model extends CI_Model{
 		if($query != false){
 			foreach ($query->result() as $value) {
 				$dateObject->setTitle($value->title);
+				$dateObject->setBeginDate(Mpm_calendar::get_date_from_db_string($value->begda));
 			}
 		}
 	}
