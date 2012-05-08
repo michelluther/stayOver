@@ -1,99 +1,115 @@
 <?php
 
 abstract class SO_DateBase extends SO_JSONData {
-	// Model is injected
-	private static $model;
-	
-	private $title;
-	private $beginDate;
-	private $beginTime;
-	private $endDate;
-	private $endTime;
-	private $note;
-	private $children = array();
-	private $helper = array();
-	private $isPersistent;
-	private $isChanged;
-	
+	// Model is injected ...
+	protected static $model;
+	protected $id;
+	protected $title;
+	protected $beginDate;
+	protected $beginTime;
+	protected $endDate;
+	protected $endTime;
+	protected $note;
+	protected $helper = array();
+	protected $isPersistent = false;
+	protected $isChanged = true;
+
 	public function __construct($id = null){
 		if($id != null){
 			$this->id = $id;
 		}
 	}
-	
 	public static function setModel($model){
 		self::$model = $model;
 	}
-	
+
 	public function init(){
 		self::$model->initData($this);
+		$this->isChanged = false;
 	}
-	
+
 	public function save(){
-		self::$model->saveDate($this);
+		if ($this->id != null){
+			self::$model->saveDate($this);
+		} else {
+			self::$model->createDate($this);
+		}
+		$this->isPersistent = true;
+		$this->isChanged = false;
 	}
 	
-	private function setPersistent($persistent){
+	public function delete(){
+		self::$model->deleteDate($this);
+	}
+	
+	protected function setPersistent($persistent){
 		$this->isPersistent = $persistent;
 	}
-	
+
 	// Begin Setters
 	public function setTitle($title){
 		$this->title = $title;
+		$this->isChanged = true;
 	}
-	
+
 	public function setBeginDate($beginDate){
 		$this->beginDate = $beginDate;
+		$this->isChanged = true;
 	}
-	
+
 	public function setEndDate($endDate){
 		$this->endDate = $endDate;
+		$this->isChanged = true;
 	}
-	
+
 	public function setBeginTime($beginTime){
 		$this->beginTime = $beginTime;
+		$this->isChanged = true;
 	}
-	
+
 	public function setEndTime($endTime){
 		$this->endTime = $endTime;
+		$this->isChanged = true;
 	}
-	
+
 	public function setNote($note){
 		$this->note = $note;
+		$this->isChanged = true;
 	}
-	
-	public function addChild($child){
-		array_push($this->children, $child);	
-	}
+
 	// End Setters
 	// Begin Getters
-	
+
 	public function getId(){
 		return $this->id;
 	}
-	
+
 	public function getTitle(){
 		return $this->title;
 	}
-	
+
 	public function getBeginDate(){
 		return $this->beginDate;
 	}
-	
+
 	public function getEndDate(){
 		return $this->endDate;
 	}
-	
+
 	public function getBeginTime(){
 		return $this->beginTime;
 	}
-	
+
 	public function getEndTime(){
 		return $this->endTime;
 	}
-		
+
 	public function getNote(){
 		return $this->note;
+	}
+
+	public function getChildren($child){
+		return $this->children;
 	}
 	// End Getters
 }

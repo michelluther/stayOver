@@ -14,6 +14,19 @@ class ManageKidDates extends SO_BaseController{
 	}
 	
 	public function addDate(){
-		
+		// ToDo: Extract Form/JSON-Data
+		$newDate = SO_DateFactory::createNewDate($beginDate, $endDate, $beginTime, $endTime);
+		if (count($children) <> 0){
+			foreach ($children as $child) {
+				$newDate->addChild($child);
+			}
+		}
+		$newDate->save();
+	}
+	
+	public function removeDate(){
+		// ToDo: Extract JSON-Data
+		$dateToRemove = SO_DateFactory::getDate($id);
+		$dateToRemove->delete();
 	}
 }

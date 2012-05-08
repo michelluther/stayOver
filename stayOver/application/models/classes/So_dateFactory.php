@@ -18,8 +18,12 @@ class SO_DateFactory{
 		return $dates[$id];
 	}
 		
-	public static function createNewDate($beginDate, $endDate, $beginTime, $endTime, $childID){
-		$dates[$id] = new SO_DateChild($beginDate, $endDate, $beginTime, $endTime, $title, $childID);
+	public static function createNewDate($beginDate, $endDate, $beginTime, $endTime){
+		return new SO_DateChild($beginDate, $endDate, $beginTime, $endTime, $title);
+	}
+	
+	public static function getDatesByPeriod($beginDate, $endDate){
+		return self::$model->getDatesByPeriod($beginDate, $endDate);
 	}
  
 }
