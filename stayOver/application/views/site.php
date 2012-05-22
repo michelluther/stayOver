@@ -23,6 +23,7 @@ if($msg != null ){
 <div id="content"><?php
 $this->load->view('content/' . $content['view'], $content['data']);
 ?></div>
+<div id="debugArea"></div>
 </div>
 <?php
 $this->load->view('footer/' . $footer['view'], $footer['data']);

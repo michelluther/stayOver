@@ -17,7 +17,7 @@ class Termin_model extends CI_Model{
 		$where = array(	'begda >=' => $beginDate,
 				'endda <=' => $endDate);
 		$this->db->select('id');
-		$this->db->from('tts_dates');
+		$this->db->from('so_dates');
 		$this->db->where($where);
 		$query = $this->db->get();
 		$returnDates = array();
@@ -32,7 +32,7 @@ class Termin_model extends CI_Model{
 	public function getDatesByChild($child){
 		$where = array('child_id =' => $child->get_id());
 		$this->db->select('id');
-		$this->db->from('tts_dates');
+		$this->db->from('so_dates');
 		$this->db->where($where);
 		$query = $this->db->get();
 		$returnDates = array();
@@ -47,7 +47,7 @@ class Termin_model extends CI_Model{
 	public function getDate($id){
 		$where = array('id' => $id);
 		$this->db->select('*');
-		$this->db->from('tts_dates');
+		$this->db->from('so_dates');
 		$this->db->where($where);
 		$query = $this->db->get();
 		if($query != false){
@@ -62,7 +62,7 @@ class Termin_model extends CI_Model{
 	public function initData($date){
 		$where = array('id' => $date->getId());
 		$this->db->select('*');
-		$this->db->from('tts_dates');
+		$this->db->from('so_dates');
 		$this->db->where($where);
 		$query = $this->db->get();
 		if($query != false){
@@ -83,36 +83,42 @@ class Termin_model extends CI_Model{
 		);
 		$where = array('id' => $date->getId());
 		$this->db->where($where);
-		$this->db->update('tts_dates', $dateData);
+		$this->db->update('so_dates', $dateData);
 	}
 
 	public function insertDate($date){
-		$dateData = array(	'child_id' => $date->getId(),
+		$id = $date->getId();
+		$dateData = array(	'child_id' => 1, //$date->getId(),
 				'title' => $date->getTitle(),
 				'begda' => $date->getBeginDate(),
-				'endda' => $date->getEndDate(),
-				'begtime' => $date->getBeginTime(),
-				'endtime' =>$date->getEndTime(),
-				'note' => $date->getNote()
+		// 				'endda' => $date->getEndDate(),
+		// 				'begtime' => $date->getBeginTime(),
+		// 				'endtime' =>$date->getEndTime(),
+		// 				'note' => $date->getNote()
 		);
-
+		$query = $this->db->insert('so_dates', $dateData);
+		if($query == true){
+			throw new Mpm_Exception('Fehler beim Schreiben des Tabelleneintrags');
+		} else {
+			throw new Mpm_Exception('Fehler beim Schreiben des Tabelleneintrags');
+		}
 	}
 
 	public function deleteDate($date){
 		$where = array('id' => $date->getId());
 		$this->db->where($where);
-		$this->db->delete('tts_dates', $where);
+		$this->db->delete('so_dates', $where);
 	}
-	
+
 	public function assignDateToChild($date, $child){
 		$assignment = array('date_id' => $date->getId(),
 							'child_id' => $child->getId());
-		$this->db->insert('tts_date_child_assignment', $assignment);
+		$this->db->insert('so_date_child_assignment', $assignment);
 	}
-	
+
 	public function removeDateToChildAssignment($date, $child){
 		$where = array('date_id' => $date->getId(),
 					   'child_id' => $child->getId());
-		$this->db->delete('tts_date_child_assignment', $where);
+		$this->db->delete('so_date_child_assignment', $where);
 	}
 }

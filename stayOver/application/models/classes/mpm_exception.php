@@ -1,6 +1,6 @@
 <?php
 
-class MPM_Exception extends Exception{
+class Mpm_Exception extends Exception{
 	
 	private $fault_view;
 	private $fault_data;

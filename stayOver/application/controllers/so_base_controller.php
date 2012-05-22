@@ -61,7 +61,7 @@ class SO_BaseController extends CI_Controller{
 			$this->user = $this->User_model->login($credentials);
 			$this->_init_navigation();								// needs to be redone, because it would fail in constructor
 			$this->_init_session_cookie($this->user);
-			$this->msg = $this->_handleSuccess('Du bist eingeloggt');
+			$this->_handleSuccess('Du bist eingeloggt');
 		} catch(Exception $e){
 			$this->_handleError($e);
 		}
@@ -139,11 +139,11 @@ class SO_BaseController extends CI_Controller{
 	/*
 	 * Error and Success Handling
 	 */
-	public function _handleError(Exception $e){
-		$this->msg = array('msg_class' => 'msg_error',
-						   'msg_text'	=> $e->getMessage());
+	protected function _handleError(Exception $e){
+		$this->msg = array(	'msg_class' => 'msg_error',
+						   					'msg_text'	=> $e->getMessage());
 		$this->content['view'] = $e->get_fault_view();
-		if ($this->content['view'] == null){
+		if($this->content['view'] == null){
 			$this->content['view'] = 'login_screen';
 		}
 		$this->content['data'] = $e->get_fault_data();
@@ -151,9 +151,11 @@ class SO_BaseController extends CI_Controller{
 		//		$this->load->view('system_feedback');
 	}
 
-	private function _handleSuccess($msg){
-		$return = array('msg_class' => 'msg_success',
-						'msg_text'	=> $msg);
-		return $return;
+	protected function _handleSuccess($msg){
+		$msgArray = array('msg_class' 	=> 'msg_success',
+										 	 'msg_text'		=> $msg);
+		$this->msg = $msgArray;
+	//	if()
+		//$this->load->view('ajax_data', $return);
 	}
 }

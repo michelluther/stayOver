@@ -18,8 +18,33 @@ class SO_DateFactory{
 		return $dates[$id];
 	}
 		
-	public static function createNewDate($beginDate, $endDate, $beginTime, $endTime){
-		return new SO_DateChild($beginDate, $endDate, $beginTime, $endTime, $title);
+	public static function createNewDate($beginDate, $endDate = null, $title = null, $beginTime = null, $endTime = null, $note = null, $kids = null){
+		$date = new SO_DateChild();
+		$date->init($beginDate, $endDate, $beginTime, $endTime, $title);
+		if($beginDate != null){
+			$date->setBeginDate($beginDate);
+		}
+		if($endDate != null){
+			$date->setEndDate($endDate);
+		}
+		if($title != null){
+			$date->setTitle($title);
+		}
+		if($beginTime != null){
+			$date->setBeginTime($beginTime);
+		}
+		if($endTime != null){
+			$date->setEndTime($endTime);
+		}
+		if($note != null){
+			$date->setNote($note);
+		}
+		if($kids != null){
+			foreach ($kids as $kid) {
+				;
+			}
+		}
+		return $date;
 	}
 	
 	public static function getDatesByPeriod($beginDate, $endDate){

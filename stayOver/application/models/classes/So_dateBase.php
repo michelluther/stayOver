@@ -32,7 +32,7 @@ abstract class SO_DateBase extends SO_JSONData {
 		if ($this->id != null){
 			self::$model->saveDate($this);
 		} else {
-			self::$model->createDate($this);
+			self::$model->insertDate($this);
 		}
 		$this->isPersistent = true;
 		$this->isChanged = false;

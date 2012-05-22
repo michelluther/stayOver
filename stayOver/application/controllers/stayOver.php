@@ -20,5 +20,8 @@ class StayOver extends SO_BaseController{
 		$this->_callView();
 	}
 	
-		
+	public function addDate(){
+		$this->content['view'] = 'addDate';
+	}
+	
 }
