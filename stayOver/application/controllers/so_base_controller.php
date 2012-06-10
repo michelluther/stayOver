@@ -6,6 +6,7 @@ include_once './system/core/Controller.php';
 define("MLU_AJAX_CONTENT", "ajaxContent");
 define("MLU_AJAX_DATA", "ajaxData");
 
+
 class SO_BaseController extends CI_Controller{
 
 	protected $returnType;
@@ -61,7 +62,7 @@ class SO_BaseController extends CI_Controller{
 			$this->user = $this->User_model->login($credentials);
 			$this->_init_navigation();								// needs to be redone, because it would fail in constructor
 			$this->_init_session_cookie($this->user);
-			$this->_handleSuccess('Du bist eingeloggt');
+			$this->_setFeedback(BASE_MSG_SUCCESS, 'Du bist eingeloggt');
 		} catch(Exception $e){
 			$this->_handleError($e);
 		}
@@ -150,11 +151,14 @@ class SO_BaseController extends CI_Controller{
 		$this->_callView();
 		//		$this->load->view('system_feedback');
 	}
-
-	protected function _handleSuccess($msg){
-		$msgArray = array('msg_class' 	=> 'msg_success',
-										 	 'msg_text'		=> $msg);
-		$this->msg = $msgArray;
+	
+	protected function _setFeedback($msgClass, $msgText){
+		$this->msg = $this->base_messager->get_message($msgClass, $msgText);
+	}
+	
+	protected function _returnFeedback($msgClass, $msgText){
+		$msg = $this->base_messager->get_message($msgClass, $msgText);
+		$this->load->view('ajax_data', array('ajax_data' => array($msg)));
 	//	if()
 		//$this->load->view('ajax_data', $return);
 	}

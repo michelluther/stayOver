@@ -85,6 +85,10 @@ p {
 	padding: 15px;
 }
 
+#preloader{
+	display: none;
+}
+
 /* Message Area */
 
 #msg_area {

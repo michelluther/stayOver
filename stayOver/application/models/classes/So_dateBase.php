@@ -36,6 +36,7 @@ abstract class SO_DateBase extends SO_JSONData {
 		}
 		$this->isPersistent = true;
 		$this->isChanged = false;
+		SO_DateFactory::cacheDate($this);
 	}
 	
 	public function delete(){
@@ -47,6 +48,14 @@ abstract class SO_DateBase extends SO_JSONData {
 	}
 
 	// Begin Setters
+	public function setId($id){
+		if ($this->id == null) {
+			$this->id = $id;
+		} else {
+			throw new Mpm_Exception('Die ID eines Termins kann nicht geändert werden.');			
+		}
+	}
+	
 	public function setTitle($title){
 		$this->title = $title;
 		$this->isChanged = true;

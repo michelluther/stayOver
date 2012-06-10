@@ -14,12 +14,13 @@ if ($banner['view'] != null) {
 if ($navigation['view'] != null){
 	$this->load->view('navigation/' . $navigation['view'], $navigation['data']);
 }
-?>
+if($msg != null ){?>
 <div id="content_wrapper"><div id="msg_area"><?php 
-if($msg != null ){
+
 	$this->load->view('system_feedback', $msg);
-}
+
 ?></div>
+<?php } ?>
 <div id="content"><?php
 $this->load->view('content/' . $content['view'], $content['data']);
 ?></div>
@@ -29,3 +30,7 @@ $this->load->view('content/' . $content['view'], $content['data']);
 $this->load->view('footer/' . $footer['view'], $footer['data']);
 ?>
 </div>
+<?php
+$this->load->view('preloader');
+?>
+

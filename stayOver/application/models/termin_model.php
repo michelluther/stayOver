@@ -87,18 +87,21 @@ class Termin_model extends CI_Model{
 	}
 
 	public function insertDate($date){
-		$id = $date->getId();
+		$CI =& get_instance();
+		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
+		$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
 		$dateData = array(	'child_id' => 1, //$date->getId(),
-				'title' => $date->getTitle(),
-				'begda' => $date->getBeginDate(),
-		// 				'endda' => $date->getEndDate(),
-		// 				'begtime' => $date->getBeginTime(),
-		// 				'endtime' =>$date->getEndTime(),
-		// 				'note' => $date->getNote()
+							'title' => $date->getTitle(),
+							'begda' => $beginDate,
+							'endda' => $endDate,
+							'begtime' => $date->getBeginTime(),
+							'endtime' =>$date->getEndTime(),
+							'note' => $date->getNote()
 		);
 		$query = $this->db->insert('so_dates', $dateData);
 		if($query == true){
-			throw new Mpm_Exception('Fehler beim Schreiben des Tabelleneintrags');
+			$id = $this->db->insert_id();
+			$date->setId($id);
 		} else {
 			throw new Mpm_Exception('Fehler beim Schreiben des Tabelleneintrags');
 		}

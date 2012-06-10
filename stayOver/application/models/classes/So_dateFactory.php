@@ -20,9 +20,10 @@ class SO_DateFactory{
 		
 	public static function createNewDate($beginDate, $endDate = null, $title = null, $beginTime = null, $endTime = null, $note = null, $kids = null){
 		$date = new SO_DateChild();
-		$date->init($beginDate, $endDate, $beginTime, $endTime, $title);
 		if($beginDate != null){
 			$date->setBeginDate($beginDate);
+		} else {
+			throw new Mpm_Exception('Wenigstens ein Beginndatum muss angegeben werden.');
 		}
 		if($endDate != null){
 			$date->setEndDate($endDate);
@@ -51,4 +52,7 @@ class SO_DateFactory{
 		return self::$model->getDatesByPeriod($beginDate, $endDate);
 	}
  
+	public static function cacheDate($date){
+		$dates[$date->getId()] = $date;
+	}
 }

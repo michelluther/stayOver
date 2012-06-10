@@ -9,26 +9,30 @@ class ManageKidDates extends SO_BaseController{
 	}
 
 	public function start(){
-		SO_BaseController::$content['view'] = 'manageKidDatesStart';
-		SO_BaseController::$content['data'] = null;
+		$this->content['view'] = 'manageKidDatesStart';
+		$this->content['data'] = null;
 		$this->_callView();
 	}
 
 	public function addDate(){
 		// ToDo: Extract Form/JSON-Data
 		$clientArray = $_POST["date"];
-		if($clientArray["singleDay"] == true){
+		$singleDay = $clientArray["singleDay"];
+		if($singleDay == 'on'){
 			$clientArray["endDate"] = $clientArray["beginDate"];
 		}
 		try {
 			$this->returnType = MLU_AJAX_DATA;
-			$newDate = SO_DateFactory::createNewDate(	$clientArray["beginDate"],
-																								$clientArray["endDate"],
-																								$clientArray["title"]); // , $clientDate->kids, $clientDate->beginTime, $clientDate->endTime
+			$newDate = SO_DateFactory::createNewDate(Mpm_calendar::get_date_from_user_string($clientArray["beginDate"]),
+													 Mpm_calendar::get_date_from_user_string($clientArray["endDate"]),
+													 $clientArray['title']);
+			if ($clientArray["note"] != 'null') {
+				$newDate->setNote($clientArray["note"]);
+			}
 			$newDate->save();
-			SO_BaseController::_handleSuccess('Termin erfolgreich angelegt');
+			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Termin erfolgreich angelegt');
 		} catch (Mpm_Exception $e) {
-			SO_BaseController::$_handleError($e);
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
 		
 	}

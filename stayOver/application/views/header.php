@@ -10,6 +10,7 @@
 		</script>
 		<script type="text/javascript" src="<?= $basePath ?>js/jquery.js"></script>
 		<script type="text/javascript" src="<?= $basePath ?>js/jquery_ui_datepicker.min.js"></script>
+		<script type="text/javascript" src="<?= $basePath ?>js/jquery.ui.datepicker-de.js"></script>
 		<script type="text/javascript" src="<?= $basePath ?>js/jquery_livequery.js"></script>
 		<script type="text/javascript" src="<?= $basePath ?>js/jquery.blockUI.js"></script>
 		<script type="text/javascript" src="<?= $basePath ?>js/form2js.js"></script>
