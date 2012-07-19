@@ -38,7 +38,7 @@ class ManageKidDates extends SO_BaseController{
 	}
 
 	public function removeDate(){
-		// ToDo: Extract JSON-Data
+			// ToDo: Extract JSON-Data
 		$dateToRemove = SO_DateFactory::getDate($id);
 		$dateToRemove->delete();
 	}

@@ -7,11 +7,10 @@
 body{
 	font-family: Ubuntu, sans-serif;
 	color: #888;
-	font-size: 0.8em;
 }
 
 h1{
-	color: #8CE474;
+	color: #B2B2B2;
 	font-size: 18pt;
 	margin: 0 0 20px 0;
 	padding: 0;
@@ -89,6 +88,58 @@ p {
 	display: none;
 }
 
+.weekday {
+	padding:9px 9px;
+	-webkit-border-radius:9px;
+	-moz-border-radius:9px;
+	border-radius:9px;
+	background-color:#AEC400;
+	height: 45px;
+	width: 45px;
+	float:left;
+	margin: 0 10px 5px 0;
+}
+
+.helper_square {
+	padding:9px 9px;
+	-webkit-border-radius:9px;
+	-moz-border-radius:9px;
+	border-radius:9px;
+	background-color:#73A99E;
+	height: 45px;
+	width: 45px;
+	float:left;
+	color: #fff;
+	margin: 0 10px 5px 0;
+}
+
+.dateNavigation {
+    display: block;
+    position: relative;
+    padding: 5px;
+    text-align: right;
+   	color:#555; 
+}
+
+li.date_list_entry {
+	clear: both;
+	margin: 15px 0;
+	width: 450px;
+}
+
+.date{
+	font-size: 10pt;
+	float:left;
+}
+
+.description {
+	float:left;
+}
+
+.date_list_entry_content{
+	width: 290px;
+	float: left;
+}
 /* Message Area */
 
 #msg_area {
@@ -106,6 +157,13 @@ p {
 	background:url(images/bg-footer.gif) repeat-x left bottom;
 }
 
+#toolBox {
+	margin-top: -19px;
+	padding-bottom: 15px;
+	border-bottom: 1px solid #333;
+	margin-bottom: 10px;
+}
+
 /* form layout */
 
 .form_wrapper{
@@ -114,16 +172,46 @@ p {
 	margin-bottom: 20px;
 }
 
+.formBox {
+	float: left;
+	margin: 0 10px;
+	vertical-align: top;
+}
+
+
+
 label{
 	font-size: small;
 	width: 150px;
 	float: left;
 }
 
-input{
+input {
 	margin: 0 0 10px 10px;
 	font-size: small;
+	height: 24px;
+	float: left;
+}
 
+select	{
+	margin-left: 11px;
+}
+
+checkbox{
+	margin-left: 5px;
+}
+
+.formBox label  {
+	line-height: 10px;
+	margin: 5px;
+}
+
+.formBox input {
+	margin: 0px 0px 10px 0px;
+}
+
+textarea {
+	margin-left: 10px;
 }
 
 /* Login specific */
@@ -148,12 +236,13 @@ input{
 /* Tables */
 
 table{
-	border: 1px solid #999;
+	border: none;
 }
 
 td{
 	padding: 3px 5px 5px 5px;
-	border: 1px solid #999;
+	border: none;
+	vertical-align: top;
 }
 
 th{
@@ -161,6 +250,12 @@ th{
 	padding: 4px;
 }
 
+.loaderText {
+	margin: 15px;
+	font-size: 9px;
+	vertical-align: top;
+	float: right;
+}
 .highlight{
 	background: #3f3;
 }

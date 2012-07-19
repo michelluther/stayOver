@@ -11,7 +11,7 @@ $baseURL = base_url();
 			<input type="text" name="uname" id="uname" /><br/>
 			<label>Passwort</label>
 			<input type="password" id="pw" name="pw" />
-			<input type="submit" value="Einloggen" />
+			<input type="submit" value="Einloggen" class="btn"/>
 		</form>
 	</div>
 	<br style="clear: both" />
