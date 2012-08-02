@@ -10,7 +10,8 @@ abstract class SO_DateBase extends SO_JSONData {
 	protected $endDate;
 	protected $endTime;
 	protected $note;
-	protected $helper = array();
+	protected $helper;
+	protected $kids = array();
 	protected $isPersistent = false;
 	protected $isChanged = true;
 
@@ -52,7 +53,7 @@ abstract class SO_DateBase extends SO_JSONData {
 		if ($this->id == null) {
 			$this->id = $id;
 		} else {
-			throw new Mpm_Exception('Die ID eines Termins kann nicht geändert werden.');			
+			throw new Mpm_Exception('Die ID eines Termins kann nicht geï¿½ndert werden.');			
 		}
 	}
 	

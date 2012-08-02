@@ -89,6 +89,9 @@ class Termin_model extends CI_Model{
 	public function insertDate($date){
 		$CI =& get_instance();
 		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
+		if($date->getEndDate() == null){
+			throw new Mpm_Exception('Endedatum nicht gesetzt');
+		}
 		$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
 		$dateData = array(	'child_id' => 1, //$date->getId(),
 							'title' => $date->getTitle(),
