@@ -61,9 +61,8 @@ function hideSubNavigation(target) {
 }
 
 function writeDebugData(text) {
-	$('#debugArea').append(text);
-	$('#debugArea').append('<br />');
-}
+	console.log(text);
+	}
 
 function giveFeedbackTest() {
 	var object = new Object();
