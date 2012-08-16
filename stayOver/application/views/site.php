@@ -1,4 +1,3 @@
-<div id="full_wrapper">
 <?php
 
 if(isset($header['data'])){
@@ -22,7 +21,6 @@ $this->load->view('content/' . $content['view'], $content['data']);
 <?php
 $this->load->view('footer/' . $footer['view'], $footer['data']);
 ?>
-</div>
 <?php
 $this->load->view('preloader');
 ?>
