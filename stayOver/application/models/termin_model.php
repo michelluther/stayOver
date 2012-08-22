@@ -43,6 +43,17 @@ class Termin_model extends CI_Model{
 		}
 		return $returnDates;
 	}
+	
+	public function getDatesByParent(SO_Person $parent){
+		$children = array();
+		$children = $parent->get_children();
+		$returnDates = array();
+		foreach ($children as $child) {
+			$newDates = $this->getDatesByChild($child);
+			array_merge($returnDates, $newDates);
+		}
+		return $returnDates;
+	}
 
 	public function getDate($id){
 		$where = array('id' => $id);

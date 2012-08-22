@@ -52,6 +52,19 @@ class SO_DateFactory{
 		return self::$model->getDatesByPeriod($beginDate, $endDate);
 	}
  
+	public static function getDatesByRole($role, SO_Person $person){
+		switch ($role) {
+			case ROLE_PARENT:
+				return self::$model->getDatesByParent($person);
+			break;
+			case ROLE_HELPER:
+				
+			default:
+				;
+			break;
+		} 
+	}
+	
 	public static function cacheDate($date){
 		$dates[$date->getId()] = $date;
 	}

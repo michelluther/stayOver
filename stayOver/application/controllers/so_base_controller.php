@@ -2,10 +2,10 @@
 
 include_once './system/core/Controller.php';
 
-
 define("MLU_AJAX_CONTENT", "ajaxContent");
 define("MLU_AJAX_DATA", "ajaxData");
-
+define("ROLE_PARENT", "perent");
+define("ROLE_HELPER", "helper");
 
 class SO_BaseController extends CI_Controller{
 
@@ -59,7 +59,8 @@ class SO_BaseController extends CI_Controller{
 			$this->fault_view = 'login_screen';
 			$this->navigation['view'] = null;
 			$credentials = $this->_extract_credentials();
-			$this->user = $this->User_model->login($credentials);
+			$this->User_model->login($credentials);
+			$this->user = SO_User::getInstance($credentials['uname']);
 			$this->_init_navigation();								// needs to be redone, because it would fail in constructor
 			$this->_init_session_cookie($this->user);
 			$this->_setFeedback(BASE_MSG_SUCCESS, 'Du bist eingeloggt');
@@ -70,7 +71,7 @@ class SO_BaseController extends CI_Controller{
 
 	protected function _extract_credentials(){
 		$credentials = array('uname' => $_POST['uname'],
-							 'pw'	 => $_POST['pw'] );
+							 						'pw'	 => $_POST['pw'] );
 		return $credentials;
 	}
 
@@ -85,7 +86,7 @@ class SO_BaseController extends CI_Controller{
 
 	protected function _get_logged_in_user(){
 		if($this->session->userdata['logged_in'] ==  true){
-			$this->user = $this->User_model->get_user_for_uname($this->session->userdata['uname']);
+			$this->user = SO_User::getInstance($this->session->userdata['uname']);
 		} else {
 			$this->_redirect_to_login();
 		}

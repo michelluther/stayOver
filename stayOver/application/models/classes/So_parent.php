@@ -6,8 +6,8 @@ class SO_Parent extends SO_Person{
 
 	private $children = array();
 
-	public function __construct($id){
-		parent::__construct($id);
+	public function __construct(SO_Person $person){
+		
 	}
 
 	public function add_child($id){
@@ -15,7 +15,7 @@ class SO_Parent extends SO_Person{
 			$children[$id] = ChildFactory::get_child($id);
 		}
 	}
-
+	
 	public function get_children(){
 		return $this->children;
 	}
@@ -23,6 +23,7 @@ class SO_Parent extends SO_Person{
 	public function remove_child($id){
 		// unset($this->children($id));
 	}
+	
 	
 
 }

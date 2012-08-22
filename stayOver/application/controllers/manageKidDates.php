@@ -10,7 +10,8 @@ class ManageKidDates extends SO_BaseController{
 
 	public function start(){
 		$this->content['view'] = 'manageKidDatesStart';
-		$this->content['data'] = null;
+		$parent = $this->user->getAssignedPerson();
+		$this->content['data'] = SO_DateFactory::getDatesByRole(ROLE_PARENT, $parent);
 		$this->_callView();
 	}
 

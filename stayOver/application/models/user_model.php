@@ -1,6 +1,6 @@
 <?php
 
-// include_once 'classes/userdata.php';
+include_once 'classes/So_userdata.php';
 include_once 'classes/mpm_exception.php';
 
 class User_model extends CI_Model{
@@ -8,6 +8,10 @@ class User_model extends CI_Model{
 	private $uname;
 	private $user;
 
+	public function __construct(){
+		SO_User::setUserModel($this);
+	}
+	
 	/*
 	 * Login Procedure
 	 */
@@ -15,8 +19,7 @@ class User_model extends CI_Model{
 		$this->uname = $credentials['uname'];
 		$salt = $this->_get_salt();
 		$this->_check_hashed_pw($credentials['pw'], $salt);
-		$this->get_user_for_uname($this->uname);
-		return $this->user;
+		return true;
 	}
 
 	private function _get_salt(){
@@ -45,13 +48,6 @@ class User_model extends CI_Model{
 	 * Init user data for logged in user
 	 */
 	
-	public function get_user_for_uname($uname){
-		$this->uname = $uname;
-		$this->user = $this->mpm_user->get_user($this->uname);
-		$this->_init_user_data();
-		return $this->user;
-	}
-	
 	/*
 	 * Initialization, user roles, etc.
 	 */
@@ -68,8 +64,8 @@ class User_model extends CI_Model{
 		$this->user->personal_id = $user_data->pernr;
 	}
 
-	private function _set_roles(){
-		$where = array(	'uname' => $this->uname);
+	public function setRoles(SO_User &$user){
+		$where = array(	'uname' => $user->uname);
 		$query = $this->db->get_where('sec_role_user_assignments', $where);
 		$role_assignments = $query->result();
 		foreach ($role_assignments as $role_assignment) {
@@ -77,8 +73,8 @@ class User_model extends CI_Model{
 			$query = $this->db->get_where('sec_roles', $where);
 			$roleArray = $query->result();
 			$role = $roleArray[0];
-			array_push($this->user->roles, $role);
+			array_push($user->roles, $role);
 		}
 	}
-
+	
 }
