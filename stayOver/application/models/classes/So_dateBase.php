@@ -1,6 +1,6 @@
 <?php
 
-abstract class SO_DateBase extends SO_JSONData {
+abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 	// Model is injected ...
 	protected static $model;
 	protected $id;
@@ -90,11 +90,15 @@ abstract class SO_DateBase extends SO_JSONData {
 	// End Setters
 	// Begin Getters
 
-	public function getId(){
+	public function getID(){
 		return $this->id;
 	}
 
 	public function getTitle(){
+		return $this->title;
+	}
+	
+	public function getName(){
 		return $this->title;
 	}
 

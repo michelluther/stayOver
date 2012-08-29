@@ -1,11 +1,12 @@
 <?php
+
 class SO_DateFactory{
 	
 	private static $model;
 	private static $dates = array();
 	
 	public static function setModel($model){
-		// Might not be the most loosely coupled way ... factory sets model for classes
+// Might not be the most loosely coupled way ... factory sets model for classes
 		self::$model = $model;
 		SO_dateBase::setModel($model);
 	}
@@ -55,7 +56,7 @@ class SO_DateFactory{
 	public static function getDatesByRole($role, SO_Person $person){
 		switch ($role) {
 			case ROLE_PARENT:
-				return self::$model->getDatesByParent($person);
+				return self::$model->getDatesByParent($person->getParent()->getID());
 			break;
 			case ROLE_HELPER:
 				
@@ -63,6 +64,16 @@ class SO_DateFactory{
 				;
 			break;
 		} 
+	}
+	
+	public static function getDatesByChild(SO_Person $child){
+		$dateIDs = self::$model->getDatesByChild($child->getID());
+		$returnArray = array();
+		foreach ($dateIDs as $dateID) {
+			$date = self::getDate($dateID);
+			array_push($returnArray, $date);
+		}
+		return $returnArray;
 	}
 	
 	public static function cacheDate($date){

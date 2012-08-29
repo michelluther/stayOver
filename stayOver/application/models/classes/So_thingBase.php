@@ -1,6 +1,6 @@
 <?php
 
-class SO_ThingBase extends SO_JSONData {
+class SO_ThingBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
 	// Model is injected ...
 	protected static $model;
 	protected $id;

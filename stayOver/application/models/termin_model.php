@@ -29,8 +29,8 @@ class Termin_model extends CI_Model{
 		return $returnDates;
 	}
 
-	public function getDatesByChild($child){
-		$where = array('child_id =' => $child->get_id());
+	public function getDatesByChild(IF_BASE_NAMED_OBJECT $child){
+		$where = array('child_id =' => $child->getID());
 		$this->db->select('id');
 		$this->db->from('so_dates');
 		$this->db->where($where);
@@ -44,17 +44,6 @@ class Termin_model extends CI_Model{
 		return $returnDates;
 	}
 	
-	public function getDatesByParent(SO_Person $parent){
-		$children = array();
-		$children = $parent->get_children();
-		$returnDates = array();
-		foreach ($children as $child) {
-			$newDates = $this->getDatesByChild($child);
-			array_merge($returnDates, $newDates);
-		}
-		return $returnDates;
-	}
-
 	public function getDate($id){
 		$where = array('id' => $id);
 		$this->db->select('*');
@@ -70,7 +59,7 @@ class Termin_model extends CI_Model{
 
 	// DB-Interface
 
-	public function initData($date){
+	public function initData(IF_BASE_NAMED_OBJECT $date){
 		$where = array('id' => $date->getId());
 		$this->db->select('*');
 		$this->db->from('so_dates');
@@ -84,7 +73,7 @@ class Termin_model extends CI_Model{
 		}
 	}
 
-	public function updateDate($date){
+	public function updateDate(SO_DateChild $date){
 		$dateData = array(	'title' => $date->getTitle(),
 				'begda' => $date->getBeginDate(),
 				'endda' => $date->getEndDate(),
@@ -97,7 +86,7 @@ class Termin_model extends CI_Model{
 		$this->db->update('so_dates', $dateData);
 	}
 
-	public function insertDate($date){
+	public function insertChildDate(SO_DateChild $date){
 		$CI =& get_instance();
 		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
 		if($date->getEndDate() == null){
@@ -121,7 +110,7 @@ class Termin_model extends CI_Model{
 		}
 	}
 
-	public function deleteDate($date){
+	public function deleteDate(SO_D$date){
 		$where = array('id' => $date->getId());
 		$this->db->where($where);
 		$this->db->delete('so_dates', $where);

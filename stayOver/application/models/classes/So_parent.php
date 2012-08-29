@@ -2,28 +2,55 @@
 
 include_once 'So_person.php';
 
-class SO_Parent extends SO_Person{
+class SO_Parent implements IF_BASE_NAMED_OBJECT{
 
-	private $children = array();
+// Model is injected
+	protected static $model;
+	
+	private $person;
+	private $children = array();		// SO_Person
 
-	public function __construct(SO_Person $person){
-		
+	public static function setModel($model){
+		self::$model = $model;
 	}
-
-	public function add_child($id){
-		if (!isset($children[$id])){
-			$children[$id] = ChildFactory::get_child($id);
+	
+	public function __construct(IF_BASE_NAMED_OBJECT &$person){
+		$this->person = $person;
+	}
+	
+	public function addChild(SO_Person $child){
+		if (!isset($this->children[$child->getID()])){
+			$children[$child->getID()] = $child;
 		}
 	}
 	
-	public function get_children(){
-		return $this->children;
+	public function getPerson(){
+		return $this->person;
 	}
-
-	public function remove_child($id){
+	
+	public function removeChild($id){
 		// unset($this->children($id));
 	}
 	
+	public function getChildren(){
+		if(!($this->children)){
+			$this->children = self::$model->getChildrenByParent($this);
+		}
+		return $this->children;
+	}
 	
-
+	public function getDates(){
+		$children = $this->getChildren();
+		foreach ($children as $child) {
+			SO_DateFactory::getDatesByChild($child);
+		}
+	}
+	
+	public function getID(){
+		$this->person->getID();
+	}
+	
+	public function getName(){
+		$this->person->getName();
+	}
 }

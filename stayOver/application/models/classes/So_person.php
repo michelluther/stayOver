@@ -1,14 +1,11 @@
 <?php
 
-class SO_Person extends SO_JSONData {
+class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
 	// Model is injected
 	protected static $model;
 
 	protected $id;
 	protected $name;
-	protected $helper;
-	protected $parent;
-
 
 	public function __construct($id = null){
 		if($id != null){
@@ -24,26 +21,10 @@ class SO_Person extends SO_JSONData {
 		return $this->id;
 	}
 	
-	public function setParent(SO_Parent $parent){
-		$this->parent = $parent;
+	public function getName(){
+		return $this->name;
 	}
-
-	public function getIsHelper(){
-		if (!isset($this->helper)){
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	public function getIsParent(){
-		if(!isset($this->parent)){
-			return true;
-		} else {
-			return false;
-		}
-	}
-
+	
 	public function init(){
 		if(isset($this->id)){
 			self::$model->getPersonData($this->id);
