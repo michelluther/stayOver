@@ -6,6 +6,9 @@ define("MLU_AJAX_CONTENT", "ajaxContent");
 define("MLU_AJAX_DATA", "ajaxData");
 define("ROLE_PARENT", "eltern");
 define("ROLE_HELPER", "helper");
+define("BASE_OBJECT_TYPE_DATE", "DATE");
+define("BASE_OBJECT_TYPE_PERSON", "PERSON");
+define("BASE_OBJECT_TYPE_USER", "USER");
 
 class SO_BaseController extends CI_Controller{
 
@@ -82,7 +85,7 @@ class SO_BaseController extends CI_Controller{
 	 */
 
 	protected function _init_session_cookie(SO_User $user){
-		$this->session->set_userdata('uname', $user->getUserID());
+		$this->session->set_userdata('uname', $user->getID());
 		$this->session->set_userdata('logged_in', true);
 	}
 

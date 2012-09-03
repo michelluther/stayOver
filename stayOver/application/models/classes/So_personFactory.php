@@ -19,7 +19,7 @@ class SO_PeopleFactory{
 	public static function getPerson($id){
 		if (!isset(self::$people[$id])){
 			$person = new SO_Person($id);
-			self::compose($person);
+			$person->init();
 			self::$people[$id] = $person;
 		}
 		return self::$people[$id];

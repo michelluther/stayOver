@@ -1,6 +1,8 @@
 <?php
 
 interface IF_BASE_NAMED_OBJECT{
+	public function getType();
+	
 	public function getID();
 	
 	public function getName();

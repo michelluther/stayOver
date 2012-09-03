@@ -52,28 +52,10 @@ class SO_DateFactory{
 	public static function getDatesByPeriod($beginDate, $endDate){
 		return self::$model->getDatesByPeriod($beginDate, $endDate);
 	}
- 
-	public static function getDatesByRole($role, SO_Person $person){
-		switch ($role) {
-			case ROLE_PARENT:
-				return self::$model->getDatesByParent($person->getParent()->getID());
-			break;
-			case ROLE_HELPER:
-				
-			default:
-				;
-			break;
-		} 
-	}
 	
 	public static function getDatesByChild(SO_Person $child){
-		$dateIDs = self::$model->getDatesByChild($child->getID());
-		$returnArray = array();
-		foreach ($dateIDs as $dateID) {
-			$date = self::getDate($dateID);
-			array_push($returnArray, $date);
-		}
-		return $returnArray;
+		$returnDates = self::$model->getDatesByChild($child);
+		return $returnDates;
 	}
 	
 	public static function cacheDate($date){

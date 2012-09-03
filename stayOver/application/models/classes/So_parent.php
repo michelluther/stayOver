@@ -39,18 +39,29 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT{
 		return $this->children;
 	}
 	
-	public function getDates(){
+	public function getDates(DateTime $beginDate = null, DateTime $endDate = null){
 		$children = $this->getChildren();
+		$returnArray = array();
 		foreach ($children as $child) {
-			SO_DateFactory::getDatesByChild($child);
+			$childDates = SO_DateFactory::getDatesByChild($child);
+			$returnArray = array_merge($childDates, $returnArray);
 		}
+		ksort($returnArray);
+		return $returnArray;
 	}
 	
+	
+	// IF_BASE_NAMED_PERSON
 	public function getID(){
-		$this->person->getID();
+		return $this->person->getID();
+	}
+	
+	public function getType() {
+		return $this->person->getType();
+		;
 	}
 	
 	public function getName(){
-		$this->person->getName();
+		return $this->person->getName();
 	}
 }

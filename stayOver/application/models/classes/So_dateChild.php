@@ -7,6 +7,12 @@ class SO_DateChild extends SO_DateBase{
 	public function __construct($id = null){
 		parent::__construct($id);
 	}
+	
+	public function init(){
+		self::$model->initData($this);
+		$this->isChanged = false;
+	}
+	
 	public function addChild($child){
 		array_push($this->children, $child);
 	}
@@ -21,5 +27,9 @@ class SO_DateChild extends SO_DateBase{
 	
 	public function getThings(){
 		return $this->things;
+	}
+	
+	public function getChildren(){
+		return $this->children;
 	}
 }

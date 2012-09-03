@@ -15,7 +15,7 @@ class Termin_model extends CI_Model{
 
 	public function getDatesByPeriod($beginDate, $endDate){
 		$where = array(	'begda >=' => $beginDate,
-				'endda <=' => $endDate);
+										'endda <=' => $endDate);
 		$this->db->select('id');
 		$this->db->from('so_dates');
 		$this->db->where($where);
@@ -29,16 +29,17 @@ class Termin_model extends CI_Model{
 		return $returnDates;
 	}
 
-	public function getDatesByChild(IF_BASE_NAMED_OBJECT $child){
+	public function getDatesByChild(IF_BASE_NAMED_OBJECT $child, $periodBeginDate = null, $periodEndDate = null){
 		$where = array('child_id =' => $child->getID());
-		$this->db->select('id');
-		$this->db->from('so_dates');
+		$this->db->select('*');
+		$this->db->from('so_date_child');
+		$this->db->join('so_dates', 'so_date_child.date_id = so_dates.id');
 		$this->db->where($where);
 		$query = $this->db->get();
 		$returnDates = array();
 		if($query != false){
 			foreach ($query->result() as $value) {
-				array_push($returnDates, SO_DateFactory::getDate($value->id));
+				$returnDates[$value->begda . '_' . $value->date_id] = SO_DateFactory::getDate($value->date_id);
 			}
 		}
 		return $returnDates;
@@ -59,16 +60,20 @@ class Termin_model extends CI_Model{
 
 	// DB-Interface
 
-	public function initData(IF_BASE_NAMED_OBJECT $date){
-		$where = array('id' => $date->getId());
+	public function initData(SO_DateChild $date){
 		$this->db->select('*');
 		$this->db->from('so_dates');
+		$this->db->join('so_date_child', 'so_dates.id = so_date_child.date_id');
+		$where = array('so_dates.id' => $date->getId());
 		$this->db->where($where);
 		$query = $this->db->get();
 		if($query != false){
 			foreach ($query->result() as $value) {
 				$date->setTitle($value->title);
 				$date->setBeginDate(Mpm_calendar::get_date_from_db_string($value->begda));
+				$date->setEndDate(Mpm_calendar::get_date_from_db_string($value->endda));
+				$child = SO_PeopleFactory::getPerson($value->child_id);
+				$date->addChild($child);
 			}
 		}
 	}
@@ -86,14 +91,14 @@ class Termin_model extends CI_Model{
 		$this->db->update('so_dates', $dateData);
 	}
 
-	public function insertChildDate(SO_DateChild $date){
+	public function insertDate(SO_DateChild $date){
 		$CI =& get_instance();
 		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
 		if($date->getEndDate() == null){
 			throw new Mpm_Exception('Endedatum nicht gesetzt');
 		}
 		$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
-		$dateData = array(	'child_id' => 1, //$date->getId(),
+		$dateData = array(	
 							'title' => $date->getTitle(),
 							'begda' => $beginDate,
 							'endda' => $endDate,

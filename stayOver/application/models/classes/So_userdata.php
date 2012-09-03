@@ -40,6 +40,20 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 		$this->uname = $uname;
 	}
 	
+	// IF_BASE_NAMED_OBJECT
+	public function getType(){
+		return BASE_OBJECT_TYPE_USER;
+	}
+	
+	public function getID(){
+		return $this->uname;
+	}
+	
+	public function getName(){
+		return $this->uname;
+	}
+
+	
 	private function init(){
 		$this->roles = self::$userModel->getRoles($this->uname);
 		$this->person = SO_PeopleFactory::getPersonByUser($this);
@@ -57,14 +71,6 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 		/* TODO: Verification of session id */
 		self::setInstance($uname);
 		return self::$instance;
-	}
-
-	public function getID(){
-		return $this->uname;
-	}
-	
-	public function getName(){
-		return $this->uname;
 	}
 
 	public function hasRole($role){

@@ -35,9 +35,13 @@
 					<tr>
 						<td><input type="checkBox" /></td>
 						<td><p><?= $date->getTitle() ?></p></td>
-						<td><?= $date->getChild() ?></td>
-						<td><?= $date->getBeginDate() ?></td>
-						<td><?= $date->getEndDate() ?></td>
+						<td><?php $children = $date->getChildren(); 
+							foreach ($children as $child) {
+								echo $child->getFirstName();
+							}
+						?></td>
+						<td><?= Mpm_Calendar::format_date_for_User($date->getBeginDate()) ?></td>
+						<td><?= Mpm_Calendar::format_date_for_User($date->getEndDate()) ?></td>
 						<td>Dagmar &amp; Michael</td>
 					</tr>
 					<?php } ?>

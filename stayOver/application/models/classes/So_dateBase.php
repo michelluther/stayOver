@@ -23,10 +23,18 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 	public static function setModel($model){
 		self::$model = $model;
 	}
-
-	public function init(){
-		self::$model->initData($this);
-		$this->isChanged = false;
+	
+	//IF_BASE_NAMED_OBJECT
+	public function getType(){
+		return BASE_OBJECT_TYPE_DATE;		
+	}
+	
+	public function getID(){
+		return $this->id;
+	}
+	
+	public function getName(){
+		return $this->title;
 	}
 
 	public function save(){
@@ -90,17 +98,13 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 	// End Setters
 	// Begin Getters
 
-	public function getID(){
-		return $this->id;
-	}
+	
 
 	public function getTitle(){
 		return $this->title;
 	}
 	
-	public function getName(){
-		return $this->title;
-	}
+	
 
 	public function getBeginDate(){
 		return $this->beginDate;

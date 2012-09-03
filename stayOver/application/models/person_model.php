@@ -36,4 +36,13 @@ class Person_model extends CI_Model{
 		$personResult = $result[0];
 		return $personResult->pernr;
 	}
+	
+	public function getPersonData(SO_Person $person){
+		$where = array('pernr' => $person->getID());
+		$query = $this->db->get_where('base_people', $where);
+		$result = $query->result();
+		$personResult = $result[0];
+		$person->setFirstName($personResult->first_name);
+		$person->setLastName($personResult->last_name);
+	}
 }
