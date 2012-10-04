@@ -3,8 +3,8 @@ $baseURL = base_url();
 if ($navigation['data'] != null) {
 	$navigationContent = $navigation['data']->get_navigationEntries();
 	?>
-<div class="navbar">
-	<div class="navbar-inner">
+<div class="navbar row">
+	<div class="navbar-inner span12">
 		<div class="container">
 			<a class="brand" href="#">stayOver</a>
 			<ul class="nav">

@@ -10,7 +10,12 @@ class ManageKidDates extends SO_BaseController{
 
 	public function start(){
 		$this->content['view'] = 'manageKidDatesStart';
-		$this->content['data'] = null;
+		try {
+			$user = SO_User::getInstance();
+			$this->content['data']['parentDates'] = $user->getParent()->getDates();
+		} catch (Mpm_Exception $e) {
+			$this->content['data']['parentDates'] = null;
+		}
 		$this->_callView();
 	}
 
@@ -24,8 +29,8 @@ class ManageKidDates extends SO_BaseController{
 		try {
 			$this->returnType = MLU_AJAX_DATA;
 			$newDate = SO_DateFactory::createNewDate(Mpm_calendar::get_date_from_user_string($clientArray["beginDate"]),
-													 Mpm_calendar::get_date_from_user_string($clientArray["endDate"]),
-													 $clientArray['title']);
+																																											 Mpm_calendar::get_date_from_user_string($clientArray["endDate"]),
+																																											 $clientArray['title']);
 			if ($clientArray["note"] != 'null') {
 				$newDate->setNote($clientArray["note"]);
 			}
@@ -34,7 +39,6 @@ class ManageKidDates extends SO_BaseController{
 		} catch (Mpm_Exception $e) {
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
-		
 	}
 
 	public function removeDate(){

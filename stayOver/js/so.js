@@ -16,7 +16,7 @@ function giveFeedback(data) {
 			+ type
 			+ ' fade in out"><button class="close" data-dismiss="alert" type="button">&times;</button>'
 			+ text + '</div>';
-	$('#content').append(html);
+	$('#content').insert(html);
 }
 
 function openAddDate() {
@@ -61,9 +61,8 @@ function hideSubNavigation(target) {
 }
 
 function writeDebugData(text) {
-	$('#debugArea').append(text);
-	$('#debugArea').append('<br />');
-}
+	console.log(text);
+	}
 
 function giveFeedbackTest() {
 	var object = new Object();

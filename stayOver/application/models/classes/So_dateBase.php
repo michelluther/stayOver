@@ -1,6 +1,6 @@
 <?php
 
-abstract class SO_DateBase extends SO_JSONData {
+abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 	// Model is injected ...
 	protected static $model;
 	protected $id;
@@ -10,7 +10,8 @@ abstract class SO_DateBase extends SO_JSONData {
 	protected $endDate;
 	protected $endTime;
 	protected $note;
-	protected $helper = array();
+	protected $helper;
+	protected $kids = array();
 	protected $isPersistent = false;
 	protected $isChanged = true;
 
@@ -22,10 +23,18 @@ abstract class SO_DateBase extends SO_JSONData {
 	public static function setModel($model){
 		self::$model = $model;
 	}
-
-	public function init(){
-		self::$model->initData($this);
-		$this->isChanged = false;
+	
+	//IF_BASE_NAMED_OBJECT
+	public function getType(){
+		return BASE_OBJECT_TYPE_DATE;		
+	}
+	
+	public function getID(){
+		return $this->id;
+	}
+	
+	public function getName(){
+		return $this->title;
 	}
 
 	public function save(){
@@ -52,7 +61,7 @@ abstract class SO_DateBase extends SO_JSONData {
 		if ($this->id == null) {
 			$this->id = $id;
 		} else {
-			throw new Mpm_Exception('Die ID eines Termins kann nicht geändert werden.');			
+			throw new Mpm_Exception('Die ID eines Termins kann nicht geï¿½ndert werden.');			
 		}
 	}
 	
@@ -89,13 +98,13 @@ abstract class SO_DateBase extends SO_JSONData {
 	// End Setters
 	// Begin Getters
 
-	public function getId(){
-		return $this->id;
-	}
+	
 
 	public function getTitle(){
 		return $this->title;
 	}
+	
+	
 
 	public function getBeginDate(){
 		return $this->beginDate;
