@@ -7,6 +7,7 @@
 body{
 	font-family: Ubuntu, sans-serif;
 	color: #888;
+	font-size:10pt;
 }
 
 h1{
@@ -17,59 +18,27 @@ h1{
 }
 
 h2{
-	color: #8CE474;
+	color: #B2B2B2;
 	font-size: 14pt;
-	margin: 4px 0 10px 0;
+	margin: 0 0 20px 0;
 	padding: 0;
 }
 
-p {
-	
+h3{
+	color: #B2B2B2;
+	font-size: 11pt;
+	margin: 0 0 20px 0;
+	padding: 0;
+	font-weight: bold
 }
 
-#full_wrapper{
-	margin: 0 auto;
-	width: 800px;
+h3 i {
+	margin: 1;
 }
 
-
-#top_header{
-	
-}
-
-#banner_logo{
-	margin-left: 40px;
-}
-
-/* Navigation */
-
-#navigation{
-	width: 100%;
-	background: #D7D7D7;
-	height: 30px;
-}
-
-#navigation ul{
-	margin-left: 10px;
-	list-style-type: none;
-}
-
-#navigation li{
-	float: left;
-	font-size: 10pt;
-	padding: 9px 10px;
-}
-
-#navigation a {
-	text-decoration: none;
-	color: #000;
-}
-
-#navigation li.active{
-	border-top: 5px solid #8CE474;
-	padding: 4px 10px;
-    background: url("../img/nav_active_arrow.gif") no-repeat center bottom; 
-    height: 17px;
+h4 {
+	font-weight: bold;
+	margin-bottom: 15px;
 }
 
 /* Content */
@@ -132,6 +101,10 @@ li.date_list_entry {
 	float:left;
 }
 
+.datesContainer{
+	background-color: #999;
+}
+
 .description {
 	float:left;
 }
@@ -140,31 +113,26 @@ li.date_list_entry {
 	width: 290px;
 	float: left;
 }
-/* Message Area */
 
-#msg_area {
-	border: 1px solid #eee;
-	padding: 5px 15px;
-	background: #eee;
-	margin-bottom: 5px;
-}
 
 #footer {
-	position: fixed;
-	width: 100%; 
-	left: 0;
-	bottom: 0;
-	background:url(images/bg-footer.gif) repeat-x left bottom;
 }
 
-#toolBox {
+.toolBox {
 	margin-top: -19px;
 	padding-bottom: 15px;
 	border-bottom: 1px solid #333;
 	margin-bottom: 10px;
+	float:left;
 }
 
 /* form layout */
+
+.separator{
+	float:left;
+	padding: 5px;
+	color: #999;
+}
 
 .form_wrapper{
 	position: relative;
@@ -177,8 +145,6 @@ li.date_list_entry {
 	margin: 0 10px;
 	vertical-align: top;
 }
-
-
 
 label{
 	font-size: small;
@@ -212,6 +178,10 @@ checkbox{
 
 textarea {
 	margin-left: 10px;
+}
+
+.btn-floated {
+	float:left;
 }
 
 /* Login specific */
@@ -258,6 +228,10 @@ th{
 }
 .highlight{
 	background: #3f3;
+}
+
+.kidButtons {
+	margin-top: -8px;
 }
 
 /* Buttons */

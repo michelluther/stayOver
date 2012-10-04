@@ -1,5 +1,9 @@
 <?php
-include_once 'So_parent.php';
+
+include_once 'application/models/interfaces/So_Interfaces.php';
+include_once 'application/models/classes/So_parent.php';
+include_once 'application/models/classes/So_person.php';
+include_once 'application/models/classes/So_helper.php';
 
 class SO_PeopleFactory{
 	private static $people = array();
@@ -9,24 +13,28 @@ class SO_PeopleFactory{
 		// Factory knows all the 
 		self::$model = $model;
 		SO_Person::setModel($model);
+		SO_Parent::setModel($model);
 	}
-	
-	public static function getModel(){
-		return $this->model;
-	}
-	
+		
 	public static function getPerson($id){
 		if (!isset(self::$people[$id])){
-			$person = new SO_Person(self::$model, $id);
+			$person = new SO_Person($id);
+			$person->init();
 			self::$people[$id] = $person;
 		}
 		return self::$people[$id];
 	}
 	
-	public static function createPerson($firstName, $lastName){
-		$person = new SO_Person($this->model);
+	public static function getPersonByUser(SO_User $user){
+		$pernr = self::$model->getPersonIdByUser($user);
+		return self::getPerson($pernr);
+	}
+	
+	public static function createPerson($firstName, $lastName = null){
+		$person = new SO_Person();
 		$person->setFirstName($firstName);
 		$person->setLastName($lastName);
 	}
-	
+
+
 }

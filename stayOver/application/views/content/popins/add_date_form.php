@@ -1,4 +1,3 @@
-
 <form id="addKidForm" action="">
 	<table class="alignment">
 		<tr>
