@@ -5,7 +5,7 @@ include_once './system/core/Controller.php';
 define("MLU_AJAX_CONTENT", "ajaxContent");
 define("MLU_AJAX_DATA", "ajaxData");
 define("ROLE_PARENT", "eltern");
-define("ROLE_HELPER", "helper");
+define("ROLE_HELPER", "helfer");
 define("BASE_OBJECT_TYPE_DATE", "DATE");
 define("BASE_OBJECT_TYPE_PERSON", "PERSON");
 define("BASE_OBJECT_TYPE_USER", "USER");

@@ -15,7 +15,7 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
 		}
 	}
 
-	public static function setModel($model){
+	public static function setPersonModel($model){
 		self::$model = $model;
 	}
 	//IF_BASE_NAMED_OBJECT

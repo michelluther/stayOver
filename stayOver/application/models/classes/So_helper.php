@@ -1,10 +1,22 @@
 <?php
-class SO_Helper{
+class SO_Helper implements IF_BASE_NAMED_OBJECT{
+	
+	private static $personModel;
+	private static $dateModel;
 	
 	private $person;
+	private $children;
 	
 	public function __construct(IF_BASE_NAMED_OBJECT $person){
 		$this->person = $person;
+	}
+	
+	public static function setPersonModel($model){
+		self::$personModel = $model;
+	}
+	
+	public static function setDatesModel($model){
+		self::$dateModel = $model;
 	}
 	
 	public function getName() {
@@ -15,4 +27,23 @@ class SO_Helper{
 		return $this->person->getID();
 	}
 	
+	public function getType(){
+		return BASE_OBJECT_TYPE_HELPER;
+	}
+
+	public function getChildren(){
+		if (! isset($this->children)){
+			$this->children = self::$personModel->getChildrenByHelper($this);
+		} 
+		return $this->children;
+	}
+	
+	public function getDates(DateTime $beginDate = null, DateTime $endDate = null){
+		$children = $this->getChildren();
+		$returnDates = array();
+		foreach ($children as $child){
+			$returnDates = array_merge($returnDates, self::$dateModel->getDatesByChild($child, $beginDate, $endDate));
+		}
+		return $returnDates;
+	}
 }

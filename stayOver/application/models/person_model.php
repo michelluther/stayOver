@@ -29,6 +29,18 @@ class Person_model extends CI_Model{
 		return $returnArray;
 	}
 	
+	public function getChildrenByHelper(IF_BASE_NAMED_OBJECT $helper){
+		$where = array('helper_id' => $helper->getID());
+		$query = $this->db->get_where('so_helper_child', $where);
+		$result = $query->result();
+		$returnArray = array();
+		foreach ($result as $childEntry) {
+			$child = SO_PeopleFactory::getPerson($childEntry->child_id);
+			array_push($returnArray, $child);
+		}
+		return $returnArray;
+	}
+	
 	public function getPersonIdByUser(IF_BASE_NAMED_OBJECT $user){
 		$where = array(	'uname' => $user->getID());
 		$query = $this->db->get_where('base_people', $where);

@@ -106,4 +106,8 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 			$this->helper = new SO_Helper($this->person);
 		}
 	}
+	
+	public function getHelper(){
+		return $this->helper;
+	}
 }

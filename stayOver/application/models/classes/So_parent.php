@@ -10,7 +10,7 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT{
 	private $person;
 	private $children = array();		// SO_Person
 
-	public static function setModel($model){
+	public static function setPersonModel($model){
 		self::$model = $model;
 	}
 	
@@ -43,7 +43,7 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT{
 		$children = $this->getChildren();
 		$returnArray = array();
 		foreach ($children as $child) {
-			$childDates = SO_DateFactory::getDatesByChild($child);
+			$childDates = SO_DateFactory::getDatesByChild($child, $beginDate, $endDate);
 			$returnArray = array_merge($childDates, $returnArray);
 		}
 		ksort($returnArray);

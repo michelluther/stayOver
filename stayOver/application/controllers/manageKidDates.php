@@ -12,7 +12,7 @@ class ManageKidDates extends SO_BaseController{
 		$this->content['view'] = 'manageKidDatesStart';
 		try {
 			$user = SO_User::getInstance();
-			$this->content['data']['parentDates'] = $user->getParent()->getDates();
+			$this->content['data']['parentDates'] = $user->getParent()->getDates(new DateTime());
 		} catch (Mpm_Exception $e) {
 			$this->content['data']['parentDates'] = null;
 		}

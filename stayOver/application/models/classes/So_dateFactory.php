@@ -9,6 +9,7 @@ class SO_DateFactory{
 // Might not be the most loosely coupled way ... factory sets model for classes
 		self::$model = $model;
 		SO_dateBase::setModel($model);
+		SO_Helper::setDatesModel($model);
 	}
 	
 	public static function getDate($id){
@@ -53,8 +54,8 @@ class SO_DateFactory{
 		return self::$model->getDatesByPeriod($beginDate, $endDate);
 	}
 	
-	public static function getDatesByChild(SO_Person $child){
-		$returnDates = self::$model->getDatesByChild($child);
+	public static function getDatesByChild(SO_Person $child, DateTime $beginDate = null, DateTime $endDate = null){
+		$returnDates = self::$model->getDatesByChild($child, $beginDate, $endDate);
 		return $returnDates;
 	}
 	

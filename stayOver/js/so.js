@@ -32,7 +32,7 @@ function submitForm(form, target, callback) {
 	$.post(target, jsonForm, function(data) {
 		jsonObject = JSON.parse(data);
 		giveFeedback(jsonObject[0]);
-		writeDebugData(data);
+		//writeDebugData(data);
 		$.unblockUI();
 	});
 }

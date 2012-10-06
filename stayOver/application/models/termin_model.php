@@ -31,6 +31,14 @@ class Termin_model extends CI_Model{
 
 	public function getDatesByChild(IF_BASE_NAMED_OBJECT $child, $periodBeginDate = null, $periodEndDate = null){
 		$where = array('child_id =' => $child->getID());
+		if($periodBeginDate != null){
+			$beginDate = Mpm_Calendar::format_date_for_DataBase($periodBeginDate);
+			$where['begda >='] = $beginDate;
+		}
+		if($periodEndDate != null){
+			$endDate = Mpm_Calendar::format_date_for_DataBase($periodEndDate);
+			$where['begda <='] = $endDate;
+		}
 		$this->db->select('*');
 		$this->db->from('so_date_child');
 		$this->db->join('so_dates', 'so_date_child.date_id = so_dates.id');

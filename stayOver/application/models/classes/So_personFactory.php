@@ -12,8 +12,9 @@ class SO_PeopleFactory{
 	public static function setModel($model){
 		// Factory knows all the 
 		self::$model = $model;
-		SO_Person::setModel($model);
-		SO_Parent::setModel($model);
+		SO_Person::setPersonModel($model);
+		SO_Parent::setPersonModel($model);
+		SO_Helper::setPersonModel($model);
 	}
 		
 	public static function getPerson($id){

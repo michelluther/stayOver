@@ -14,10 +14,14 @@ class StayOver extends SO_BaseController{
 	}
 	
 	public function home(){
-		$nextDates = So_dateFactory::getDatesByPeriod('1.1.2012', '31.3.2012');
+		$helper = $this->user->getHelper();
+		$beginDate = new DateTime();
+		$nextDates = $helper->getDates($beginDate);
 		$this->content['data']['nextDates'] = $nextDates;
 		$this->content['view'] = 'home';
 		$this->_callView();
 	}
+	
+//	private function 
 	
 }
