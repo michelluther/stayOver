@@ -15,7 +15,7 @@ class Termin_model extends CI_Model{
 
 	public function getDatesByPeriod($beginDate, $endDate){
 		$where = array(	'begda >=' => $beginDate,
-										'endda <=' => $endDate);
+				'endda <=' => $endDate);
 		$this->db->select('id');
 		$this->db->from('so_dates');
 		$this->db->where($where);
@@ -52,7 +52,7 @@ class Termin_model extends CI_Model{
 		}
 		return $returnDates;
 	}
-	
+
 	public function getDate($id){
 		$where = array('id' => $id);
 		$this->db->select('*');
@@ -101,26 +101,45 @@ class Termin_model extends CI_Model{
 
 	public function insertDate(SO_DateChild $date){
 		$CI =& get_instance();
+		$successful = true;
 		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
 		if($date->getEndDate() == null){
 			throw new Mpm_Exception('Endedatum nicht gesetzt');
 		}
-		$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
-		$dateData = array(	
-							'title' => $date->getTitle(),
-							'begda' => $beginDate,
-							'endda' => $endDate,
-							'begtime' => $date->getBeginTime(),
-							'endtime' =>$date->getEndTime(),
-							'note' => $date->getNote()
-		);
-		$query = $this->db->insert('so_dates', $dateData);
-		if($query == true){
-			$id = $this->db->insert_id();
-			$date->setId($id);
-		} else {
-			throw new Mpm_Exception('Fehler beim Schreiben des Tabelleneintrags');
+		$this->db->trans_begin();
+		try{
+			$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
+			$dateData = array(
+					'title' => $date->getTitle(),
+					'begda' => $beginDate,
+					'endda' => $endDate,
+					'begtime' => $date->getBeginTime(),
+					'endtime' =>$date->getEndTime(),
+					'note' => $date->getNote()
+			);
+			$query = $this->db->insert('so_dates', $dateData);
+			if($query == true){
+				$id = $this->db->insert_id();
+				$date->setId($id);
+			} else {
+				throw new Mpm_Exception('Fehler beim Schreiben des Tabelleneintrags');
+			}
+			$children = $date->getChildren();
+			if($children != null){
+				foreach ($children as $child) {
+					$dateToChildData = array('date_id' => $date->getID(),
+								  			 'child_id' => $child->getID());
+					$query = $this->db->insert('so_date_child', $dateToChildData);
+					if($query != true){
+						throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
+					}
+				}
+			} 
+		} catch (Exception $ex){
+			$this->db->trans_rollback();
+			throw $ex;
 		}
+		$this->db->trans_commit();
 	}
 
 	public function deleteDate(SO_D$date){
@@ -131,13 +150,13 @@ class Termin_model extends CI_Model{
 
 	public function assignDateToChild($date, $child){
 		$assignment = array('date_id' => $date->getId(),
-							'child_id' => $child->getId());
+				'child_id' => $child->getId());
 		$this->db->insert('so_date_child_assignment', $assignment);
 	}
 
 	public function removeDateToChildAssignment($date, $child){
 		$where = array('date_id' => $date->getId(),
-					   'child_id' => $child->getId());
+				'child_id' => $child->getId());
 		$this->db->delete('so_date_child_assignment', $where);
 	}
 }

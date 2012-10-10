@@ -13,6 +13,7 @@ class ManageKidDates extends SO_BaseController{
 		try {
 			$user = SO_User::getInstance();
 			$this->content['data']['parentDates'] = $user->getParent()->getDates(new DateTime());
+			$this->content['data']['parentChildren'] = $user->getParent()->getChildren();
 		} catch (Mpm_Exception $e) {
 			$this->content['data']['parentDates'] = null;
 		}
@@ -28,9 +29,13 @@ class ManageKidDates extends SO_BaseController{
 		}
 		try {
 			$this->returnType = MLU_AJAX_DATA;
-			$newDate = SO_DateFactory::createNewDate(Mpm_calendar::get_date_from_user_string($clientArray["beginDate"]),
-																																											 Mpm_calendar::get_date_from_user_string($clientArray["endDate"]),
-																																											 $clientArray['title']);
+			$newDate = SO_DateFactory::createNewDate(Mpm_calendar::get_date_from_user_string($clientArray["beginDate"]), 
+													 Mpm_calendar::get_date_from_user_string($clientArray["endDate"]),
+													 $clientArray["title"],
+													 null,
+													 null,
+												     null,
+													 $clientArray["kid"]);
 			if ($clientArray["note"] != 'null') {
 				$newDate->setNote($clientArray["note"]);
 			}

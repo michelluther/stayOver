@@ -16,7 +16,8 @@ function giveFeedback(data) {
 			+ type
 			+ ' fade in out"><button class="close" data-dismiss="alert" type="button">&times;</button>'
 			+ text + '</div>';
-	$('#content').insert(html);
+	alert($('#content').html());
+	$('#content').before(html);
 }
 
 function openAddDate() {
@@ -31,9 +32,10 @@ function submitForm(form, target, callback) {
 	// $(".loaderText").display();
 	$.post(target, jsonForm, function(data) {
 		jsonObject = JSON.parse(data);
+		$.unblockUI();
 		giveFeedback(jsonObject[0]);
 		//writeDebugData(data);
-		$.unblockUI();
+		
 	});
 }
 
