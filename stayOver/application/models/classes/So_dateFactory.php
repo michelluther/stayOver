@@ -53,7 +53,7 @@ class SO_DateFactory{
 		return self::$model->getDatesByPeriod($beginDate, $endDate);
 	}
 
-	public static function getDatesByChild(SO_Person $child, DateTime $beginDate = null, DateTime $endDate = null){
+	public static function getDatesByChild(IF_BASE_NAMED_OBJECT $child, DateTime $beginDate = null, DateTime $endDate = null){
 		$returnDates = self::$model->getDatesByChild($child, $beginDate, $endDate);
 		return $returnDates;
 	}

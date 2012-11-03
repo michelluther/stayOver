@@ -9,6 +9,7 @@ define("ROLE_HELPER", "helfer");
 define("BASE_OBJECT_TYPE_DATE", "DATE");
 define("BASE_OBJECT_TYPE_PERSON", "PERSON");
 define("BASE_OBJECT_TYPE_USER", "USER");
+define("BASE_OBJECT_TYPE_CHILD", "CHILD");
 
 class SO_BaseController extends CI_Controller{
 
@@ -148,7 +149,7 @@ class SO_BaseController extends CI_Controller{
 	 */
 	protected function _handleError(Exception $e){
 		$this->msg = array(	'msg_class' => 'msg_error',
-						   					'msg_text'	=> $e->getMessage());
+						   	'msg_text'	=> $e->getMessage());
 		$this->content['view'] = $e->get_fault_view();
 		if($this->content['view'] == null){
 			$this->content['view'] = 'login_screen';

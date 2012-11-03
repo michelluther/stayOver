@@ -1,4 +1,4 @@
-<form id="addKidForm" action="">
+<form id="addKidDateForm" action="">
 	<table class="alignment">
 		<tr>
 			<td><label>Termin:</label>
@@ -39,7 +39,7 @@
 		<tr>
 			<td>&nbsp;</td>
 			<td><input type="button" value="Termin anlegen"
-				onclick="submitForm('addKidForm', '<?= $basePath ?>index.php/manageKidDates/addDate', 'formSubmitted')"
+				onclick="submitForm('addKidDateForm', '<?= $basePath ?>index.php/manageKidDates/addDate', 'formSubmitted')"
 				class="btn" />
 				<div class="loaderText" style="display: none">
 					<p>

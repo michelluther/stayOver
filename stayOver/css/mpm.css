@@ -2,8 +2,6 @@
 
 /* General */
 
-
-
 body{
 	font-family: Ubuntu, sans-serif;
 	color: #888;
@@ -40,6 +38,10 @@ h4 {
 	font-weight: bold;
 	margin-bottom: 15px;
 }
+/* Tables */
+.table tbody tr:hover td{
+	background-color: transparent;
+}
 
 /* Content */
 
@@ -57,49 +59,6 @@ h4 {
 	display: none;
 }
 
-.weekday {
-	padding:9px 9px;
-	-webkit-border-radius:9px;
-	-moz-border-radius:9px;
-	border-radius:9px;
-	background-color:#AEC400;
-	height: 45px;
-	width: 45px;
-	float:left;
-	margin: 0 10px 5px 0;
-}
-
-.helper_square {
-	padding:9px 9px;
-	-webkit-border-radius:9px;
-	-moz-border-radius:9px;
-	border-radius:9px;
-	background-color:#73A99E;
-	height: 45px;
-	width: 45px;
-	float:left;
-	color: #fff;
-	margin: 0 10px 5px 0;
-}
-
-.dateNavigation {
-    display: block;
-    position: relative;
-    padding: 5px;
-    text-align: right;
-   	color:#555; 
-}
-
-li.date_list_entry {
-	clear: both;
-	margin: 15px 0;
-	width: 450px;
-}
-
-.date{
-	font-size: 10pt;
-	float:left;
-}
 
 .datesContainer{
 	background-color: #999;

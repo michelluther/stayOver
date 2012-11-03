@@ -4,6 +4,7 @@ include_once 'application/models/interfaces/So_Interfaces.php';
 include_once 'application/models/classes/So_parent.php';
 include_once 'application/models/classes/So_person.php';
 include_once 'application/models/classes/So_helper.php';
+include_once 'application/models/classes/So_child.php';
 
 class SO_PeopleFactory{
 	private static $people = array();
@@ -15,6 +16,7 @@ class SO_PeopleFactory{
 		SO_Person::setPersonModel($model);
 		SO_Parent::setPersonModel($model);
 		SO_Helper::setPersonModel($model);
+		SO_Child::setPersonModel($model);
 	}
 		
 	public static function getPerson($id){

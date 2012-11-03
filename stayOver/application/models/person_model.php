@@ -23,7 +23,7 @@ class Person_model extends CI_Model{
 		$result = $query->result();
 		$returnArray = array();
 		foreach ($result as $childEntry) {
-			$child = SO_PeopleFactory::getPerson($childEntry->child_id);
+			$child = new SO_Child(SO_PeopleFactory::getPerson($childEntry->child_id));
 			array_push($returnArray, $child);
 		}
 		return $returnArray;
@@ -35,10 +35,25 @@ class Person_model extends CI_Model{
 		$result = $query->result();
 		$returnArray = array();
 		foreach ($result as $childEntry) {
-			$child = SO_PeopleFactory::getPerson($childEntry->child_id);
+			$child = new SO_Child(SO_PeopleFactory::getPerson($childEntry->child_id));
 			array_push($returnArray, $child);
 		}
 		return $returnArray;
+	}
+	
+	public function getHelpersByChild(IF_BASE_NAMED_OBJECT $child){
+		$where = array('child_id' => $child->getID());
+		$this->db->where = $where;
+		$this->db->select('helper_id');
+		$query = $this->db->get('so_helper_child');
+		$result = $query->result();
+		$helpers = array();
+		foreach ($result as $helperEntry) {
+			$person = SO_PeopleFactory::getPerson($helperEntry->helper_id);
+			$helper = new SO_Helper($person);
+			array_push($helpers, $helper);
+		}
+		return $helpers;
 	}
 	
 	public function getPersonIdByUser(IF_BASE_NAMED_OBJECT $user){
@@ -49,6 +64,8 @@ class Person_model extends CI_Model{
 		return $personResult->pernr;
 	}
 	
+	
+	
 	public function getPersonData(SO_Person $person){
 		$where = array('pernr' => $person->getID());
 		$query = $this->db->get_where('base_people', $where);
@@ -57,4 +74,6 @@ class Person_model extends CI_Model{
 		$person->setFirstName($personResult->first_name);
 		$person->setLastName($personResult->last_name);
 	}
+
+	
 }

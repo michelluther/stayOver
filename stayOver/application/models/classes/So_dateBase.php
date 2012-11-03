@@ -39,7 +39,7 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 
 	public function save(){
 		if ($this->id != null){
-			self::$model->saveDate($this);
+			self::$model->updateDate($this);
 		} else {
 			self::$model->insertDate($this);
 		}
@@ -61,7 +61,7 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 		if ($this->id == null) {
 			$this->id = $id;
 		} else {
-			throw new Mpm_Exception('Die ID eines Termins kann nicht ge�ndert werden.');			
+			throw new Mpm_Exception('Die ID eines Termins kann nicht ge&auml;ndert werden.');			
 		}
 	}
 	

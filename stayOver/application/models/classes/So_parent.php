@@ -18,7 +18,7 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT{
 		$this->person = $person;
 	}
 	
-	public function addChild(SO_Person $child){
+	public function addChild(SO_Child $child){
 		if (!isset($this->children[$child->getID()])){
 			$children[$child->getID()] = $child;
 		}

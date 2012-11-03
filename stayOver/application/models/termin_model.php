@@ -13,9 +13,11 @@ class Termin_model extends CI_Model{
 		SO_DateFactory::setModel($this);
 	}
 
+	// Readers
 	public function getDatesByPeriod($beginDate, $endDate){
 		$where = array(	'begda >=' => $beginDate,
-				'endda <=' => $endDate);
+				'endda <=' => $endDate,
+				'deleted' => false);
 		$this->db->select('id');
 		$this->db->from('so_dates');
 		$this->db->where($where);
@@ -30,7 +32,8 @@ class Termin_model extends CI_Model{
 	}
 
 	public function getDatesByChild(IF_BASE_NAMED_OBJECT $child, $periodBeginDate = null, $periodEndDate = null){
-		$where = array('child_id =' => $child->getID());
+		$where = array('child_id =' => $child->getID(),
+				'so_dates.deleted =' => false );
 		if($periodBeginDate != null){
 			$beginDate = Mpm_Calendar::format_date_for_DataBase($periodBeginDate);
 			$where['begda >='] = $beginDate;
@@ -54,7 +57,8 @@ class Termin_model extends CI_Model{
 	}
 
 	public function getDate($id){
-		$where = array('id' => $id);
+		$where = array('id' => $id,
+				'deleted' => false);
 		$this->db->select('*');
 		$this->db->from('so_dates');
 		$this->db->where($where);
@@ -65,9 +69,7 @@ class Termin_model extends CI_Model{
 			}
 		}
 	}
-
-	// DB-Interface
-
+	// Initialization
 	public function initData(SO_DateChild $date){
 		$this->db->select('*');
 		$this->db->from('so_dates');
@@ -80,18 +82,62 @@ class Termin_model extends CI_Model{
 				$date->setTitle($value->title);
 				$date->setBeginDate(Mpm_calendar::get_date_from_db_string($value->begda));
 				$date->setEndDate(Mpm_calendar::get_date_from_db_string($value->endda));
-				$child = SO_PeopleFactory::getPerson($value->child_id);
-				$date->addChild($child);
+				$children = $this->_getDateChildren($date);
+				foreach ($children as $child) {
+					$date->addChild($child);
+				}
+				$helpers = $this->_getDateHelper($date);
+				foreach ($helpers as $helper) {
+					$date->addHelper($helper);
+				}
+				$date->setNote($value->note);
 			}
 		}
 	}
 
+	private function _getDateChildren(SO_DateChild $date){
+		$where = array('date_id' => $date->getID());
+		$this->db->from('so_date_child');
+		$this->db->where($where);
+		$this->db->select('child_id');
+		$query = $this->db->get();
+		$children = array();
+		if($query != null){
+			foreach ($query->result() as $value){
+				$child = SO_PeopleFactory::getPerson($value->child_id);
+				array_push($children, $child);
+			}
+		}
+		return $children;
+	}
+	
+	private function _getDateHelper(SO_DateChild $date){
+		$where = array('date_id' => $date->getID());
+		$this->db->from('so_date_helper');
+		$this->db->where($where);
+		$this->db->select('helper_id');
+		$query = $this->db->get();
+		$helpers = array();
+		if($query != null){
+			foreach ($query->result() as $value){
+				$helper = SO_PeopleFactory::getPerson($value->child_id);
+				array_push($helpers, $helper);
+			}
+		}
+		return $helpers;
+	}
+	
+	// Writers
 	public function updateDate(SO_DateChild $date){
-		$dateData = array(	'title' => $date->getTitle(),
-				'begda' => $date->getBeginDate(),
-				'endda' => $date->getEndDate(),
-				'begtime' => $date->getBeginTime(),
-				'endtime' =>$date->getEndTime(),
+		if( $date->getBeginDate() > $date->getEndDate()){
+			throw new Mpm_Exception('Das Beginndatum kann nicht gr&ouml;&zslig;er als das Endedatum sein.');
+		}
+		$dateData = array(
+				'title' => $date->getTitle(),
+				'begda' => Mpm_calendar::format_date_for_DataBase($date->getBeginDate()),
+				'endda' => Mpm_calendar::format_date_for_DataBase($date->getEndDate()),
+				//'begtime' => $date->getBeginTime(),
+				//'endtime' =>$date->getEndTime(),
 				'note' => $date->getNote()
 		);
 		$where = array('id' => $date->getId());
@@ -115,7 +161,8 @@ class Termin_model extends CI_Model{
 					'endda' => $endDate,
 					'begtime' => $date->getBeginTime(),
 					'endtime' =>$date->getEndTime(),
-					'note' => $date->getNote()
+					'note' => $date->getNote(),
+					'deleted' => false
 			);
 			$query = $this->db->insert('so_dates', $dateData);
 			if($query == true){
@@ -128,13 +175,13 @@ class Termin_model extends CI_Model{
 			if($children != null){
 				foreach ($children as $child) {
 					$dateToChildData = array('date_id' => $date->getID(),
-								  			 'child_id' => $child->getID());
+							'child_id' => $child->getID());
 					$query = $this->db->insert('so_date_child', $dateToChildData);
 					if($query != true){
 						throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
 					}
 				}
-			} 
+			}
 		} catch (Exception $ex){
 			$this->db->trans_rollback();
 			throw $ex;
@@ -142,10 +189,11 @@ class Termin_model extends CI_Model{
 		$this->db->trans_commit();
 	}
 
-	public function deleteDate(SO_D$date){
+	public function deleteDate(IF_BASE_NAMED_OBJECT $date){
 		$where = array('id' => $date->getId());
+		$dateData = array( 'deleted' => true );
 		$this->db->where($where);
-		$this->db->delete('so_dates', $where);
+		$this->db->update('so_dates', $dateData);
 	}
 
 	public function assignDateToChild($date, $child){
@@ -158,5 +206,15 @@ class Termin_model extends CI_Model{
 		$where = array('date_id' => $date->getId(),
 				'child_id' => $child->getId());
 		$this->db->delete('so_date_child_assignment', $where);
+	}
+
+	public function assignDateToHelper(IF_BASE_NAMED_OBJECT $date,IF_BASE_NAMED_OBJECT $helper){
+		$data = array('date_id' => $date->getID(),
+				'helper_id' => $helper->getID(),
+				'deleted' => false );
+		$query = $this->db->insert('so_date_helper', $data);
+		if($query == false){
+			throw new Mpm_Exception('Fehler beim Anlegen des Helfers f&uumlr den Termin');
+		}
 	}
 }

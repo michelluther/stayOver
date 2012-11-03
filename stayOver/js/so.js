@@ -1,14 +1,17 @@
+var selectedDates = new Array();
+var addDateForm;
+
 $(document).ready(function() {
 	$.datepicker.setDefaults($.datepicker.regional['de']);
 	$(".datepicker").datepicker();
-//	$(".dateNavigation").on('mouseover', function(e) {
-//		showSubNavigation(e.target);
-//	});
-//	$(".dateNavigation").on('mouseout', function(e) {
-//		hideSubNavigation(e.target);
-//	});
+	$(".selectableTr").on('click', function(event) {
+		toggleSelection($(event.target).closest('.selectableTr'));
+	});
+	addDateForm = $('#addKidDateForm');
+	addDateForm.detach();
 });
 
+// Feedback Data
 function giveFeedback(data) {
 	var text = data.msgText;
 	var type = data.msgClass;
@@ -16,26 +19,106 @@ function giveFeedback(data) {
 			+ type
 			+ ' fade in out"><button class="close" data-dismiss="alert" type="button">&times;</button>'
 			+ text + '</div>';
-	alert($('#content').html());
 	$('#content').before(html);
 }
 
-function openAddDate() {
-	// $('#addDateForm').modal('show');
-	$.blockUI({
-		message : $('#addDateForm')
+// Table Management
+function toggleSelection(target) {
+	var selectedID = target.attr('so_data.id');
+	if (target.hasClass('highlight') == true) {
+		selectedDates = $.grep(selectedDates, function(value) {
+			return value != selectedID;
+		});
+		target.removeClass('highlight');
+	} else {
+		selectedDates.push(selectedID);
+		target.addClass('highlight');
+	}
+}
+
+function refreshDates() {
+	var postTarget = base_url + 'index.php/manageKidDates/removeDates';
+	$.post(postTarget, null , function(htmlK) {
+		
 	});
+}
+// Popup Management
+function openAddDate() {
+	$.blockUI({
+		message : $('#dynamicPopup')
+	});
+	setPopupContent(addDateForm);
+}
+
+function openChangeDate() {
+	if (selectedDates.length == 1) {
+		$.blockUI({
+			message : $('#dynamicPopup')
+		});
+		clearPopupContent();
+		var selectedID = selectedDates[0];
+		var postTarget = base_url
+				+ 'index.php/manageKidDates/getChangeDateForm/' + selectedID;
+		$.post(postTarget, null, function(data) {
+			setPopupContent($(data));
+			$(".datepicker").datepicker();
+		});
+	} else {
+		var feedBackData = new Object();
+		feedBackData.sgText = 'Bitte nur einen Eintrag selektieren';
+		feedBackData.msgClass = 'error';
+		giveFeedback(feedBackData);
+	}
+}
+
+function openDeleteDate() {
+	var postTarget = base_url
+			+ 'index.php/manageKidDates/getDeleteDatesConfirm';
+	$.blockUI({
+		message : $('#dynamicPopup')
+	});
+	$.post(postTarget, {
+		dates : selectedDates
+	}, function(data) {
+		setPopupContent($(data));
+	});
+}
+
+function openAssignDate() {
+	var postTarget = base_url + 'index.php/manageKidDates/getAssignDatesForm';
+	$.blockUI({
+		message : $('#dynamicPopup')
+	});
+	$.post(postTarget, {
+		dates : selectedDates
+	}, function(data) {
+		setPopupContent($(data));
+	});
+}
+
+function setPopupContent(content) {
+	clearPopupContent();
+	$('#dynamicPopupContent').html(content);
+	$('#dynamicPopupContent').show();
+}
+
+function clearPopupContent() {
+	$('#dynamicPopupContent').empty();
+	$('#dynamicPopupContent').hide();
 }
 
 function submitForm(form, target, callback) {
 	var jsonForm = form2js(form, '.', false);
-	// $(".loaderText").display();
-	$.post(target, jsonForm, function(data) {
+	$.post(target, {
+		'form' : jsonForm,
+		'dates' : selectedDates
+	}, function(data) {
 		jsonObject = JSON.parse(data);
 		$.unblockUI();
 		giveFeedback(jsonObject[0]);
-		//writeDebugData(data);
-		
+		if (callback != null) {
+			callback();
+		}
 	});
 }
 
@@ -43,31 +126,17 @@ function formSubmitted(data) {
 	writeDebugData('data returned');
 }
 
-function showSubNavigation(hoverTarget) {
-	var navigation = $(hoverTarget);
-	while (navigation.hasClass('dateNavigation') != true) {
-		navigation = navigation.parent();
-		if (navigation.id == 'content') {
-			continue;
-		}
-	}
-	if (navigation.hasClass('dateNavigation') == true) {
-		navigation.css('color', '#000');
-	}
-}
-
-function hideSubNavigation(target) {
-	if (target.hasClass('dateNavigation') == true) {
-		$(target).css('color', '#fff');
-	}
+function submitDeletion() {
+	var postTarget = base_url + 'index.php/manageKidDates/removeDates';
+	$.post(postTarget, {
+		dates : selectedDates
+	}, function(data) {
+		jsonObject = JSON.parse(data);
+		$.unblockUI();
+		giveFeedback(jsonObject[0]);
+	});
 }
 
 function writeDebugData(text) {
 	console.log(text);
-	}
-
-function giveFeedbackTest() {
-	var object = new Object();
-	object.msgText = 'Haaaaalo';
-	giveFeedback(object);
 }

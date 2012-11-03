@@ -1,4 +1,4 @@
-<form id="changeKidDateForm" action="" class="hide">
+<form id="changeKidDateForm" action="">
 <?php $basePath = base_url(); ?>
 	<table class="alignment">
 		<tr>
@@ -32,7 +32,9 @@
 		<tr>
 			<td><label>Anmerkungen:</label>
 			</td>
-			<td><textarea name="date.note" cols="40" rows="4">...</textarea>
+			<td><textarea name="date.note" cols="40" rows="4"><?php 
+				echo $date->getNote(); 
+				?></textarea>
 			</td>
 		</tr>
 		<tr>
