@@ -1,4 +1,4 @@
-<table class="table table-bordered table-condensed">
+<table class="table table-bordered table-condensed" id="kidDatesTable">
 	<thead>
 		<tr>
 			<th width="30px"><i class="icon-check"></i>

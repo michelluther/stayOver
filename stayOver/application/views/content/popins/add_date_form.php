@@ -39,7 +39,7 @@
 		<tr>
 			<td>&nbsp;</td>
 			<td><input type="button" value="Termin anlegen"
-				onclick="submitForm('addKidDateForm', '<?= $basePath ?>index.php/manageKidDates/addDate', 'formSubmitted')"
+				onclick="submitAddDateForm('addKidDateForm', '<?= $basePath ?>index.php/manageKidDates/addDate')"
 				class="btn" />
 				<div class="loaderText" style="display: none">
 					<p>

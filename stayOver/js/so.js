@@ -37,9 +37,10 @@ function toggleSelection(target) {
 }
 
 function refreshDates() {
-	var postTarget = base_url + 'index.php/manageKidDates/removeDates';
-	$.post(postTarget, null , function(htmlK) {
-		
+	var postTarget = base_url + 'index.php/manageKidDates/getDates';
+	$.get(postTarget, null , function(html) {
+		alert( "..." );
+		$('#kidDatesTable').html(html);
 	});
 }
 // Popup Management
@@ -107,6 +108,12 @@ function clearPopupContent() {
 	$('#dynamicPopupContent').hide();
 }
 
+function submitAddDateForm(form, target){
+	submitForm(form, target, function(){
+		refreshDates();
+	});
+}
+
 function submitForm(form, target, callback) {
 	var jsonForm = form2js(form, '.', false);
 	$.post(target, {
@@ -116,14 +123,13 @@ function submitForm(form, target, callback) {
 		jsonObject = JSON.parse(data);
 		$.unblockUI();
 		giveFeedback(jsonObject[0]);
-		if (callback != null) {
+		var callbackType = typeof callback;
+		alert(callbackType);
+		if (callback != undefined && typeof callback == 'function') {
+			alert(callback);	
 			callback();
 		}
 	});
-}
-
-function formSubmitted(data) {
-	writeDebugData('data returned');
 }
 
 function submitDeletion() {
