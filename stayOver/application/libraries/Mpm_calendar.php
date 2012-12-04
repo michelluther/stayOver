@@ -8,7 +8,9 @@ class Mpm_calendar{
 	
 	private static $calendar;
 	private static $db_date_format;
+	private static $db_time_format;
 	private static $user_date_format;
+	private static $user_time_format;
 	private static $locale;
 	
 	public function __construct(){
@@ -19,7 +21,7 @@ class Mpm_calendar{
 	
 	public static function get_date_from_db_string($date_string){
 		$date = DateTime::createFromFormat(self::$db_date_format, $date_string);
-		return $date;
+		return $date; 
 	}
 	
 	public static function get_date_from_user_string($date_string){
@@ -44,8 +46,16 @@ class Mpm_calendar{
 		return $returnString = $dateTime->format(self::$db_date_format);
 	}
 	
+	public static function format_time_for_DataBase($dateTime){
+		return $returnString = $dateTime->format(self::$db_time_format);
+	}
+	
 	public static function format_date_for_User($dateTime){
 		return $returnString = $dateTime->format(self::$user_date_format);
+	}
+	
+	public static function format_time_for_User($dateTime){
+		return $returnString = $dateTime->format(self::$user_time_format);
 	}
 	
 	public static function get_week_day($dateTime){
@@ -72,7 +82,7 @@ class Mpm_calendar{
 		/*
 		 * Past & Future als Intervallangabe,
 		* 	z.B: 	P2M -> 2 Monate
-		* 			  P1W -> 1 Woche
+		* 		    P1W -> 1 Woche
 		*  Retourniert ein Array Beginndatum, Endedatum
 		*/
 		$today = new DateTime();
@@ -83,38 +93,6 @@ class Mpm_calendar{
 		self::add_to_date($endDate, new DateInterval($future));
 		$endDateString = self::format_date_for_DataBase($endDate);
 		return array('beginDate' => $beginDateString,
-					 			 'endDate'   => $endDateString);
-	}
-}
-
-class Mpm_calendar_object{
-	
-	public function __construct(){
-		return $this;
-	}
-}
-
-class Mpm_calendar_entry{
-	
-	private $dateString;
-	private $date;
-	private $hours;
-	
-	public function __construct($format, $date){
-		$this->setDate($date, $format);
-		return $this;
-	}
-	
-	private function setDate($date, $format) {
-		$this->date = $date;
-		$this->dateString = date($format, $date);
-	}
-	
-	public function getDateString(){
-		return $this->dateString;
-	}
-	
-	public function getDate(){
-		return $this->date;
+					 'endDate'   => $endDateString);
 	}
 }

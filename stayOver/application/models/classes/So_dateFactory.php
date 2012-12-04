@@ -20,7 +20,10 @@ class SO_DateFactory{
 		return $dates[$id];
 	}
 
-	public static function createNewDate($beginDate, $endDate = null, $title = null, $beginTime = null, $endTime = null, $note = null, $kids = null){
+	public static function createNewDate(DateTime $beginDate, DateTime $endDate = null, 
+										 String $title = null, $beginTime = null, 
+										 DateTime $endTime = null, $note = null, 
+										 $kids = null){
 		// TODO: Authority-Check
 		$date = new SO_DateChild();
 		if($beginDate != null){

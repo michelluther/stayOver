@@ -148,13 +148,15 @@ class Termin_model extends CI_Model{
 	public function insertDate(SO_DateChild $date){
 		$CI =& get_instance();
 		$successful = true;
-		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
 		if($date->getEndDate() == null){
 			throw new Mpm_Exception('Endedatum nicht gesetzt');
 		}
 		$this->db->trans_begin();
 		try{
+			$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
+			$beginTime = Mpm_Calendar::format_time_for_DataBase($date->getEndDate());
 			$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
+			$endTime = Mpm_Calendar::format_time_for_DataBase($date->getEndDate());
 			$dateData = array(
 					'title' => $date->getTitle(),
 					'begda' => $beginDate,

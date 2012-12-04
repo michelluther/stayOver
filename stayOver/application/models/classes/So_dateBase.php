@@ -97,14 +97,9 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 
 	// End Setters
 	// Begin Getters
-
-	
-
 	public function getTitle(){
 		return $this->title;
 	}
-	
-	
 
 	public function getBeginDate(){
 		return $this->beginDate;
@@ -112,14 +107,6 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 
 	public function getEndDate(){
 		return $this->endDate;
-	}
-
-	public function getBeginTime(){
-		return $this->beginTime;
-	}
-
-	public function getEndTime(){
-		return $this->endTime;
 	}
 
 	public function getNote(){

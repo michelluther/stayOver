@@ -53,7 +53,7 @@ $autoload['packages'] = array(APPPATH.'third_party');
 */
 
 $autoload['libraries'] = array(	'database', 'session', 'mpm_navigation', 
-							 	'mpm_calendar', 'base_messager' );
+							 	'mpm_calendar', 'base_messager', 'so_ical' );
 
 
 /*

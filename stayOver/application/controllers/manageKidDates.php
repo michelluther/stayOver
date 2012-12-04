@@ -140,6 +140,12 @@ class ManageKidDates extends SO_BaseController{
 		}
 	}
 	
+	public function downloadIcalEntry($dateID){
+		$date = SO_DateFactory::getDate($dateID);
+		$icalEntry = $this->so_ical->getIcalEntry($date);
+		$icalEntry->download();
+	}
+	
 	private function getHelpersOfParent(){
 		$children = $user->getParent()->getChildren();
 		$helpers = array();
