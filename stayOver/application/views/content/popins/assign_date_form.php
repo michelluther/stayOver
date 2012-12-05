@@ -1,4 +1,5 @@
 <form id="assignKidDateForm" action="">
+<?php $basePath = base_url(); ?>
 	<table class="alignment">
 		<tr>
 			<td colspan="2"><p>Termine zur Zuordnung</p>
@@ -11,7 +12,7 @@
 		</tr>
 		<tr>
 			<td><p>Helfer:</p>
-			<select>
+			<select name="date.helper">
 			<?php foreach ($helpers as $helper) { ?>
 				<option value="<?= $helper->getID() ?>"><?= $helper->getName() ?></option>
 			<?php }?>
@@ -21,7 +22,7 @@
 		</tr>
 		<tr>
 			<td colspan="2"><input type="button" value="Speichern"
-				onclick="submitForm('assignKidDateForm', '<?= $basePath ?>index.php/manageKidDates/assignDates?>', 'formSubmitted')"
+				onclick="submitFormAndRefresh('assignKidDateForm', '<?= $basePath ?>index.php/manageKidDates/assignDates')"
 				class="btn" /></td>
 		</tr>
 	</table>

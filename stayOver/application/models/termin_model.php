@@ -31,7 +31,7 @@ class Termin_model extends CI_Model{
 		return $returnDates;
 	}
 
-	public function getDatesByChild(IF_BASE_NAMED_OBJECT $child, $periodBeginDate = null, $periodEndDate = null){
+	public function getDatesByChild(IF_BASE_NAMED_OBJECT $child, DateTime $periodBeginDate = null, DateTime $periodEndDate = null){
 		$where = array('child_id =' => $child->getID(),
 				'so_dates.deleted =' => false );
 		if($periodBeginDate != null){
@@ -56,6 +56,35 @@ class Termin_model extends CI_Model{
 		return $returnDates;
 	}
 
+	public function getOpenDatesByChild(IF_BASE_NAMED_OBJECT $child, IF_BASE_NAMED_OBJECT $helper = null, DateTime $periodBeginDate = null, DateTime $periodEndDate){
+		$where = array('child_id =' => $child->getID(),
+									 'so_dates.deleted =' => false );
+		if($periodBeginDate != null){
+			$beginDate = Mpm_Calendar::format_date_for_DataBase($periodBeginDate);
+			$where['begda >='] = $beginDate;
+		}
+		if($periodEndDate != null){
+			$endDate = Mpm_Calendar::format_date_for_DataBase($periodEndDate);
+			$where['endda <='] = $endDate;
+		}
+		$helperID = null;
+		if($helper != null){	// only those not assigned to anyone
+			$helperID = $helper->getID();
+		}
+		$this->db->select('*');
+		$this->db->from('so_date_child');
+		$this->db->join('so_dates', 'so_date_child.date_id = so_dates.id');
+		$this->db->where($where);
+		$query = $this->db->get();
+		$returnDates = array();
+		if($query != false){
+			foreach ($query->result() as $value) {
+				$returnDates[$value->begda . '_' . $value->date_id] = SO_DateFactory::getDate($value->date_id);
+			}
+		}
+		return $returnDates;
+	}
+	
 	public function getDate($id){
 		$where = array('id' => $id,
 				'deleted' => false);
@@ -110,7 +139,7 @@ class Termin_model extends CI_Model{
 		}
 		return $children;
 	}
-	
+
 	private function _getDateHelper(SO_DateChild $date){
 		$where = array('date_id' => $date->getID());
 		$this->db->from('so_date_helper');
@@ -120,43 +149,137 @@ class Termin_model extends CI_Model{
 		$helpers = array();
 		if($query != null){
 			foreach ($query->result() as $value){
-				$helper = SO_PeopleFactory::getPerson($value->child_id);
+				$helper = SO_PeopleFactory::getPerson($value->helper_id);
 				array_push($helpers, $helper);
 			}
 		}
 		return $helpers;
 	}
-	
-	// Writers
+
+	// Writers & Updater
 	public function updateDate(SO_DateChild $date){
+		$changesMade = false;
 		if( $date->getBeginDate() > $date->getEndDate()){
 			throw new Mpm_Exception('Das Beginndatum kann nicht gr&ouml;&zslig;er als das Endedatum sein.');
 		}
-		$dateData = array(
-				'title' => $date->getTitle(),
-				'begda' => Mpm_calendar::format_date_for_DataBase($date->getBeginDate()),
-				'endda' => Mpm_calendar::format_date_for_DataBase($date->getEndDate()),
-				//'begtime' => $date->getBeginTime(),
-				//'endtime' =>$date->getEndTime(),
-				'note' => $date->getNote()
-		);
-		$where = array('id' => $date->getId());
-		$this->db->where($where);
-		$this->db->update('so_dates', $dateData);
+		$this->db->trans_begin();
+		try{
+			$changesMade = $this->_updateBaseData($date, $changesMade);
+			$changesMade = $this->_updateChildData($date, $changesMade);
+			$changesMade = $this->_updateHelperData($date, $changesMade);
+			$helpers = $date->getHelpers();
+		} catch (Exception $ex) {
+			$this->db->trans_complete();
+			$this->db->trans_rollback();
+			throw $ex;
+		}
+		$this->db->trans_complete();
+		$this->db->trans_commit();
+		return $changesMade;
 	}
 
+	private function _updateBaseData(SO_DateChild $date, $changesMade){
+		$dateData = array('id'		=> $date->getID(),
+											'title' => $date->getTitle(),
+											'begda' => Mpm_calendar::format_date_for_DataBase($date->getBeginDate()),
+											'endda' => Mpm_calendar::format_date_for_DataBase($date->getEndDate()),
+											'note' => $date->getNote()
+		);
+		$where = array('id' => $date->getId());
+		$this->db->from('so_dates');
+		$this->db->where($dateData);
+		$query = $this->db->get();
+		if($query == true){
+			if(count($query->result()) == 0){
+				$this->db->where($where);
+				$this->db->update('so_dates', $dateData);
+				if($this->db->_error_message() != null){
+					throw new Mpm_Exception($this->db->_error_message());
+				} else {
+					$changesMade = true;
+				}
+			}
+		}
+		return $changesMade;
+	}
+
+	private function _updateChildData(SO_DateChild $date, $changesMade){
+		$children = $date->getChildren();
+		$childIDs = array();
+		foreach ($children as $child) {
+			array_push($childIDs, $child->getID());
+		}
+		// 		Get all children on DB
+		$this->db->from('so_date_child');
+		$this->db->where(array('date_id' => $date->getID()));
+		$this->db->select('child_id');
+		$query = $this->db->get();
+		$childrenDB = array();
+		if ($query == true){
+			foreach ($query->result() as $entry) {
+				array_push($childrenDB, $entry->child_id);
+			}
+		}
+		$childrenToAdd = array_diff($childIDs, $childrenDB);
+		$childrenToDelete = array_diff($childrenDB, $childIDs);
+		foreach ($childrenToDelete as $childID) {
+			$this->removeDateToChildAssignment($date, $childID);
+			if($this->db->_error_message() != null){
+				throw new Mpm_Exception($this->db->_error_message());
+			} else {
+				$changesMade = true;
+			}
+		}
+		foreach ($childrenToAdd as $childID) {
+			$this->assignDateToChild($date, $childID);
+		}
+		return $changesMade;
+	}
+
+	private function _updateHelperData(SO_DateChild $date, $changesMade){
+		$helpers = $date->getHelpers();
+		$helperIDs = array();
+		foreach ($helpers as $helper) {
+			array_push($helperIDs, $helper->getID());
+		}
+		// 		Get all helpers on DB
+		$this->db->from('so_date_helper');
+		$this->db->where(array('date_id' => $date->getID()));
+		$this->db->select('helper_id');
+		$query = $this->db->get();
+		$helpersDB = array();
+		if ($query == true){
+			foreach ($query->result() as $entry) {
+				array_push($helpersDB, $entry->helper_id);
+			}
+		}
+		$helpersToAdd = array_diff($helperIDs, $helpersDB);
+		$helpersToDelete = array_diff($helpersDB, $helperIDs);
+		foreach ($helpersToDelete as $helperID) {
+			$this->removeDateTohelperAssignment($date, $helperID);
+			if($this->db->_error_message() != null){
+				throw new Mpm_Exception($this->db->_error_message());
+			} else {
+				$changesMade = true;
+			}
+		}
+		foreach ($helpersToAdd as $helperID) {
+			$this->assignDateTohelper($date, $helperID);
+		}
+		return $changesMade;
+	}
+	
 	public function insertDate(SO_DateChild $date){
 		$CI =& get_instance();
 		$successful = true;
+		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
 		if($date->getEndDate() == null){
 			throw new Mpm_Exception('Endedatum nicht gesetzt');
 		}
 		$this->db->trans_begin();
 		try{
-			$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
-			$beginTime = Mpm_Calendar::format_time_for_DataBase($date->getEndDate());
+			// Base Data
 			$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
-			$endTime = Mpm_Calendar::format_time_for_DataBase($date->getEndDate());
 			$dateData = array(
 					'title' => $date->getTitle(),
 					'begda' => $beginDate,
@@ -173,21 +296,21 @@ class Termin_model extends CI_Model{
 			} else {
 				throw new Mpm_Exception('Fehler beim Schreiben des Tabelleneintrags');
 			}
+			// Children
 			$children = $date->getChildren();
 			if($children != null){
 				foreach ($children as $child) {
-					$dateToChildData = array('date_id' => $date->getID(),
-							'child_id' => $child->getID());
-					$query = $this->db->insert('so_date_child', $dateToChildData);
-					if($query != true){
-						throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
-					}
+					$this->assignDateToChild($date, $child->getID());
 				}
 			}
+			// Helpers
+			// ToDo: Helpers
 		} catch (Exception $ex){
+			$this->db->trans_complete();
 			$this->db->trans_rollback();
 			throw $ex;
 		}
+		$this->db->trans_complete();
 		$this->db->trans_commit();
 	}
 
@@ -198,25 +321,41 @@ class Termin_model extends CI_Model{
 		$this->db->update('so_dates', $dateData);
 	}
 
-	public function assignDateToChild($date, $child){
+	private function assignDateToChild($date, $childID){
 		$assignment = array('date_id' => $date->getId(),
-				'child_id' => $child->getId());
-		$this->db->insert('so_date_child_assignment', $assignment);
+												'child_id' => $childID);
+		$query = $this->db->insert('so_date_child', $assignment);
+		if($query != true){
+			throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
+		}
 	}
 
-	public function removeDateToChildAssignment($date, $child){
+	private function removeDateToChildAssignment($date, $childID){
 		$where = array('date_id' => $date->getId(),
-				'child_id' => $child->getId());
-		$this->db->delete('so_date_child_assignment', $where);
+									 'child_id' => $childID);
+		$query = $this->db->delete('so_date_child', $where);
+		if($query != true){
+			throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
+		}
 	}
 
-	public function assignDateToHelper(IF_BASE_NAMED_OBJECT $date,IF_BASE_NAMED_OBJECT $helper){
+	private function assignDateToHelper(IF_BASE_NAMED_OBJECT $date, $helperID){
 		$data = array('date_id' => $date->getID(),
-				'helper_id' => $helper->getID(),
-				'deleted' => false );
+									'helper_id' => $helperID,
+									'deleted' => false );
 		$query = $this->db->insert('so_date_helper', $data);
 		if($query == false){
 			throw new Mpm_Exception('Fehler beim Anlegen des Helfers f&uumlr den Termin');
 		}
 	}
+
+	private function removeDateToHelperAssignment($date, $helperID){
+		$where = array('date_id' => $date->getId(),    
+										'helper_id' => $helperID);
+		$query = $this->db->delete('so_date_helper', $where);
+		if($query != true){
+			throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
+		}
+	}
+	
 }

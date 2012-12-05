@@ -91,7 +91,7 @@ class SO_BaseController extends CI_Controller{
 	}
 
 	protected function _get_logged_in_user(){
-		if($this->session->userdata['logged_in'] == true){
+		if(isset($this->session->userdata['logged_in']) && ($this->session->userdata['logged_in'] == true)){
 			$this->user = SO_User::getLoggedInUser($this->session->userdata['uname'], null);
 		} else {
 			$this->_redirect_to_login();

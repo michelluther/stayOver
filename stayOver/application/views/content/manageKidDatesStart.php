@@ -12,7 +12,7 @@
 			<a class="btn disabled">|</a>
 			<a class="btn btn-small" onclick="openChangeDate()"><i class="icon-pencil"></i> ändern</a> 
 			<a class="btn btn-small" onclick="openAssignDate()"><i class="icon-resize-small"></i> zuordnen</a> 
-			<a class="btn btn-small"><i class="icon-resize-full"></i> freigeben</a>
+			<a class="btn btn-small" onclick="openUnassignDate()"><i class="icon-resize-full"></i> freigeben</a>
 			<a class="btn btn-small" onclick="openDeleteDate()"><i class="icon-trash"></i> l&ouml;schen</a>
 		</div>
 		<div id="dateEditList" class="span12">

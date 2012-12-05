@@ -38,14 +38,17 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 	}
 
 	public function save(){
+		$changesMade = false;
 		if ($this->id != null){
-			self::$model->updateDate($this);
+			$changesMade = self::$model->updateDate($this);
 		} else {
 			self::$model->insertDate($this);
+			$changesMade = true;
 		}
 		$this->isPersistent = true;
 		$this->isChanged = false;
 		SO_DateFactory::cacheDate($this);
+		return $changesMade;
 	}
 	
 	public function delete(){
@@ -97,9 +100,14 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 
 	// End Setters
 	// Begin Getters
+
+	
+
 	public function getTitle(){
 		return $this->title;
 	}
+	
+	
 
 	public function getBeginDate(){
 		return $this->beginDate;
@@ -107,6 +115,14 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 
 	public function getEndDate(){
 		return $this->endDate;
+	}
+
+	public function getBeginTime(){
+		return $this->beginTime;
+	}
+
+	public function getEndTime(){
+		return $this->endTime;
 	}
 
 	public function getNote(){

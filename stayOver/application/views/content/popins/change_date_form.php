@@ -40,7 +40,7 @@
 		<tr>
 			<td>&nbsp;</td>
 			<td><input type="button" value="Speichern"
-				onclick="submitForm('changeKidDateForm', '<?= $basePath ?>index.php/manageKidDates/changeDate/<?php echo $date->getID() ?>', 'formSubmitted')"
+				onclick="submitFormAndRefresh('changeKidDateForm', '<?= $basePath ?>index.php/manageKidDates/changeDate/<?php echo $date->getID() ?>', 'formSubmitted')"
 				class="btn" />
 				<div class="loaderText" style="display: none">
 					<p>

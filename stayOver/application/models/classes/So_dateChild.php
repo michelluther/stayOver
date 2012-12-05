@@ -18,6 +18,10 @@ class SO_DateChild extends SO_DateBase{
 		array_push($this->children, $child);
 	}
 	
+	public function removeChildren(){
+		$this->children = array();
+	}
+	
 	public function addThing(SO_ThingBase $thing){
 		$things[$thing->getID()] = $thing;
 	}
@@ -26,8 +30,8 @@ class SO_DateChild extends SO_DateBase{
 		$this->helpers[$helper->getID()] = $helper;
 	}
 	
-	public function removeHelper(SO_Person $helper){
-		unset($this->helpers[$helper->getID()]);
+	public function removeHelpers(){
+		$this->helpers = array();
 	}
 	
 	public function removeThing(SO_ThingBase $thing){

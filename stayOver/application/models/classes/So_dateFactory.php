@@ -21,9 +21,9 @@ class SO_DateFactory{
 	}
 
 	public static function createNewDate(DateTime $beginDate, DateTime $endDate = null, 
-										 String $title = null, $beginTime = null, 
-										 DateTime $endTime = null, $note = null, 
-										 $kids = null){
+																			 $title = null, $beginTime = null, 
+																			 DateTime $endTime = null, $note = null, 
+																			 $kids = null){
 		// TODO: Authority-Check
 		$date = new SO_DateChild();
 		if($beginDate != null){

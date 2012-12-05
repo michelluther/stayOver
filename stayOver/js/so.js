@@ -36,11 +36,19 @@ function toggleSelection(target) {
 	}
 }
 
+function refreshSelectedDates(){
+	selectedDates = new Array();
+}
+
 function refreshDates() {
+	refreshSelectedDates();
 	var postTarget = base_url + 'index.php/manageKidDates/getDates';
-	$.get(postTarget, null , function(html) {
-		alert( "..." );
+	$.post(postTarget, null, function(html) {
 		$('#kidDatesTable').html(html);
+		$.unblockUI();
+		$(".selectableTr").on('click', function(event) {
+			toggleSelection($(event.target).closest('.selectableTr'));
+		});
 	});
 }
 // Popup Management
@@ -97,6 +105,18 @@ function openAssignDate() {
 	});
 }
 
+function openUnassignDate(){
+	var postTarget = base_url + 'index.php/manageKidDates/getUnassignDatesForm';
+	$.blockUI({
+		message : $('#dynamicPopup')
+	});
+	$.post(postTarget, {
+		dates : selectedDates
+	}, function(data) {
+		setPopupContent($(data));
+	});
+}
+
 function setPopupContent(content) {
 	clearPopupContent();
 	$('#dynamicPopupContent').html(content);
@@ -108,7 +128,7 @@ function clearPopupContent() {
 	$('#dynamicPopupContent').hide();
 }
 
-function submitAddDateForm(form, target){
+function submitFormAndRefresh(form, target){
 	submitForm(form, target, function(){
 		refreshDates();
 	});
@@ -123,10 +143,7 @@ function submitForm(form, target, callback) {
 		jsonObject = JSON.parse(data);
 		$.unblockUI();
 		giveFeedback(jsonObject[0]);
-		var callbackType = typeof callback;
-		alert(callbackType);
 		if (callback != undefined && typeof callback == 'function') {
-			alert(callback);	
 			callback();
 		}
 	});
@@ -140,6 +157,7 @@ function submitDeletion() {
 		jsonObject = JSON.parse(data);
 		$.unblockUI();
 		giveFeedback(jsonObject[0]);
+		refreshDates();
 	});
 }
 
