@@ -1,11 +1,6 @@
 <?php $basePath = base_url(); ?>
 <div id="datesOverview" class="row">
-	<h3 class="span12">Suche</h3>
-	<div id="searchBar" class="span12">
-		<input type="text"> <a class="btn btn-small"><i class="icon-filter"></i>
-			Filtern</a>
-	</div>
-	<h3 class="span12">Aktionen</h3>
+	<h3 class="span12">Die n&auml;chsten Termine Deiner Kinder</h3>
 	<div class="datesContainer">
 		<div class="btn-group span7">
 			<a class="btn btn-small" onclick="openAddDate()" href="#"><i class="icon-plus"></i> Neu</a> 

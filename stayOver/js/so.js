@@ -81,8 +81,7 @@ function openChangeDate() {
 }
 
 function openDeleteDate() {
-	var postTarget = base_url
-			+ 'index.php/manageKidDates/getDeleteDatesConfirm';
+	var postTarget = base_url + 'index.php/manageKidDates/getDeleteDatesConfirm';
 	$.blockUI({
 		message : $('#dynamicPopup')
 	});

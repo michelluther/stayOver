@@ -10,7 +10,7 @@
 	</thead>
 	<tbody>
 	<?php
-	foreach ($parentDates as $date) { ?>
+	foreach ($helperOpenDates as $date) { ?>
 		<tr class="selectableTr" so_data.id="<?php echo $date->getID() ?>">
 			<td><p>
 			<?= $date->getTitle() ?>
