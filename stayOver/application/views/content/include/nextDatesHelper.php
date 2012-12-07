@@ -1,4 +1,4 @@
-<?php if(count($helperOpenDates) != 0){  ?>
+<?php if(count($helperDates) != 0){  ?>
 <table class="table table-bordered table-condensed" id="kidDatesTable">
 	<thead>
 		<tr>
@@ -6,12 +6,13 @@
 			<th>Kinder</th>
 			<th>Beginndatum</th>
 			<th>Endedatum</th>
+			<th>Kommentar</th>
 		</tr>
 	</thead>
 	<tbody>
 	<?php
 	
-	foreach ($helperOpenDates as $date) { ?>
+	foreach ($helperDates as $date) { ?>
 		<tr class="selectableTr" so_data.id="<?php echo $date->getID() ?>">
 			<td><p>
 			<?= $date->getTitle() ?>
@@ -25,6 +26,7 @@
 			</td>
 			<td><?= Mpm_Calendar::format_date_for_User($date->getEndDate()) ?>
 			</td>
+			<td><?php echo $date->get_note(); ?></td>
 		</tr>
 		<?php } ?>
 	</tbody>

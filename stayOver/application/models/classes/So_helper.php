@@ -59,5 +59,6 @@ class SO_Helper implements IF_BASE_NAMED_OBJECT{
 				$returnDates = array_merge($returnDates, self::$dateModel->getOpenDatesByChild($child, $this, $beginDate, $endDate));
 			}
 		}
+		return $returnDates;
 	}
 }

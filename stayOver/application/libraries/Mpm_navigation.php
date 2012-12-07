@@ -4,6 +4,9 @@ class Mpm_navigation {
 	private $navigation;
 	
 	public function &get_navigation($activities){
+		usort($activities, function($a, $b){
+			return strcmp($a->index, $b->index);
+		});
 		if ($this->navigation == null){
 			$this->navigation = new MPM_NavigationObject($activities);	
 		}
@@ -24,7 +27,7 @@ class MPM_NavigationObject{
 			$navigationEntry = new MPM_NavigationEntry($activity);
 			$this->navigationEntries[$navigationEntry->get_index()] = $navigationEntry;
 		}
-		usort($this->navigationEntries, array($this, 'get_entry_index'));
+		
 		return $this;
 	}
 
