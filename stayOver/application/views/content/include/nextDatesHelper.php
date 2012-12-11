@@ -33,6 +33,6 @@
 	
 </table>
 <?php } else { ?>
-	<p>Es liegen keine unvergebenen Termine in der n&auml;chsten Zeit vor.</p>
+	<p>Es liegen keine Termine in den n&auml;chsten Tagen an.</p>
 <?php } ?>
 

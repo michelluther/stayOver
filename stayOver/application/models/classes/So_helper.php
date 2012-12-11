@@ -31,6 +31,18 @@ class SO_Helper implements IF_BASE_NAMED_OBJECT{
 		return BASE_OBJECT_TYPE_HELPER;
 	}
 
+	public function getFirstName(){
+		return $this->person->getFirstName();
+	}
+	
+	public function getLastName(){
+		return $this->person->getLastName();
+	}
+	
+	public function getBirthday(){
+		return $this->person->getBirthday();
+	}
+	
 	public function getChildren(){
 		if (! isset($this->children)){
 			$this->children = self::$personModel->getChildrenByHelper($this);

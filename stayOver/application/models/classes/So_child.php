@@ -1,6 +1,6 @@
 <?php
 
-class SO_Child implements IF_BASE_NAMED_OBJECT, IF_SO_Child {
+class SO_Child implements IF_BASE_NAMED_OBJECT, IF_SO_Child, IF_SO_Person {
 	
 	private static $personModel;
 	
@@ -22,13 +22,21 @@ class SO_Child implements IF_BASE_NAMED_OBJECT, IF_SO_Child {
 	public function getName(){
 		return $this->person->getName();
 	}
+	
+	public function getFirstName(){
+		return $this->person->getFirstName();
+	}
+	
+	public function getLastName(){
+		return $this->person->getLastName();
+	}
+	
+	public function getBirthday(){
+		return $this->person->getBirthday();
+	}
 
 	public function getType(){
 		return BASE_OBJECT_TYPE_CHILD;
-	}
-	
-	public function getPerson(){
-		return $this->person;
 	}
 	
 	public function getHelpers(){
@@ -36,6 +44,18 @@ class SO_Child implements IF_BASE_NAMED_OBJECT, IF_SO_Child {
 			$this->helpers = self::$personModel->getHelpersByChild($this);
 		}
 		return $this->helpers;
+	}
+	
+	public function setFirstName($firstName){
+		$this->person->setFirstName($firstName);
+	}
+	
+	public function setLastName($lastName){
+		$this->person->setLastName($lastName);
+	}
+	
+	public function setBirthday(DateTime $birthday){
+		$this->person->setBirthday($birthday);
 	}
 	
 }

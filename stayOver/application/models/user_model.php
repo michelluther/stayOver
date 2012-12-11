@@ -72,4 +72,14 @@ class User_model extends CI_Model{
 		return $returnArray;
 	}
 	
+	public function getEmail(IF_BASE_NAMED_OBJECT $user){
+		$where = array('uname' => $user->getID());
+		$this->db->where($where);
+		$this->db->select('email');
+		$query = $this->db->get('base_users');
+		$userEmails = $query->result();
+		$userEmail = $userEmails[0]->email;
+		return $userEmail;
+	}
+	
 }

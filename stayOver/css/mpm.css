@@ -230,3 +230,10 @@ div .btn_find {
 	border: 0;
 	float: left;
 }
+
+.plainwhite{
+	color: #fff;
+	text-decoration: none;
+	cursor: hand;
+	cursor: pointer;
+}

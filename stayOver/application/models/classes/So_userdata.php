@@ -9,6 +9,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 	private static $personModel;
 
 	private $uname;
+	private $email;
 	private $person;
 	private $parent;
 	private $helper;
@@ -53,10 +54,23 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 		return $this->uname;
 	}
 
+	public function getFirstName(){
+		return $this->person->getFirstName();
+	}
+	
+	public function getLastName(){
+		return $this->person->getLastName();
+	}
+	
+	public function getEmail(){
+		return $this->email;
+		
+	}
 	
 	private function init(){
 		$this->roles = self::$userModel->getRoles($this->uname);
 		$this->person = SO_PeopleFactory::getPersonByUser($this);
+		$this->email = self::$userModel->getEmail($this);
 		$this->addParent();
 		$this->addHelper();
 	}
@@ -82,11 +96,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 		}
 		return $hasRole;
 	}
-
-	public function getPerson(){
-		return $this->person;
-	}
-
+	
 	public function setPerson($person){
 		$this->person = $person;
 	}

@@ -2,7 +2,7 @@
 
 include_once 'So_person.php';
 
-class SO_Parent implements IF_BASE_NAMED_OBJECT{
+class SO_Parent implements IF_BASE_NAMED_OBJECT, IF_SO_Person, IF_SO_Parent{
 
 // Model is injected
 	protected static $model;
@@ -24,10 +24,6 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT{
 		}
 	}
 	
-	public function getPerson(){
-		return $this->person;
-	}
-	
 	public function removeChild($id){
 		// unset($this->children($id));
 	}
@@ -37,6 +33,14 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT{
 			$this->children = self::$model->getChildrenByParent($this);
 		}
 		return $this->children;
+	}
+	
+	public function assignHelperToChild(IF_BASE_NAMED_OBJECT $child, IF_BASE_NAMED_OBJECT $helper){
+		
+	}
+	
+	public function unassignHelperFromChild(IF_BASE_NAMED_OBJECT $child, IF_BASE_NAMED_OBJECT $helper){
+		self::$model->removeHelperToChildAssignment($child, $helper);
 	}
 	
 	public function getDates(DateTime $beginDate = null, DateTime $endDate = null){
@@ -63,5 +67,17 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT{
 	
 	public function getName(){
 		return $this->person->getName();
+	}
+	
+	public function getFirstName(){
+		return $this->person->getFirstName();
+	}
+	
+	public function getLastName(){
+		return $this->person->getLastName();
+	}
+	
+	public function getBirthday(){
+		return $this->person->getBirthday();
 	}
 }

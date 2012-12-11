@@ -6,7 +6,7 @@
 $basePath = base_url();
 ?>
 <link rel=stylesheet
-	href="<?php echo $basePath . 'css/bootstrap.min.css'?>" type="text/css"
+	href="<?php echo $basePath . 'css/bootstrap.css'?>" type="text/css"
 	media=screen>
 <script type="text/javascript">
 			var base_url = "<?= $basePath ?>";
@@ -32,8 +32,6 @@ $basePath = base_url();
 <?php
 	}
 } ?>
-<link rel=stylesheet href="<?php echo $basePath . 'css/reset.css'?>"
-	type="text/css" media=screen>
 <link rel=stylesheet
 	href="<?php echo $basePath . 'css/ui_lightness/jquery_ui.css'?>"
 	type="text/css" media=screen>

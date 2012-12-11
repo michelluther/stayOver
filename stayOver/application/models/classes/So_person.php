@@ -8,6 +8,7 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
 	protected $name;
 	protected $firstName;
 	protected $lastName;
+	protected $birthday;
 
 	public function __construct($id = null){
 		if($id != null){
@@ -35,6 +36,14 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
 		return $this->firstName;
 	}
 	
+	public function getLastName(){
+		return $this->lastName;
+	}
+	
+	public function getBirthday(){
+		return $this->birthday;
+	}
+	
 	public function setFirstName($firstName){
 		$this->firstName = $firstName;
 	}
@@ -42,6 +51,11 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
 	public function setLastName($lastName){
 		$this->lastName = $lastName;
 	}
+	
+	public function setBirthday(DateTime $birthday){
+		$this->birthday = $birthday;
+	}
+	
 	public function init(){
 		if(isset($this->id)){
 			self::$model->getPersonData($this);

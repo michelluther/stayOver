@@ -43,7 +43,7 @@ class MPM_NavigationObject{
 		}
 		// Set default: first Entry
 		if($activeEntryFound == false){
-			$this->navigationEntries[0]->set_active();
+			$this->navigationEntries[1]->set_active();
 		}
 	}
 	

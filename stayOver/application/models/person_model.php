@@ -43,7 +43,7 @@ class Person_model extends CI_Model{
 	
 	public function getHelpersByChild(IF_BASE_NAMED_OBJECT $child){
 		$where = array('child_id' => $child->getID());
-		$this->db->where = $where;
+		$this->db->where($where);
 		$this->db->select('helper_id');
 		$query = $this->db->get('so_helper_child');
 		$result = $query->result();
@@ -64,8 +64,6 @@ class Person_model extends CI_Model{
 		return $personResult->pernr;
 	}
 	
-	
-	
 	public function getPersonData(SO_Person $person){
 		$where = array('pernr' => $person->getID());
 		$query = $this->db->get_where('base_people', $where);
@@ -75,5 +73,9 @@ class Person_model extends CI_Model{
 		$person->setLastName($personResult->last_name);
 	}
 
-	
+	public function removeHelperToChildAssignment(IF_BASE_NAMED_OBJECT $child, IF_BASE_NAMED_OBJECT $helper){
+		$this->db->where(array(	'child_id' => $child->getID(),
+								'helper_id' => $helper->getID()));
+		$query = $this->db->delete('so_helper_child');
+	}
 }
