@@ -1,11 +1,14 @@
 <?php $basePath = base_url(); ?>
+
 <div class="row">
 <!--  Userdaten -->
 	<div class="row">
+	
 	<h3 class="span12 offset1">
 		<i class="icon-user"></i> Benutzerdaten
 	</h3>
 	</div>
+	<form id="UserDataForm" action="">
 	<div class="row">
 		<label class="span2 offset1" for="user.name">Benutzername</label><input
 			name="user.username" type="text" value="<?php echo $user->getName(); ?>"/>
@@ -28,9 +31,10 @@
 	</div>
 	<div class="row">
 		<div class="span2 offset1">
-			<a class="btn btn-small"><i class="icon-save"></i>Speichern</a>
+			<a class="btn btn-small" onClick="saveUserData();"><i class="icon-save"></i>Speichern</a>
 		</div>
 	</div>
+	</form>
 <!--  Kinderdaten -->	
 	<div class="row">
 	<h3 class="span3 offset1">

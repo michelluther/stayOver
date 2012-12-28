@@ -22,7 +22,10 @@ class Settings extends SO_BaseController{
 	
 	public function saveUserData(){
 		$clientArray = $_POST["form"]["user"];
-		
+		$user = SO_User::getInstance();
+		$user->setEmail($clientArray['email']);
+		$user->save();
+		$this->_returnFeedback(BASE_MSG_SUCCESS, "Benutzerdaten erfolgreich gespeichert");
 	}
 	
 	public function removeHelper($kidID, $helperID){

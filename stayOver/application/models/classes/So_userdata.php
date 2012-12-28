@@ -70,7 +70,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 	private function init(){
 		$this->roles = self::$userModel->getRoles($this->uname);
 		$this->person = SO_PeopleFactory::getPersonByUser($this);
-		$this->email = self::$userModel->getEmail($this);
+		$this->setEmail(self::$userModel->getEmail($this));
 		$this->addParent();
 		$this->addHelper();
 	}
@@ -81,6 +81,10 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 		}
 	}
 
+	public function setEmail($email){
+		$this->email = $email;
+	}
+	
 	public static function getLoggedInUser($uname, $sessionID){
 		/* TODO: Verification of session id */
 		self::setInstance($uname);

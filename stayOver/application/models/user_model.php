@@ -48,7 +48,16 @@ class User_model extends CI_Model{
 	 * Initialization, user roles, etc.
 	 */
 
+	public function saveUserEmail(SO_User $user){
+		$this->db->where = array( 'uname' => $user->getID());
+		$data = array('email' => $user->getEmail());
+		$this->db->update('base_users', $data);
+	}
 
+	public function changeUserPassword($pw){
+		/* TODO: Change User Password in Model */		
+	}
+	
 	private function _set_pernr(){
 		$where = array(	'uname' => $this->uname);
 		$query = $this->db->get_where('base_people', $where);
