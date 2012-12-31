@@ -4,7 +4,7 @@
 	<div class="datesContainer">
 		<div class="btn-group span7">
 			<a class="btn btn-small" onclick="openAddDate()" href="#"><i class="icon-plus"></i> Neu</a> 
-			<a class="btn disabled">|</a>
+			<a class="btn btn-small disabled">|</a>
 			<a class="btn btn-small" onclick="openChangeDate()"><i class="icon-pencil"></i> ändern</a> 
 			<a class="btn btn-small" onclick="openAssignDate()"><i class="icon-resize-small"></i> zuordnen</a> 
 			<a class="btn btn-small" onclick="openUnassignDate()"><i class="icon-resize-full"></i> freigeben</a>

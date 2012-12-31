@@ -86,61 +86,13 @@ h4 {
 }
 
 /* form layout */
-
-.separator{
-	float:left;
-	padding: 5px;
-	color: #999;
-}
-
-.form_wrapper{
-	position: relative;
-	padding-left: 30px;
-	margin-bottom: 20px;
-}
-
-.formBox {
-	float: left;
-	margin: 0 10px;
-	vertical-align: top;
-}
-
-label{
-	font-size: small;
-	width: 150px;
-	float: left;
-}
-
 input {
-	margin: 0 0 10px 10px;
-	font-size: small;
-	height: 24px;
-	float: left;
-}
-
-select	{
-	margin-left: 11px;
-}
-
-checkbox{
-	margin-left: 5px;
-}
-
-.formBox label  {
-	line-height: 10px;
-	margin: 5px;
-}
-
-.formBox input {
-	margin: 0px 0px 10px 0px;
+	font-size: 14px;
+	height: 25px;
 }
 
 textarea {
 	margin-left: 10px;
-}
-
-.btn-floated {
-	float:left;
 }
 
 /* Login specific */
@@ -166,7 +118,9 @@ textarea {
 
 table{
 	border: none;
+	font-size: 10pt;
 }
+
 
 td{
 	padding: 3px 5px 5px 5px;
@@ -186,49 +140,11 @@ th{
 	float: right;
 }
 .highlight{
-	background: #3f3;
+	background: #f1f1f1;
 }
 
 .kidButtons {
 	margin-top: -8px;
-}
-
-/* Buttons */
-
-div .btn_add {
-	background: url("../img/buttons/add.png") no-repeat;
-	width: 16px;
-	height: 16px;
-	margin: 0 3px 0 3px;
-	border: 0;
-	float: left;
-}
-
-div .btn_edit {
-	background: url("../img/buttons/edit.png") no-repeat;
-	width: 16px;
-	height: 16px;
-	margin: 0 3px 0 3px;
-	border: 0;
-	float: left;
-}
-
-div .btn_delete {
-	background: url("../img/buttons/delete.png") no-repeat;
-	width: 16px;
-	height: 16px;
-	margin: 0 3px 0 3px;
-	border: 0;
-	float: left;
-}
-
-div .btn_find {
-	background: url("../img/buttons/find.png") no-repeat;
-	width: 16px;
-	height: 16px;
-	margin: 0 3px 0 3px;
-	border: 0;
-	float: left;
 }
 
 .plainwhite{

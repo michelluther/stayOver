@@ -12,9 +12,8 @@
 	<?php
 	foreach ($parentDates as $date) { ?>
 		<tr class="selectableTr" so_data.id="<?php echo $date->getID() ?>">
-			<td><p>
+			<td>
 			<?= $date->getTitle() ?>
-				</p>
 			</td>
 			<td><?php $children = $date->getChildren(); 
 			foreach ($children as $child) {
