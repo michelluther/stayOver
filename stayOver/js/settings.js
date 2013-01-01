@@ -27,5 +27,5 @@ function openAddChildPopup() {
 }
 
 function deleteChild() {
-
+	
 }
