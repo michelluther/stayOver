@@ -6,6 +6,7 @@ class SO_Child implements IF_BASE_NAMED_OBJECT, IF_SO_Child, IF_SO_Person {
 	
 	private $person;
 	private $helpers;
+	private $parents;
 	
 	public static function setPersonModel($model){
 		self::$personModel = $model;
@@ -40,10 +41,17 @@ class SO_Child implements IF_BASE_NAMED_OBJECT, IF_SO_Child, IF_SO_Person {
 	}
 	
 	public function getHelpers(){
-		if(!isset($helpers)){
+		if(!isset($this->helpers)){
 			$this->helpers = self::$personModel->getHelpersByChild($this);
 		}
 		return $this->helpers;
+	}
+	
+	public function getParents(){
+		if(!isset($this->parents)){
+			$this->parents = self::$personModel->getParentsByChild($this);
+		}
+		return $this->parents;
 	}
 	
 	public function setFirstName($firstName){

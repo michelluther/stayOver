@@ -1,5 +1,4 @@
 <?php $basePath = base_url(); ?>
-
 <!--  Userdaten -->
 <div class="row">
 	<h3 class="span2 offset1">
@@ -9,27 +8,33 @@
 </div>
 <form id="UserDataForm" action="">
 	<div class="row">
-		<label class="span2 offset2" for="user.name">Benutzername</label><input
+		<label class="span2 offset2" for="user.name">Benutzername</label>
+		<div class="span3"><input
 			name="user.username" type="text"
 			value="<?php echo $user->getName(); ?>" />
+			</div>
 	</div>
 	<div class="row">
-		<label class="span2 offset2" for="">Passwort</label><input
-			name="user.password" type="password" />
+		<label class="span2 offset2" for="">Passwort</label>
+		<div class="span3"><input
+			name="user.password" type="password" /></div>
 	</div>
 	<div class="row">
-		<label class="span2 offset2" for="user.firstname">Vorname</label><input
-			name="user.firstname" type="text"
-			value="<?php echo $user->getFirstName() ?>" />
+		<label class="span2 offset2" for="user.firstname">Vorname</label>
+		<div class="span3">
+			<input name="user.firstname" type="text" value="<?php echo $user->getFirstName() ?>" />
+		</div>
 	</div>
 	<div class="row">
-		<label class="span2 offset2" for="user.lastname">Nachname</label><input
+		<label class="span2 offset2" for="user.lastname">Nachname</label>
+		<div class="span3"><input
 			name="user.lastname" type="text"
-			value="<?php echo $user->getLastName() ?>" />
+			value="<?php echo $user->getLastName() ?>" /></div>
 	</div>
 	<div class="row">
-		<label class="span2 offset2" for="">E-Mail</label><input
-			name="user.email" type="text" value="<?php echo $user->getEmail() ?>" />
+		<label class="span2 offset2" for="">E-Mail</label>
+		<div class="span3"><input
+			name="user.email" type="text" value="<?php echo $user->getEmail() ?>" /></div>
 	</div>
 	<div class="row">
 		<div class="span2 offset2">
@@ -45,67 +50,10 @@
 	</h3>
 	<hr class="span9" />
 </div>
-<?php 
-$iterator = 1;
-foreach ($kids as $kid) { ?>
-<div class="row">
-	<h4 class="span2 offset2">
-		<?php echo $kid->getFirstName(); ?>
-	</h4>
-	<div class="span2 kidButtons offset2">
-		<a class="btn btn-small"><i class="icon-trash"></i> L&ouml;schen</a>
-	</div>
-</div>
-<div class="row">
-	<label class="span2 offset2" for="kid.firstName">Vorname</label><input
-		name="kid.firstName" type="text"
-		value="<?php echo $kid->getFirstName(); ?>" />
-</div>
-<div class="row">
-	<label class="span2 offset2" for="kid.lastName">Nachname</label><input
-		name="kid.lastName" type="text"
-		value="<?php echo $kid->getLastName(); ?>" />
-</div>
-<!-- 
-	<div class="row">
-		<label class="span2 offset1" for="kid.name">Geburtsdatum</label><input
-			name="kid.dateOfBirth" type="text" value="19.6.2011"/>
-	</div> -->
-<div class="row">
-	<?php $helpers = $kid->getHelpers();?>
-	<label class="span2 offset2" for="kid.helpers">Helfer</label>
-	<div class="span3">
-		<?php 
-		$iterator = 1;
-		foreach ($helpers as $helper) {?>
-
-		<?php echo $helper->getName(); 
-		if($iterator > 1){
-			echo ",&nbsp;";
-		}
-		$iterator ++;
-		}
-}
-?>
-	</div>
-	<div class="span2">
-		<a class="btn btn-small"
-			onClick="removeHelper(<?php echo $kid->getID() ?>, <?php echo $helper->getID()?>)"><i
-			class="icon-minus-sign"></i>&nbsp;Entfernen</a>
-	</div>
+<div id="assignedChildren">
+<?php include_once 'include/assigned_children.php'?>
 </div>
 <div class="row">
 	<span class="span4 offset1"><a class="btn btn-small"
-		onClick="openAddChild()"><i class="icon-plus"></i> Neues Kind</a> </span>
-</div>
-<div class="modal hide" id="dynamicPopup">
-	<div class="modal-header">
-		<button class="close" data-dismiss="modal" type="button"
-			onclick="$.unblockUI();">&times;</button>
-		<h2>Neuen Termin anlegen</h2>
-	</div>
-	<div class="modal-body" id="dynamicPopupContent">
-		<?php include_once 'popins/add_helper_form.php';?>
-		<?php include_once 'popins/add_child_form.php';?>
-	</div>
+		onClick="openAddChildPopup()"><i class="icon-plus"></i> Neues Kind</a> </span>
 </div>

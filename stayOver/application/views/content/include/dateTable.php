@@ -6,12 +6,13 @@
 			<th>Beginndatum</th>
 			<th>Endedatum</th>
 			<th>Helfer</th>
+			<th width="60px">Aktionen</th>
 		</tr>
 	</thead>
 	<tbody>
 	<?php
 	foreach ($parentDates as $date) { ?>
-		<tr class="selectableTr" so_data.id="<?php echo $date->getID() ?>">
+		<tr so_data.id="<?php echo $date->getID() ?>">
 			<td>
 			<?= $date->getTitle() ?>
 			</td>

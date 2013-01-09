@@ -14,7 +14,7 @@ class SO_DateChild extends SO_DateBase{
 		$this->isChanged = false;
 	}
 	
-	public function addChild(SO_Person $child){
+	public function addChild(SO_Child $child){
 		array_push($this->children, $child);
 	}
 	

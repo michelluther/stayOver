@@ -54,7 +54,7 @@ class SO_Helper implements IF_BASE_NAMED_OBJECT{
 		$children = $this->getChildren();
 		$returnDates = array();
 		foreach ($children as $child){
-			$returnDates = array_merge($returnDates, self::$dateModel->getDatesByChild($child, $beginDate, $endDate));
+			$returnDates = array_merge($returnDates, self::$dateModel->getDatesByChild($child, $beginDate, $endDate, $this));
 		}
 		return $returnDates;
 	}
@@ -68,7 +68,7 @@ class SO_Helper implements IF_BASE_NAMED_OBJECT{
 		$returnDates = array();
 		foreach ($children as $child) {
 			if($endDate != null){
-				$returnDates = array_merge($returnDates, self::$dateModel->getOpenDatesByChild($child, $this, $beginDate, $endDate));
+				$returnDates = array_merge($returnDates, self::$dateModel->getOpenDatesByChild($child, null, $beginDate, $endDate));
 			}
 		}
 		return $returnDates;

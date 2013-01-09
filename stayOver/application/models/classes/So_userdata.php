@@ -2,7 +2,7 @@
 
 include_once 'application/models/interfaces/So_Interfaces.php';
 
-class SO_User implements IF_BASE_NAMED_OBJECT{
+class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 
 	static private $instance = null;
 	private static $userModel;
@@ -13,13 +13,18 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 	private $person;
 	private $parent;
 	private $helper;
+	private $is_persistent;
 
 	public $roles = array();
 	public $navigation;
 
-	// Model
+	// Models
 	public static function setUserModel($model){
 		self::$userModel = $model;
+	}
+	
+	public static function setPersonModel($model){
+		self::$personModel = $model;
 	}
 
 	// Singleton
@@ -51,9 +56,20 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 	}
 	
 	public function getName(){
-		return $this->uname;
+		return $this->person->getName();
 	}
-
+	
+	// IF_BASE_SAVEABLE
+	public function save(){
+		$changesMade = false;
+		$changesUser = self::$userModel->updateUserData($this);
+		$changesPerson = self::$personModel->updatePersonalData($this->person);
+		if($changesPerson == true || $changesUser == true){
+			$changesMade = true;
+		} 
+		return $changesMade;
+	}
+	
 	public function getFirstName(){
 		return $this->person->getFirstName();
 	}
@@ -64,7 +80,6 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 	
 	public function getEmail(){
 		return $this->email;
-		
 	}
 	
 	private function init(){
@@ -83,6 +98,14 @@ class SO_User implements IF_BASE_NAMED_OBJECT{
 
 	public function setEmail($email){
 		$this->email = $email;
+	}
+	
+	public function setFirstName($firstName){
+		$this->person->setFirstName($firstName);
+	}
+	
+	public function setLastName($lastName){
+		$this->person->setLastName($lastName);
 	}
 	
 	public static function getLoggedInUser($uname, $sessionID){

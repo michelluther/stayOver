@@ -17,6 +17,8 @@ class SO_PeopleFactory{
 		SO_Parent::setPersonModel($model);
 		SO_Helper::setPersonModel($model);
 		SO_Child::setPersonModel($model);
+		SO_User::setPersonModel($model);
+		self::$people = array();
 	}
 		
 	public static function getPerson($id){
@@ -37,7 +39,11 @@ class SO_PeopleFactory{
 		$person = new SO_Person();
 		$person->setFirstName($firstName);
 		$person->setLastName($lastName);
+		return $person;
 	}
 
+	public static function searchPeopleGeneric($searchString){
+		return self::$model->getPeopleBySearchString($searchString);
+	}
 
 }

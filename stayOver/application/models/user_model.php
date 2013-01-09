@@ -8,7 +8,7 @@ class User_model extends CI_Model{
 	public function __construct(){
 		SO_User::setUserModel($this);
 	}
-	
+		
 	/*
 	 * Login Procedure
 	 */
@@ -35,23 +35,53 @@ class User_model extends CI_Model{
 		$where = array(	'uname' 	=> $uname,
 					   				'password'	=> $pw_hashed);
 		$query = $this->db->get_where('base_users', $where);
-		if(count($query->result()) == 0){
+		if(count($query->result()) > 0){
+			$this->_resetFailedAttampts($uname);
+		} else {
+			$this->_increaseFailedAttempts($uname);
 			throw new MPM_Exception('Benutzername oder Passwort falsch');
 		}
 	}
 
+	private function _increaseFailedAttempts($uname){
+		$where = array(	'uname' 	=> $uname);
+		$this->db->select('failed_attempts');
+		$query = $this->db->get_where('base_users', $where);
+		foreach ($query->result() as $row) {
+			$failedAttempts = $row->failed_attempts;
+		}
+		$failedAttempts ++;
+		$data = array('failed_attempts' => $failedAttempts);
+		$this->db->where = $where;
+		$this->db->update('base_users', $data);
+	}
+	
+	private function _resetFailedAttampts($uname){
+		$where = array(	'uname' 	=> $uname);
+		$data = array('failed_attempts' => 0);
+		$this->db->where = $where;
+		$this->db->update('base_users', $data);
+	}
+	
 	/*
 	 * Init user data for logged in user
 	 */
-	
-	/*
-	 * Initialization, user roles, etc.
-	 */
-
-	public function saveUserEmail(SO_User $user){
-		$this->db->where = array( 'uname' => $user->getID());
-		$data = array('email' => $user->getEmail());
-		$this->db->update('base_users', $data);
+	public function updateUserData(SO_User $user){
+		// Currently, only the email-address, other (like name and so on) is saved via Person model
+		$changesMade = false;
+		$data = array('uname' => $user->getID(),
+									'email' => $user->getEmail());
+		$query = $this->db->get_where('base_users', $data);
+		if(count($query->result()) == 0){
+			$this->db->where = array( 'uname' => $user->getID());
+			$this->db->update('base_users', $data);
+			if($this->db->_error_message() != null){
+				throw new Mpm_Exception($this->db->_error_message());
+			} else {
+				$changesMade = true;
+			}
+		} 
+		return $changesMade;
 	}
 
 	public function changeUserPassword($pw){
@@ -65,7 +95,10 @@ class User_model extends CI_Model{
 		$user_data = $hitlist[0];
 		$this->user->personal_id = $user_data->pernr;
 	}
-
+	
+	/*
+	* Initialization, user roles, etc.
+	*/
 	public function getRoles($userID){
 		$where = array(	'uname' => $userID);
 		$returnArray = array();

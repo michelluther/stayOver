@@ -1,4 +1,3 @@
-<?php if(count($helperDates) != 0){  ?>
 <table class="table table-bordered table-condensed" id="kidDatesTable">
 	<thead>
 		<tr>
@@ -11,9 +10,8 @@
 	</thead>
 	<tbody>
 	<?php
-	
-	foreach ($helperDates as $date) { ?>
-		<tr class="selectableTr" so_data.id="<?php echo $date->getID() ?>">
+	foreach ($nextDates as $date) { ?>
+		<tr class="" so_data.id="<?php echo $date->getID() ?>">
 			<td><p>
 			<?= $date->getTitle() ?>
 				</p>
@@ -26,13 +24,8 @@
 			</td>
 			<td><?= Mpm_Calendar::format_date_for_User($date->getEndDate()) ?>
 			</td>
-			<td><?php echo $date->get_note(); ?></td>
+			<td><?php echo $date->getNote(); ?></td>
 		</tr>
 		<?php } ?>
 	</tbody>
-	
 </table>
-<?php } else { ?>
-	<p>Es liegen keine Termine in den n&auml;chsten Tagen an.</p>
-<?php } ?>
-

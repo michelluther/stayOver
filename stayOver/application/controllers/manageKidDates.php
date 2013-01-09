@@ -30,17 +30,15 @@ class ManageKidDates extends SO_BaseController{
 
 	public function addDate(){
 		$clientArray = $_POST["form"]["date"];
-		$singleDay = $clientArray["singleDay"];
-		if($singleDay == 'on'){
-			$clientArray["endDate"] = $clientArray["beginDate"];
-		}
 		try {
 			$this->returnType = MLU_AJAX_DATA;
-			$newDate = SO_DateFactory::createNewDate(	Mpm_calendar::get_date_from_user_string($clientArray["beginDate"]),
-																								Mpm_calendar::get_date_from_user_string($clientArray["endDate"]),
+			$begin = Mpm_calendar::get_date_from_user_string($clientArray["beginDate"]);
+			Mpm_calendar::set_time_from_user_string($begin, $clientArray["beginTime"]);
+			$end = Mpm_calendar::get_date_from_user_string($clientArray["endDate"]);
+			Mpm_calendar::set_time_from_user_string($end, $clientArray["endTime"]);
+			$newDate = SO_DateFactory::createNewDate(	$begin,
+																								$end,
 																								$clientArray["title"],
-																								null,
-																								null,
 																								null,
 																								$clientArray["kid"]);
 			if ($clientArray["note"] != 'null') {
@@ -53,15 +51,10 @@ class ManageKidDates extends SO_BaseController{
 		}
 	}
 
-	public function removeDates(){
-		// ToDo: Extract JSON-Data
-		$selectedDates = $_POST['dates'];
-		$dates = array();
+	public function removeDate($dateID){
 		try {
-			foreach ($selectedDates as $dateID) {
-				$date = SO_DateFactory::getDate($dateID);
-				$date->delete();
-			}
+			$date = SO_DateFactory::getDate($dateID);
+			$date->delete();
 			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Termine erfolgreich gel&ouml;scht');
 		} catch (Mpm_Exception $e) {
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
@@ -94,6 +87,24 @@ class ManageKidDates extends SO_BaseController{
 		}
 	}
 
+	public function assignDate($dateID, $helperID = null){
+		try{
+			if($helperID == null){
+				$helperObject = $this->user->getHelper();
+				$helper = SO_PeopleFactory::getPerson($helperObject->getID());
+			} else {
+				$helper = SO_PeopleFactory::getPerson($helperID);
+			}
+			$date = SO_DateFactory::getDate($dateID);
+			$date->removeHelpers();
+			$date->addHelper($helper);
+			$changesMade = $date->save();
+			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Termine erfolgreich zugewiesen');
+		} catch (Exception $e) {
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
+		}
+	}
+
 	public function assignDates(){
 		$selectedDates = $_POST['dates'];
 		$dates = array();
@@ -115,6 +126,17 @@ class ManageKidDates extends SO_BaseController{
 		}
 	}
 
+	public function unassignDate($dateID){
+		try{
+			$date = SO_DateFactory::getDate($dateID);
+			$date->removeHelpers();
+			$changesMade = $date->save();
+			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Der Termin wurde frei gegeben.');
+		} catch (Exception $e) {
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
+		}
+	}
+
 	public function unassignDates(){
 		$selectedDates = $_POST['dates'];
 		$dates = array();
@@ -131,15 +153,19 @@ class ManageKidDates extends SO_BaseController{
 	}
 
 	// Form Management
-	public function getDeleteDatesConfirm(){
+	public function getAddDate(){
 		$this->returnType = MLU_AJAX_CONTENT;
-		$selectedDates = $_POST['dates'];
-		$dates = array();
-		foreach ($selectedDates as $dateID) {
-			$date = SO_DateFactory::getDate($dateID);
-			array_push($dates, $date);
-		}
-		$this->content['data']['dates'] = $dates;
+		$this->content['view'] = 'popins/add_date_form';
+		$user = SO_User::getInstance();
+		$this->content['data']['children'] = $user->getParent()->getChildren();
+		$this->_callView();
+	}
+	
+	
+	public function getDeleteDatesConfirm($dateID){
+		$this->returnType = MLU_AJAX_CONTENT;
+		$date = SO_DateFactory::getDate($dateID);
+		$this->content['data']['date'] = $date;
 		$this->content['view'] = 'popins/delete_dates_confirm';
 		$this->_callView();
 	}
@@ -158,17 +184,12 @@ class ManageKidDates extends SO_BaseController{
 		}
 	}
 
-	public function getAssignDatesForm(){
+	public function getAssignDateForm($dateID){
 		$this->returnType = MLU_AJAX_CONTENT;
 		try{
-			$selectedDates = $_POST['dates'];
-			$dates = array();
 			$helpers = array();
 			$children = array();
-			foreach ($selectedDates as $dateID) {
-				$date = SO_DateFactory::getDate($dateID);
-				array_push($dates, $date);
-			}
+			$date = SO_DateFactory::getDate($dateID);
 			// Helfer sind alle Helfer, die f�r die Kinder eingetragen sind
 			$children = $this->user->getParent()->getChildren();
 			foreach ($children as $child){
@@ -177,7 +198,7 @@ class ManageKidDates extends SO_BaseController{
 					$helpers[$helperTmp->getID()] = $helperTmp;
 				}
 			}
-			$this->content['data']['dates'] = $dates;
+			$this->content['data']['date'] = $date;
 			$this->content['data']['helpers'] = $helpers;
 			$this->content['view'] = 'popins/assign_date_form';
 			$this->_callView();
@@ -186,16 +207,27 @@ class ManageKidDates extends SO_BaseController{
 		}
 	}
 
-	public function getUnassignDatesForm(){
+	public function getAssignDateToSelfForm($dateID){
 		$this->returnType = MLU_AJAX_CONTENT;
 		try{
-			$selectedDates = $_POST['dates'];
 			$dates = array();
-			foreach ($selectedDates as $dateID) {
-				$date = SO_DateFactory::getDate($dateID);
-				array_push($dates, $date);
-			}
+			$helpers = array();
+			$children = array();
+			$date = SO_DateFactory::getDate($dateID);
+			array_push($dates, $date);
 			$this->content['data']['dates'] = $dates;
+			$this->content['view'] = 'popins/assign_date_to_self_form';
+			$this->_callView();
+		} catch(Mpm_Exception $e){
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
+		}
+	}
+
+	public function getUnassignDatesForm($dateID){
+		$this->returnType = MLU_AJAX_CONTENT;
+		try{
+			$date = SO_DateFactory::getDate($dateID);
+			$this->content['data']['date'] = $date;
 			$this->content['view'] = 'popins/unassign_date_form';
 			$this->_callView();
 		} catch(MPM_Exception $e){
@@ -205,11 +237,7 @@ class ManageKidDates extends SO_BaseController{
 
 	// End of Form Management
 
-	public function downloadIcalEntry($dateID){
-		$date = SO_DateFactory::getDate($dateID);
-		$icalEntry = $this->so_ical->getIcalEntry($date);
-		$icalEntry->download();
-	}
+
 
 	private function getHelpersOfParent(){
 		$children = $user->getParent()->getChildren();

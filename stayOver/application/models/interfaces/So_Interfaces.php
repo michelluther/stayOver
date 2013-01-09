@@ -33,3 +33,7 @@ interface IF_SO_Person{
 	
 	public function getBirthday();
 }
+
+interface IF_BASE_SAVEABLE{
+	public function save();
+}

@@ -1,6 +1,6 @@
 <?php
 
-class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
+class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE {
 	// Model is injected
 	protected static $model;
 
@@ -8,6 +8,7 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
 	protected $name;
 	protected $firstName;
 	protected $lastName;
+	protected $email;
 	protected $birthday;
 
 	public function __construct($id = null){
@@ -32,6 +33,18 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
 		return $this->firstName . ' ' . $this->lastName;
 	}
 	
+	// IF_BASE_SAVEABLE
+	public function save(){
+		if(isset($this->id)){
+			return self::$model->updatePersonalData($this);
+		} else {
+			$this->id = self::$model->insertPerson($this);
+			if($this->id != null){
+				return true;
+			}
+		}
+	}
+	
 	public function getFirstName(){
 		return $this->firstName;
 	}
@@ -54,6 +67,13 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT {
 	
 	public function setBirthday(DateTime $birthday){
 		$this->birthday = $birthday;
+	}
+	
+	public function getEmail(){
+		if(!isset($this->email)){
+			$user = self::$model->getUserEmailByPerson($this);
+		}
+		return $this->email;
 	}
 	
 	public function init(){

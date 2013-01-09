@@ -13,15 +13,15 @@ if ($banner['view'] != null) {
 if ($navigation['view'] != null){
 	$this->load->view('navigation/' . $navigation['view'], $navigation['data']);
 }?>
-<div id="content"><?php
+<div id="feedbackArea" class="container">&nbsp;</div>
+<div id="content" class="container"><?php
 $this->load->view('content/' . $content['view'], $content['data']);
 ?></div>
 <div id="debugArea"></div>
-</div>
-<?php
-$this->load->view('footer/' . $footer['view'], $footer['data']);
-?>
 <?php
 $this->load->view('preloader');
+$this->load->view('popup');
+$this->load->view('footer/' . $footer['view'], $footer['data']);
 ?>
+
 

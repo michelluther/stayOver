@@ -129,9 +129,6 @@ abstract class SO_DateBase extends SO_JSONData implements IF_BASE_NAMED_OBJECT{
 		return $this->note;
 	}
 
-	public function getChildren($child){
-		return $this->children;
-	}
 	// End Getters
 }
 

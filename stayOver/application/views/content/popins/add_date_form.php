@@ -1,51 +1,63 @@
 <form id="addKidDateForm" action="">
-	<table class="alignment">
-		<tr>
-			<td><label>Termin:</label>
-			</td>
-			<td><input type="text" name="date.title"></input>
-			</td>
-		</tr>
-		<tr>
-			<td><label>Beginndatum:</label>
-			</td>
-			<td><input type="text" name="date.beginDate" class="datepicker"></input><br />
-				<div class="formBox">
-					<input type="checkbox" id="date.singleDay" name="date.singleDay"></input><label
-						for="date.singleDay">nur ein Tag</label>
-				</div></td>
-		</tr>
-		<tr>
-			<td><label>Endedatum:</label>
-			</td>
-			<td><input type="text" name="date.endDate" class="datepicker"></input>
-			</td>
-		</tr>
-		<tr>
-			<td><label>Kind:</label>
-			</td>
-			<td><select name="date.kid">
-					<?php foreach ($parentChildren as $child) { ?>
-					<option value="<?= $child->getID() ?>"><?= $child->getName() ?></option>
+
+
+<?php $basePath = base_url(); ?>
+	<div class="row">
+		<div class="span2">
+			<label>Termin:</label>
+		</div>
+		<div class="span4">
+			<input type="text" name="date.title"></input>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span2">
+			<label>Beginn</label>
+		</div>
+		<div class="span4">
+			<input type="text" name="date.beginDate" class="datepicker" style="width:95px"></input>
+				<input class="timepicker-default" type="text" style="width: 75px;" name="date.beginTime">
+				<i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+	</div>
+	</div>
+	<div class="row">
+		<div class="span2">
+			<label>Ende</label>
+		</div>
+		<div class="span4">
+			   <input type="text" name="date.endDate" class="datepicker" style="width:95px"></input>
+				<input class="timepicker-default" type="text" style="width: 75px;" name="date.endTime">
+				<i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span2">
+			<label>Kind</label>
+		</div>
+		<div class="span4">
+			<select name="date.kid">
+			<?php foreach ($children as $child) { ?>
+				<option value="<?= $child->getID() ?>">
+				<?= $child->getName() ?>
+				</option>
 					<?php }?>
-			</select></td>
-		</tr>
-		<tr>
-			<td><label>Anmerkungen:</label>
+			</select>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span2">
+			<label>Anmerkungen</label>
+		</div>
+		<div class="span4">
+			<textarea name="date.note" cols="40" rows="4"></textarea>
 			</td>
-			<td><textarea name="date.note" cols="40" rows="4">...</textarea>
-			</td>
-		</tr>
-		<tr>
-			<td>&nbsp;</td>
-			<td><input type="button" value="Termin anlegen"
+		</div>
+	</div>
+	<div class="row">
+		<div class="span2">
+			<input type="button" value="Termin anlegen"
 				onclick="submitFormAndRefresh('addKidDateForm', '<?= $basePath ?>index.php/manageKidDates/addDate')"
 				class="btn" />
-				<div class="loaderText" style="display: none">
-					<p>
-						<img src="" /> ... der Termin wird gesendet.
-					</p>
-				</div></td>
-		</tr>
-	</table>
+		</div>
+	</div>
 </form>

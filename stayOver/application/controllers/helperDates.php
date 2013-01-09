@@ -12,11 +12,12 @@ class HelperDates extends SO_BaseController{
 		$this->content['view'] = 'manageHelperDatesStart';
 		try {
 			$user = SO_User::getInstance();
-			$this->content['data']['helperDates'] = $user->getHelper()->getDates(new DateTime());
-			$this->content['data']['helperOpenDates'] = $user->getHelper()->getOpenDates(new DateTime());
-			$this->content['data']['helperChildren'] = $user->getHelper()->getChildren();
+			$helper = $user->getHelper();
+			$this->content['data']['helperDates'] = $helper->getDates(new DateTime());
+			$this->content['data']['helperOpenDates'] = $helper->getOpenDates(new DateTime());
+			$this->content['data']['helperChildren'] = $helper->getChildren();
 		} catch (Mpm_Exception $e) {
-			$this->content['data']['parentDates'] = null;
+			
 		}
 		$this->_callView();
 	}

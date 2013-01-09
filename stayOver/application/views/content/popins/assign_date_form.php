@@ -1,29 +1,28 @@
 <form id="assignKidDateForm" action="">
+
 <?php $basePath = base_url(); ?>
-	<table class="alignment">
-		<tr>
-			<td colspan="2"><p>Termine zur Zuordnung</p>
-				<ul>
-					<?php foreach ($dates as $date) { ?>
-					<li><?= $date->getTitle(); ?></li>
-					<?php }?>
-				</ul>
-			</td>
-		</tr>
-		<tr>
-			<td><p>Helfer:</p>
-			<select name="date.helper">
+<div class="row">
+<div class="span6">
+<p>Du kannst diesen Termin allen Helfern aller Deiner Kinder zuweisen:
+</div>
+</div>
+<?php 
+	include 'view_date.php';
+?>
+	<div class="row">
+		<div class="span2">Verf&uuml;gbare Helfer</div>
+		<div class="span4">
+			<select name="date.helper" id="helperIDSelect">
 			<?php foreach ($helpers as $helper) { ?>
-				<option value="<?= $helper->getID() ?>"><?= $helper->getName() ?></option>
+				<option value="<?= $helper->getID() ?>">
+				<?= $helper->getName() ?>
+				</option>
 			<?php }?>
-			
 			</select>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2"><input type="button" value="Speichern"
-				onclick="submitFormAndRefresh('assignKidDateForm', '<?= $basePath ?>index.php/manageKidDates/assignDates')"
-				class="btn" /></td>
-		</tr>
-	</table>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span6"><input type="button" value="Speichern"
+			onclick="assignDate(<?php echo $date->getID(); ?>);" class="btn" /></div>
+	</div>
 </form>

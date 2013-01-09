@@ -20,34 +20,27 @@ class SO_DateFactory{
 		return $dates[$id];
 	}
 
-	public static function createNewDate(DateTime $beginDate, DateTime $endDate = null, 
-																			 $title = null, $beginTime = null, 
-																			 DateTime $endTime = null, $note = null, 
+	public static function createNewDate(DateTime $begin, DateTime $end = null, 
+																			 $title = null, $note = null, 
 																			 $kids = null){
 		// TODO: Authority-Check
 		$date = new SO_DateChild();
-		if($beginDate != null){
-			$date->setBeginDate($beginDate);
+		if($begin != null){
+			$date->setBeginDate($begin);
 		} else {
 			throw new Mpm_Exception('Wenigstens ein Beginndatum muss angegeben werden.');
 		}
-		if($endDate != null){
-			$date->setEndDate($endDate);
+		if($end != null){
+			$date->setEndDate($end);
 		}
 		if($title != null){
 			$date->setTitle($title);
-		}
-		if($beginTime != null){
-			$date->setBeginTime($beginTime);
-		}
-		if($endTime != null){
-			$date->setEndTime($endTime);
 		}
 		if($note != null){
 			$date->setNote($note);
 		}
 		if($kids != null){
-			$date->addChild(SO_PeopleFactory::getPerson($kids));
+			$date->addChild(new SO_Child(SO_PeopleFactory::getPerson($kids)));
 		}
 		return $date;
 	}
@@ -57,7 +50,7 @@ class SO_DateFactory{
 	}
 
 	public static function getDatesByChild(IF_BASE_NAMED_OBJECT $child, DateTime $beginDate = null, DateTime $endDate = null){
-		$returnDates = self::$model->getDatesByChild($child, $beginDate, $endDate);
+		$returnDates = self::$model->getDatesByChild($child, $beginDate, $endDate, null);
 		return $returnDates;
 	}
 

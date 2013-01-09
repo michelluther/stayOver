@@ -1,1 +1,3 @@
-<div id="preloader">Lade Daten ...</div>
+<div class="preloader preloader-large" id="preloaderLarge">Einen Moment, bitte ...
+</div>
+<div class="preloader preloader-small span1" id="preloaderSmall">&nbsp;</div>
