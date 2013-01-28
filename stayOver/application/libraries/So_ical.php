@@ -52,7 +52,17 @@ class SO_Ical_Entry{
 		$this->setHeader();
 		$this->setICalString();
 		echo $this->calendarString;
-		exit();
+		exit;
+// 		$CI =& get_instance();
+// 		$CI->load->helper('download');
+// 		$name = 'termin.ics';
+// 		$CI->download_helper->force_download($name, $this->calendarString);
+	}
+	
+	public function save(){
+				$CI =& get_instance();
+				$CI->load->helper('file');
+				$CI->file_helper->write_file('file.ics', 'test');
 	}
 	
 	private function setHeader(){

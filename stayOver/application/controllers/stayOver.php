@@ -62,7 +62,8 @@ class StayOver extends SO_BaseController{
 
 	public function downloadIcalEntry($dateID){
 		$date = SO_DateFactory::getDate($dateID);
-		$icalEntry = $this->so_ical->getIcalEntry($date);
+		$user = SO_User::getInstance();
+		$icalEntry = $this->so_ical->getIcalEntry($date, $user);
 		$icalEntry->download();
 	}
 
@@ -72,8 +73,17 @@ class StayOver extends SO_BaseController{
 		$this->email->to('luther@lutherundwinter.de');
 		$this->email->subject('Kalendereintrag für "' . $date->getTitle() . '"');
 		$this->email->message('eine Email für mich von mir ...');
-		$this->email->send();
+		$user = SO_User::getInstance();
+		$icalEntry = $this->so_ical->getIcalEntry($date, $user);
+		$this->load->helper('file');
+		if(write_file('name.txt', 'hallo')){
+			$this->email->send();
 		$this->_returnFeedback(BASE_MSG_SUCCESS, $this->email->print_debugger());
+		} else{
+			$this->_returnFeedback(BASE_MSG_ERROR, 'Konnte Datei nicht schreiben');
+		}
+// 		$icalEntryPath = $icalEntry->save();
+		
 	}
 
 	public function openEmailToParents($dateID){
