@@ -22,22 +22,17 @@ $(document).ready(function() {
 	preloaderSmall.detach();
 	preloaderLarge = $('#preloaderLarge');
 	preloaderLarge.detach();
-	$.blockUI.defaults = {
-		css : {
-			textAlign : "left"
-		}
-	};
 });
 
-function setTimePicker(){
-$('.timepicker-default').timepicker(
-		{ showMeridian: false,
-		  showInputs: false,
-		  disableFocus: true }
-	); 
+function setTimePicker() {
+	$('.timepicker-default').timepicker({
+		showMeridian : false,
+		showInputs : false,
+		disableFocus : true
+	});
 }
 
-function setDatePicker(){
+function setDatePicker() {
 	$('.datePicker').datepicker();
 }
 
@@ -135,15 +130,15 @@ function openAddDate() {
 }
 
 function openViewDate(dateID) {
-	openPopup("Termin ansehen");
+	openPopup("Termindetails");
 	var getTarget = base_url + 'index.php/stayOver/viewDate/' + dateID;
 	$.get(getTarget, null, function(data) {
 		setPopupContent($(data));
-	})
+	});
 }
 
 function openChangeDate(selectedID) {
-	openPopup("Termindaten &auml;ndern");
+	openPopup("Termindaten ändern");
 	var postTarget = base_url + 'index.php/manageKidDates/getChangeDateForm/'
 			+ selectedID;
 	$.post(postTarget, null, function(data) {
@@ -156,13 +151,14 @@ function openDeleteDate(dateID) {
 	var getTarget = base_url
 			+ 'index.php/manageKidDates/getDeleteDatesConfirm/' + dateID;
 	openPopup("Termine l&ouml;schen");
-	$.get(getTarget,null, function(data) {
+	$.get(getTarget, null, function(data) {
 		setPopupContent($(data));
 	});
 }
 
 function openAssignDate(dateID) {
-	var getTarget = base_url + 'index.php/manageKidDates/getAssignDateForm/' + dateID;
+	var getTarget = base_url + 'index.php/manageKidDates/getAssignDateForm/'
+			+ dateID;
 	openPopup("Termin zuweisen");
 	$.get(getTarget, null, function(data) {
 		setPopupContent($(data));
@@ -170,7 +166,8 @@ function openAssignDate(dateID) {
 }
 
 function openAssignDateToSelf(dateID) {
-	var getTarget = base_url + 'index.php/manageKidDates/getAssignDateToSelfForm/' + dateID;
+	var getTarget = base_url
+			+ 'index.php/manageKidDates/getAssignDateToSelfForm/' + dateID;
 	openPopup("Termine &uuml;bernehmen");
 	$.get(getTarget, null, function(data) {
 		setPopupContent($(data));
@@ -178,15 +175,16 @@ function openAssignDateToSelf(dateID) {
 }
 
 function openUnassignDate(dateID) {
-	var getTarget = base_url + 'index.php/manageKidDates/getUnassignDatesForm/'	+ dateID;
+	var getTarget = base_url + 'index.php/manageKidDates/getUnassignDatesForm/'
+			+ dateID;
 	openPopup("Termin freigeben");
 	$.get(getTarget, null, function(data) {
 		setPopupContent($(data));
 	});
 }
 
-function deleteDate(dateID){
-	var getTarget = base_url + 'index.php/manageKidDates/removeDate/'	+ dateID;
+function deleteDate(dateID) {
+	var getTarget = base_url + 'index.php/manageKidDates/removeDate/' + dateID;
 	$.get(getTarget, function(data) {
 		$.unblockUI();
 		jsonObject = JSON.parse(data);
@@ -195,8 +193,9 @@ function deleteDate(dateID){
 	});
 }
 
-function unassignDate(dateID){
-	var getTarget = base_url + 'index.php/manageKidDates/unassignDate/'	+ dateID;
+function unassignDate(dateID) {
+	var getTarget = base_url + 'index.php/manageKidDates/unassignDate/'
+			+ dateID;
 	$.get(getTarget, function(data) {
 		$.unblockUI();
 		jsonObject = JSON.parse(data);
@@ -205,9 +204,10 @@ function unassignDate(dateID){
 	});
 }
 
-function assignDate(dateID){
+function assignDate(dateID) {
 	var helperID = $('#helperIDSelect :selected').val();
-	var getTarget = base_url + 'index.php/manageKidDates/assignDate/' + dateID + '/' + helperID;
+	var getTarget = base_url + 'index.php/manageKidDates/assignDate/' + dateID
+			+ '/' + helperID;
 	$.get(getTarget, function(data) {
 		$.unblockUI();
 		jsonObject = JSON.parse(data);
@@ -216,7 +216,7 @@ function assignDate(dateID){
 	});
 }
 
-function assignDateToSelf(dateID){
+function assignDateToSelf(dateID) {
 	var getTarget = base_url + 'index.php/manageKidDates/assignDate/' + dateID;
 	$.get(getTarget, function(data) {
 		$.unblockUI();
@@ -283,16 +283,18 @@ function sendCalendarEntry(dateID) {
 	});
 }
 
-function openEmailToParents(dateID){
-	var getTarget = base_url + 'index.php/stayOver/openEmailToParents/' + dateID;
+function openEmailToParents(dateID) {
+	var getTarget = base_url + 'index.php/stayOver/openEmailToParents/'
+			+ dateID;
 	openPopup('E-Mail an die Eltern verfassen', null);
 	$.get(getTarget, null, function(data) {
 		setPopupContent($(data));
 	});
 }
 
-function sendMail(dateID){
-	var postTarget = base_url + 'index.php/stayOver/sendMailToParents/' + dateID ;
+function sendMail(dateID) {
+	var postTarget = base_url + 'index.php/stayOver/sendMailToParents/'
+			+ dateID;
 	submitForm('mailToParents', postTarget);
 }
 

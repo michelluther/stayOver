@@ -1,7 +1,7 @@
 <?php
 if($display['helperDates'] == true){ ?>
 <div class="row">
-	<div class="span12">
+	<div class="span12 headerBg">
 		<h2>Deine n&auml;chsten Termine</h2>
 	</div>
 </div>
@@ -18,7 +18,7 @@ if($display['helperDates'] == true){ ?>
 <?php }
 if($display['helperOpenDates'] == true){ ?>
 <div class="row">
-	<div class="span12">
+	<div class="span12 headerBg">
 		<h2>Offene Termine Deiner unterst&uuml;tzten Kinder</h2>
 	</div>
 </div>
@@ -35,7 +35,7 @@ if($display['helperOpenDates'] == true){ ?>
 <?php }
 if($display['parentDates'] == true){ ?>
 <div class="row">
-	<div class="span12">
+	<div class="span12 headerBg">
 		<h2>Die n&auml;chsten Termine Deiner Kinder</h2>
 	</div>
 </div>
@@ -49,7 +49,7 @@ if($display['parentDates'] == true){ ?>
 		<div class="row">
 			<div id="openHelperDatesDiv" class="span12">
 			<?php
-			if(count($nextDatesHelper) != 0){
+			if(count($nextDatesParent) != 0){
 				include "include/nextDatesParentTable.php";
 			} else { ?>
 				<p>keine n&auml;chsten Daten</p>

@@ -33,7 +33,7 @@ class SO_BaseController extends CI_Controller{
 		$this->banner['data'] = null;
 		$this->footer['view'] = 'footer';
 		$this->footer['data'] = null;
-		$this->navigation['view'] = 'navigation';
+		$this->navigation['view'] = 'navArea';
 		$this->navigation['data'] = null;
 		if ($this->router->fetch_method() != 'login' &&  $this->router->fetch_method() != 'submit_login'){
 			$this->_get_logged_in_user();
@@ -110,7 +110,7 @@ class SO_BaseController extends CI_Controller{
 	protected function _init_navigation(){
 		if ($this->user != null){
 			$this->navigation_data = $this->Navigation_model->init_navigation($this->user);
-			$this->navigation['view'] = 'navigation';
+			$this->navigation['view'] = 'navArea';
 		}
 	}
 

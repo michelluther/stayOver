@@ -1,6 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <title>StayOver</title>
 <?php
 $basePath = base_url();
@@ -41,6 +42,7 @@ $basePath = base_url();
 	type="text/css" media=screen>
 <link rel=stylesheet href="<?php echo $basePath . 'css/mpm.css'?>"
 	type="text/css" media=screen>
+	<link href='http://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
 <!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">  -->
 </head>
 <body>
