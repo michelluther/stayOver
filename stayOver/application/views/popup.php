@@ -4,6 +4,6 @@
 			onclick="$.unblockUI();">&times;</button>
 		<h2 id="popupTitle"></h2>
 	</div>
-	<div class="modal-body" id="dynamicPopupContent">
+	<div class="modal-body soPopupContent" id="dynamicPopupContent">
 	</div>
 </div>

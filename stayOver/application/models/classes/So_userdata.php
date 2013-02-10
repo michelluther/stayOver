@@ -93,6 +93,8 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	public static function login($uname, $pw){
 		if(self::$userModel->login($uname, $pw)){
 			self::setInstance($uname);
+		} else {
+			throw Mpm_Exception('Benutzername oder Passwort falsch');
 		}
 	}
 

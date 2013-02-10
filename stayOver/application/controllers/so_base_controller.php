@@ -67,17 +67,23 @@ class SO_BaseController extends CI_Controller{
 			$pw = $credentials['pw'];
 			SO_User::login($uname, $pw);
 			$this->user = SO_User::getInstance();
-			$this->_init_navigation();								// needs to be redone, because it would fail in constructor
+		//	$this->_init_navigation();								// needs to be redone, because it would fail in constructor
 			$this->_init_session_cookie($this->user);
-			$this->_setFeedback(BASE_MSG_SUCCESS, 'Du bist eingeloggt');
+			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Du bist eingeloggt');
+			//$this->_setFeedback(BASE_MSG_SUCCESS, 'Du bist eingeloggt');
 		} catch(Exception $e){
-			$this->_handleError($e);
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
+	}
+	
+	public function logout(){
+		$this->_clear_session();
+		$this->login();
 	}
 
 	protected function _extract_credentials(){
-		$credentials = array('uname' => $_POST['uname'],
-							 						'pw'	 => $_POST['pw'] );
+		$credentials = array('uname' => $_POST['login']['uname'],
+							 'pw'	 => $_POST['login']['pw'] );
 		return $credentials;
 	}
 
@@ -96,6 +102,10 @@ class SO_BaseController extends CI_Controller{
 		} else {
 			$this->_redirect_to_login();
 		}
+	}
+	
+	protected function _clear_session(){
+		$this->session->sess_destroy();
 	}
 
 	/*

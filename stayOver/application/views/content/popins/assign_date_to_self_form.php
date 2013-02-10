@@ -11,16 +11,6 @@
 			</td>
 		</tr>
 		<tr>
-			<td><p>Helfer:</p>
-			<select name="date.helper">
-			<?php foreach ($helpers as $helper) { ?>
-				<option value="<?= $helper->getID() ?>"><?= $helper->getName() ?></option>
-			<?php }?>
-			
-			</select>
-			</td>
-		</tr>
-		<tr>
 			<td colspan="2"><input type="button" value="Speichern"
 				onclick="assignDateToSelf(<?php echo $date->getID(); ?>);"
 				class="btn" /></td>

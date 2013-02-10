@@ -42,7 +42,7 @@ $basePath = base_url();
 	type="text/css" media=screen>
 <link rel=stylesheet href="<?php echo $basePath . 'css/mpm.css'?>"
 	type="text/css" media=screen>
-	<link href='http://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'>
+<!-- <link href='http://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'> -->
 <!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">  -->
 </head>
 <body>

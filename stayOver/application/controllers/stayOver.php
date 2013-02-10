@@ -10,7 +10,6 @@ class StayOver extends SO_BaseController{
 
 	public function submit_login(){
 		parent::submit_login();
-		$this->home();
 	}
 
 	public function home(){
@@ -27,7 +26,7 @@ class StayOver extends SO_BaseController{
 		$parent = $this->user->getParent();
 		if($parent != null){
 			$this->content['data']['display']['parentDates'] = true;
-			$user = SO_User::getInstance();
+			$user = $this->user;
 			$nextDatesParent = $user->getParent()->getDates(new DateTime());
 			$this->content['data']['nextDatesParent'] = $nextDatesParent;
 			//	$nextDatesParent
@@ -69,15 +68,15 @@ class StayOver extends SO_BaseController{
 
 	public function sendIcalEntryToUser($dateID){
 		$date = SO_DateFactory::getDate($dateID);
-		$this->email->from('michel.luther@gmail.com', 'Michel Luther');
-		$this->email->to('luther@lutherundwinter.de');
-		$this->email->subject('Kalendereintrag für "' . $date->getTitle() . '"');
-		$this->email->message('eine Email für mich von mir ...');
+// 		$this->email->from('michel.luther@gmail.com', 'Michel Luther');
+// 		$this->email->to('luther@lutherundwinter.de');
+// 		$this->email->subject('Kalendereintrag für "' . $date->getTitle() . '"');
+// 		$this->email->message('eine Email für mich von mir ...');
 		$user = SO_User::getInstance();
 		$icalEntry = $this->so_ical->getIcalEntry($date, $user);
 		$this->load->helper('file');
 		if(write_file('name.txt', 'hallo')){
-			$this->email->send();
+// 			$this->email->send();
 		$this->_returnFeedback(BASE_MSG_SUCCESS, $this->email->print_debugger());
 		} else{
 			$this->_returnFeedback(BASE_MSG_ERROR, 'Konnte Datei nicht schreiben');
@@ -124,7 +123,7 @@ class StayOver extends SO_BaseController{
 		$beginDate = new DateTime();
 		$nextDatesHelper = $helper->getDates($beginDate);
 		$this->content['data']['nextDatesHelper'] = $nextDatesHelper;
-		$this->content['view'] = 'include/nextHelperDatesTable';
+		$this->content['view'] = 'include/nextDatesHelperTable';
 		$this->_callView();
 	}
 	
@@ -135,6 +134,15 @@ class StayOver extends SO_BaseController{
 		$openDatesHelper = $helper->getOpenDates($beginDate);
 		$this->content['data']['openDatesHelper'] = $openDatesHelper;
 		$this->content['view'] = 'include/nextOpenDatesHelperTable';
+		$this->_callView();
+	}
+	
+	public function getParentDates(){
+		$this->returnType = MLU_AJAX_CONTENT;
+		$user = $this->user;
+		$nextDatesParent = $user->getParent()->getDates(new DateTime());
+		$this->content['data']['nextDatesParent'] = $nextDatesParent;
+		$this->content['view'] = 'include/nextDatesParentTable';
 		$this->_callView();
 	}
 }

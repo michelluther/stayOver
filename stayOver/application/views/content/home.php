@@ -39,7 +39,7 @@ if($display['parentDates'] == true){ ?>
 		<h2>Die n&auml;chsten Termine Deiner Kinder</h2>
 	</div>
 </div>
-	<div class="functionalArea borderTopMighty">
+	<div class="functionalArea borderTopMighty" id="nextParentDatesDiv">
 		<div class="row">
 			<div class="span12">
 				<a href="#" class="btn btn-small" onclick="openAddDate()"><i

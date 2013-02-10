@@ -22,7 +22,17 @@ $(document).ready(function() {
 	preloaderSmall.detach();
 	preloaderLarge = $('#preloaderLarge');
 	preloaderLarge.detach();
+	$('#loginSubmit').click( function(){
+		submitLogin();
+	});
+	setSubmitOnEnter();
 });
+
+function setSubmitOnEnter(){
+	$(".submitOnEnter").keypress( function(e){
+		submitLogin();
+	});
+}
 
 function setTimePicker() {
 	$('.timepicker-default').timepicker({
@@ -34,6 +44,10 @@ function setTimePicker() {
 
 function setDatePicker() {
 	$('.datePicker').datepicker();
+}
+
+function returnHome(){
+	window.location = base_url + 'index.php/stayOver/home';
 }
 
 // Feedback
@@ -90,6 +104,12 @@ function toggleSelection(target) {
 	}
 }
 
+function refreshDates(){
+	refreshSelectedDates();
+	refreshHelperDates();
+	refreshParentDates();
+}
+
 function refreshSelectedDates() {
 	selectedDates = new Array();
 }
@@ -104,6 +124,14 @@ function refreshHelperDates() {
 		$('#openHelperDatesDiv').html(html);
 	});
 }
+
+function refreshParentDates(){
+	var getTarget = base_url + 'index.php/stayOver/getParentDates';
+	$.get(getTarget, null, function(html) {
+		$('#nextParentDatesDiv').html(html);
+	});
+}
+
 // Popup management
 function openPopup(title, content) {
 	if (content != null) {
@@ -189,7 +217,7 @@ function deleteDate(dateID) {
 		$.unblockUI();
 		jsonObject = JSON.parse(data);
 		giveFeedback(jsonObject[0]);
-		refreshParentDates();
+		refreshDates();
 	});
 }
 
@@ -200,7 +228,7 @@ function unassignDate(dateID) {
 		$.unblockUI();
 		jsonObject = JSON.parse(data);
 		giveFeedback(jsonObject[0]);
-		refreshHelperDates();
+		refreshDates();
 	});
 }
 
@@ -212,7 +240,7 @@ function assignDate(dateID) {
 		$.unblockUI();
 		jsonObject = JSON.parse(data);
 		giveFeedback(jsonObject[0]);
-		refreshHelperDates();
+		refreshDates();
 	});
 }
 
@@ -222,7 +250,7 @@ function assignDateToSelf(dateID) {
 		$.unblockUI();
 		jsonObject = JSON.parse(data);
 		giveFeedback(jsonObject[0]);
-		refreshHelperDates();
+		refreshDates();
 	});
 }
 
@@ -263,6 +291,23 @@ function submitDeletion() {
 		$.unblockUI();
 		giveFeedback(jsonObject[0]);
 		refreshDates();
+	});
+}
+
+function submitLogin(){
+	var postTarget = base_url + 'index.php/stayOver/submit_login';
+	
+	var loginData = form2js('loginForm', '.');
+	$.post(postTarget, loginData , function(data){
+		var jsonObject = JSON.parse(data);
+		var feedback = jsonObject[0];	// if successful, redirect, otherwise give feedback
+		var type = feedback.msgClass;
+		if(type == 'success'){
+			var redirectTarget = base_url + 'index.php/stayOver/home';
+			window.location.replace(redirectTarget);
+		} else {
+			giveFeedback(feedback);
+		}
 	});
 }
 

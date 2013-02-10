@@ -36,11 +36,12 @@ class ManageKidDates extends SO_BaseController{
 			Mpm_calendar::set_time_from_user_string($begin, $clientArray["beginTime"]);
 			$end = Mpm_calendar::get_date_from_user_string($clientArray["endDate"]);
 			Mpm_calendar::set_time_from_user_string($end, $clientArray["endTime"]);
-			$newDate = SO_DateFactory::createNewDate(	$begin,
-																								$end,
-																								$clientArray["title"],
-																								null,
-																								$clientArray["kid"]);
+			$newDate = SO_DateFactory::createNewDate(
+					$begin,
+					$end,
+					$clientArray["title"],
+					null,
+					$clientArray["kid"]);
 			if ($clientArray["note"] != 'null') {
 				$newDate->setNote($clientArray["note"]);
 			}
@@ -67,7 +68,8 @@ class ManageKidDates extends SO_BaseController{
 			$date = SO_DateFactory::getDate($dateID);
 			$beginDate = Mpm_calendar::get_date_from_user_string($clientArray["beginDate"]);
 			$endDate = Mpm_calendar::get_date_from_user_string($clientArray["endDate"]);
-			$child = SO_PeopleFactory::getPerson($clientArray["kid"]);
+			$childPerson = SO_PeopleFactory::getPerson($clientArray["kid"]);
+			$child = new SO_Child($childPerson);
 			$title = $clientArray['title'];
 			$note = $clientArray['note'];
 			$date->setTitle($title);
@@ -119,7 +121,6 @@ class ManageKidDates extends SO_BaseController{
 					$changesMade = $date->save();
 				}
 			}
-
 			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Termine erfolgreich zugewiesen');
 		} catch (Exception $e) {
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
@@ -160,8 +161,8 @@ class ManageKidDates extends SO_BaseController{
 		$this->content['data']['children'] = $user->getParent()->getChildren();
 		$this->_callView();
 	}
-	
-	
+
+
 	public function getDeleteDatesConfirm($dateID){
 		$this->returnType = MLU_AJAX_CONTENT;
 		$date = SO_DateFactory::getDate($dateID);
@@ -236,8 +237,6 @@ class ManageKidDates extends SO_BaseController{
 	}
 
 	// End of Form Management
-
-
 
 	private function getHelpersOfParent(){
 		$children = $user->getParent()->getChildren();

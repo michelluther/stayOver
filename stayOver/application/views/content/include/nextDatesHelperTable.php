@@ -1,5 +1,7 @@
+<?php $basePath = base_url(); 
+if(count($nextDatesHelper) != 0){  ?>
 <table class="table table-bordered table-condensed" id="kidDatesTable">
-<?php $basePath = base_url(); ?>
+
 	<thead>
 		<tr>
 			<th>Termin</th>
@@ -41,3 +43,6 @@
 		<?php } ?>
 	</tbody>
 </table>
+<?php } else { ?>
+	<p>Es liegen keine unvergebenen Termine in der n&auml;chsten Zeit vor.</p>
+<?php } ?>

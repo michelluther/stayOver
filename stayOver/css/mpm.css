@@ -5,22 +5,37 @@ body {
 	font-family: Ubuntu, sans-serif;
 	color: #555;
 	font-size: 10pt;
+	background: #F6F6EC;
 }
 
 h2{
-	font-family: 'Clicker Script', cursive;
+/*	font-family: 'Clicker Script', cursive; */
+	font-family: 'Ubuntu';
 	color: #F6634E;
 }
 
 .headerBg h2 {
-	font-family: 'Satisfy', cursive;
+	/* font-family: 'Satisfy', cursive; */
 	color: #fff;
 	/*text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.2);*/
 	padding-left: 10px;
 }
 
+input[type="text"], input[type="password"], .input-append input[type="password"]{
+	height: 20px;
+	font-size: 12px;
+}
+
 .modal-header {
 	background-color: #eee;
+}
+
+.soPopupContent {
+	text-align: left;
+}
+
+.container	{
+	/* background-color: #fff; */
 }
 
 #feedbackArea { /*padding-top: 50px;*/
@@ -51,7 +66,7 @@ h2{
 }
 
 .headerBg {
-	background: url("../img/header-bg.png");	
+	background: url("../img/heading_bg_helper_next_date.gif");	
 }
 
 .functionalArea { /*background-color: #f9f9f9;*/

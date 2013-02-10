@@ -90,14 +90,8 @@ function refreshSelectedDates() {
 
 function refreshDates() {
 	refreshSelectedDates();
-	var postTarget = base_url + 'index.php/manageKidDates/getDates';
-	$.post(postTarget, null, function(html) {
-		$('#kidDatesTable').html(html);
-		$.unblockUI();
-		$(".selectableTr").on('click', function(event) {
-			toggleSelection($(event.target).closest('.selectableTr'));
-		});
-	});
+	refreshHelperDates();
+	refreshParentDates();
 }
 // Popup management
 function openPopup(title, content){
