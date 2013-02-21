@@ -16,8 +16,8 @@ class Termin_model extends CI_Model{
 	// Readers
 	public function getDatesByPeriod($beginDate, $endDate){
 		$where = array(	'begda >=' => $beginDate,
-										'endda <=' => $endDate,
-										'deleted' => false);
+				'endda <=' => $endDate,
+				'deleted' => false);
 		$this->db->select('id');
 		$this->db->from('so_dates');
 		$this->db->where($where);
@@ -33,7 +33,7 @@ class Termin_model extends CI_Model{
 
 	public function getDatesByChild(IF_BASE_NAMED_OBJECT $child, DateTime $periodBeginDate = null, DateTime $periodEndDate = null, IF_BASE_NAMED_OBJECT $helper = null){
 		$where = array('child_id =' => $child->getID(),
-									 'so_dates.deleted =' => false );
+				'so_dates.deleted =' => false );
 		if($periodBeginDate != null){
 			$beginDate = Mpm_Calendar::format_date_for_DataBase($periodBeginDate);
 			$where['begda >='] = $beginDate;
@@ -59,10 +59,10 @@ class Termin_model extends CI_Model{
 		}
 		return $returnDates;
 	}
-	
+
 	public function getOpenDatesByChild(IF_BASE_NAMED_OBJECT $child, IF_BASE_NAMED_OBJECT $helper = null, DateTime $periodBeginDate = null, DateTime $periodEndDate){
 		$where = array('so_date_child.child_id' => $child->getID(),
-									 'so_dates.deleted' => false );
+				'so_dates.deleted' => false );
 		if($periodBeginDate != null){
 			$beginDate = Mpm_Calendar::format_date_for_DataBase($periodBeginDate);
 			$where['begda >='] = $beginDate;
@@ -88,7 +88,7 @@ class Termin_model extends CI_Model{
 		}
 		return $returnDates;
 	}
-	
+
 	public function getDate($id){
 		$where = array('id' => $id,
 				'deleted' => false);
@@ -167,9 +167,7 @@ class Termin_model extends CI_Model{
 	// Writers & Updater
 	public function updateDate(SO_DateChild $date){
 		$changesMade = false;
-		if( $date->getBeginDate() > $date->getEndDate()){
-			throw new Mpm_Exception('Das Beginndatum kann nicht gr&ouml;&zslig;er als das Endedatum sein.');
-		}
+		$this->compareBeginAndEnd($date);
 		$this->db->trans_begin();
 		try{
 			$changesMade = $this->_updateBaseData($date, $changesMade);
@@ -188,10 +186,10 @@ class Termin_model extends CI_Model{
 
 	private function _updateBaseData(SO_DateChild $date, $changesMade){
 		$dateData = array('id'		=> $date->getID(),
-											'title' => $date->getTitle(),
-											'begda' => Mpm_calendar::format_date_for_DataBase($date->getBeginDate()),
-											'endda' => Mpm_calendar::format_date_for_DataBase($date->getEndDate()),
-											'note' => $date->getNote()
+				'title' => $date->getTitle(),
+				'begda' => Mpm_calendar::format_date_for_DataBase($date->getBeginDate()),
+				'endda' => Mpm_calendar::format_date_for_DataBase($date->getEndDate()),
+				'note' => $date->getNote()
 		);
 		$where = array('id' => $date->getId());
 		$this->db->from('so_dates');
@@ -276,21 +274,15 @@ class Termin_model extends CI_Model{
 		}
 		return $changesMade;
 	}
-	
+
 	public function insertDate(SO_DateChild $date){
 		$CI =& get_instance();
 		$successful = true;
-		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
-		$beginTime = Mpm_calendar::format_time_for_DataBase($date->getBeginDate());
-		if($date->getEndDate() == null){
-			throw new Mpm_Exception('Endedatum nicht gesetzt');
-		}
-		$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
-		$endTime = Mpm_calendar::format_time_for_DataBase($date->getEndDate());
+		$this->compareBeginAndEnd($date);
 		$this->db->trans_begin();
 		try{
 			// Base Data
-			
+				
 			$dateData = array(
 					'title' => $date->getTitle(),
 					'begda' => $beginDate,
@@ -334,7 +326,7 @@ class Termin_model extends CI_Model{
 
 	private function assignDateToChild($date, $childID){
 		$assignment = array('date_id' => $date->getId(),
-												'child_id' => $childID);
+				'child_id' => $childID);
 		$query = $this->db->insert('so_date_child', $assignment);
 		if($query != true){
 			throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
@@ -343,7 +335,7 @@ class Termin_model extends CI_Model{
 
 	private function removeDateToChildAssignment($date, $childID){
 		$where = array('date_id' => $date->getId(),
-									 'child_id' => $childID);
+				'child_id' => $childID);
 		$query = $this->db->delete('so_date_child', $where);
 		if($query != true){
 			throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
@@ -352,8 +344,8 @@ class Termin_model extends CI_Model{
 
 	private function assignDateToHelper(IF_BASE_NAMED_OBJECT $date, $helperID){
 		$data = array('date_id' => $date->getID(),
-									'helper_id' => $helperID,
-									'deleted' => false );
+				'helper_id' => $helperID,
+				'deleted' => false );
 		$query = $this->db->insert('so_date_helper', $data);
 		if($query == false){
 			throw new Mpm_Exception('Fehler beim Anlegen des Helfers f&uumlr den Termin');
@@ -361,12 +353,24 @@ class Termin_model extends CI_Model{
 	}
 
 	private function removeDateToHelperAssignment($date, $helperID){
-		$where = array('date_id' => $date->getId(),    
-										'helper_id' => $helperID);
+		$where = array('date_id' => $date->getId(),
+				'helper_id' => $helperID);
 		$query = $this->db->delete('so_date_helper', $where);
 		if($query != true){
 			throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
 		}
 	}
-	
+
+	private function compareBeginAndEnd(SO_DateBase $date){
+		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
+		$beginTime = Mpm_calendar::format_time_for_DataBase($date->getBeginDate());
+		if($date->getEndDate() == null){
+			throw new Mpm_Exception('Endedatum nicht gesetzt');
+		}
+		$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
+		$endTime = Mpm_calendar::format_time_for_DataBase($date->getEndDate());
+		if(($endDate < $beginDate) || (($endDate == $beginDate) && (endTime >= $beginTime))){
+			throw new Mpm_Exception('Das Ende muss hinter dem Anfang liegen');
+		}
+	}
 }

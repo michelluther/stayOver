@@ -1,4 +1,4 @@
-<table class="table table-bordered table-condensed" id="kidDatesTable">
+<table class="table table-bordered table-condensed table-striped" id="kidDatesTable">
 	<thead>
 		<tr>
 			<th>Termin</th>

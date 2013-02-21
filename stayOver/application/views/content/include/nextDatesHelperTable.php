@@ -1,6 +1,6 @@
 <?php $basePath = base_url(); 
 if(count($nextDatesHelper) != 0){  ?>
-<table class="table table-bordered table-condensed" id="kidDatesTable">
+<table class="table table-bordered table-condensed table-striped" id="kidDatesTable">
 
 	<thead>
 		<tr>

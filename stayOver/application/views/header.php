@@ -16,9 +16,7 @@ $basePath = base_url();
 <!-- <script type="text/javascript" src="<?= $basePath ?>js/bootstrap.min.js"></script>  -->
 <script type="text/javascript" src="<?= $basePath ?>js/bootstrap.alert.js"></script>
 <script type="text/javascript" src="<?= $basePath ?>js/bootstrap.timepicker.js"></script>
-<script type="text/javascript" src="<?= $basePath ?>js/bootstrap.datepicker.js"></script>
-<script type="text/javascript" src="<?= $basePath ?>js/jquery_ui_datepicker.min.js"></script>
-<script type="text/javascript" src="<?= $basePath ?>js/jquery.ui.datepicker-de.js"></script>
+<script type="text/javascript" src="<?= $basePath ?>js/bootstrap-datepicker.js"></script>
 <script type="text/javascript"
 	src="<?= $basePath ?>js/jquery.blockUI.js"></script>
 <script type="text/javascript" src="<?= $basePath ?>js/form2js.js"></script>

@@ -364,6 +364,7 @@ $config['proxy_ips'] = '';
 
 $config['db_date_format'] = 'Y-m-d';
 $config['user_date_format'] = 'd.m.Y';
+$config['user_date_format_js'] = 'dd.mm.yyyy';
 $config['db_time_format'] = 'H:i:s';
 $config['user_time_format'] = 'H:i';
 

@@ -1,6 +1,6 @@
 <div class="row">
 <?php $basePath = base_url(); ?>
-	<div class="span6">
+	<div class="span infoArea">
 		<p>Du kannst Dir den Kalendereintrag für den Termin entweder
 			downloaden oder per E-Mail zusenden lassen.</p>
 	</div>

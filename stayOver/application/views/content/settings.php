@@ -1,11 +1,13 @@
 <?php $basePath = base_url(); ?>
 <!--  Userdaten -->
 <div class="row">
-	<h3 class="span2 offset1">
+	<div class="span12 functionalAreaHeader greenBg">
+	<h2>
 		<i class="icon-user"></i> Benutzerdaten
-	</h3>
-	<hr class="span9" />
+	</h2>
+	</div>
 </div>
+<div class="functionalArea">
 <form id="UserDataForm" action="">
 	<div class="row">
 		<label class="span2 offset2" for="user.name">Benutzername</label>
@@ -43,17 +45,21 @@
 		</div>
 	</div>
 </form>
+</div>
 <!--  Kinderdaten -->
 <div class="row">
-	<h3 class="span2 offset1">
-		<i class="icon-heart"></i> Kinder
-	</h3>
-	<hr class="span9" />
+	<div class="span12 functionalAreaHeader greenBg">
+	<h2>
+		<i class="icon-heart icon-white"></i> Kinder
+	</h2>
+	</div>
 </div>
+<div class="functionalArea">
 <div id="assignedChildren">
 <?php include_once 'include/assigned_children.php'?>
 </div>
 <div class="row">
 	<span class="span4 offset1"><a class="btn btn-small"
 		onClick="openAddChildPopup()"><i class="icon-plus"></i> Neues Kind</a> </span>
+</div>
 </div>

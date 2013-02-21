@@ -6,12 +6,10 @@ var popupContent;
 var preloaderLarge;
 var preloaderSmall;
 var activePreloader;
+var popupOpen;
+var resetTest;
 
 $(document).ready(function() {
-	$.datepicker.setDefaults($.datepicker.regional['de']);
-	$(".selectableTr").on('click', function(event) {
-		toggleSelection($(event.target).closest('.selectableTr'));
-	});
 	popupDiv = $('#dynamicPopup');
 	popupTitle = $('#popupTitle');
 	popupContent = $('#dynamicPopupContent');
@@ -22,14 +20,20 @@ $(document).ready(function() {
 	preloaderSmall.detach();
 	preloaderLarge = $('#preloaderLarge');
 	preloaderLarge.detach();
-	$('#loginSubmit').click( function(){
+	$('#loginSubmit').click(function() {
 		submitLogin();
 	});
 	setSubmitOnEnter();
+	resetTest = true;
 });
 
-function setSubmitOnEnter(){
-	$(".submitOnEnter").keypress( function(e){
+function toggleHelpContentDisplay(event){
+	var target = event.target;
+	$(target).children().show();
+}
+
+function setSubmitOnEnter() {
+	$(".submitOnEnter").keypress(function(e) {
 		submitLogin();
 	});
 }
@@ -46,19 +50,23 @@ function setDatePicker() {
 	$('.datePicker').datepicker();
 }
 
-function returnHome(){
+function returnHome() {
 	window.location = base_url + 'index.php/stayOver/home';
 }
 
 // Feedback
 function giveFeedback(data) {
-	var text = data.msgText;
-	var type = data.msgClass;
-	var html = '<div class="alert alert-'
-			+ type
-			+ ' fade in out"><button class="close" data-dismiss="alert" type="button">&times;</button>'
-			+ text + '</div>';
-	$('#feedbackArea').html(html);
+	if (popupOpen == true && data.msgClass == 'error') {
+		giveFeedbackInPopup(data);
+	} else {
+		var text = data.msgText;
+		var type = data.msgClass;
+		var html = '<div class="alert alert-'
+				+ type
+				+ ' fade in out"><button class="close" data-dismiss="alert" type="button">&times;</button>'
+				+ text + '</div>';
+		$('#feedbackArea').html(html);
+	}
 }
 
 function giveFeedbackInPopup(data) {
@@ -104,7 +112,7 @@ function toggleSelection(target) {
 	}
 }
 
-function refreshDates(){
+function refreshDates() {
 	refreshSelectedDates();
 	refreshHelperDates();
 	refreshParentDates();
@@ -125,7 +133,7 @@ function refreshHelperDates() {
 	});
 }
 
-function refreshParentDates(){
+function refreshParentDates() {
 	var getTarget = base_url + 'index.php/stayOver/getParentDates';
 	$.get(getTarget, null, function(html) {
 		$('#nextParentDatesDiv').html(html);
@@ -141,9 +149,21 @@ function openPopup(title, content) {
 		preloaderLarge.show();
 	}
 	$.blockUI({
-		message : popupDiv
+		message : popupDiv,
+		onBlock : function(){ setPopupOpen(true); },
+		onUnblock : function(){setPopupOpen(false); }
 	});
 	popupTitle.text(title);
+	popupOpen = true;
+}
+
+function closePopup() {
+	setPopupOpen(false);
+	$.unblockUI();
+}
+
+function setPopupOpen(isOpen){
+	popupOpen = isOpen;
 }
 
 function openAddDate() {
@@ -166,7 +186,7 @@ function openViewDate(dateID) {
 }
 
 function openChangeDate(selectedID) {
-	openPopup("Termindaten ändern");
+	openPopup("Termindaten &Auml;ndern");
 	var postTarget = base_url + 'index.php/manageKidDates/getChangeDateForm/'
 			+ selectedID;
 	$.post(postTarget, null, function(data) {
@@ -214,7 +234,7 @@ function openUnassignDate(dateID) {
 function deleteDate(dateID) {
 	var getTarget = base_url + 'index.php/manageKidDates/removeDate/' + dateID;
 	$.get(getTarget, function(data) {
-		$.unblockUI();
+		closePopup();
 		jsonObject = JSON.parse(data);
 		giveFeedback(jsonObject[0]);
 		refreshDates();
@@ -225,7 +245,7 @@ function unassignDate(dateID) {
 	var getTarget = base_url + 'index.php/manageKidDates/unassignDate/'
 			+ dateID;
 	$.get(getTarget, function(data) {
-		$.unblockUI();
+		closePopup();
 		jsonObject = JSON.parse(data);
 		giveFeedback(jsonObject[0]);
 		refreshDates();
@@ -237,7 +257,7 @@ function assignDate(dateID) {
 	var getTarget = base_url + 'index.php/manageKidDates/assignDate/' + dateID
 			+ '/' + helperID;
 	$.get(getTarget, function(data) {
-		$.unblockUI();
+		closePopup();
 		jsonObject = JSON.parse(data);
 		giveFeedback(jsonObject[0]);
 		refreshDates();
@@ -247,7 +267,7 @@ function assignDate(dateID) {
 function assignDateToSelf(dateID) {
 	var getTarget = base_url + 'index.php/manageKidDates/assignDate/' + dateID;
 	$.get(getTarget, function(data) {
-		$.unblockUI();
+		closePopup();
 		jsonObject = JSON.parse(data);
 		giveFeedback(jsonObject[0]);
 		refreshDates();
@@ -273,9 +293,12 @@ function submitForm(form, target, callback) {
 		'form' : jsonForm,
 		'dates' : selectedDates
 	}, function(data) {
-		jsonObject = JSON.parse(data);
-		$.unblockUI();
-		giveFeedback(jsonObject[0]);
+		var jsonObject = JSON.parse(data);
+		var feedback = jsonObject[0];
+		if (feedback.msgClass == 'success') {
+			closePopup();
+		}
+		giveFeedback(feedback);
 		if (callback != undefined && typeof callback == 'function') {
 			callback();
 		}
@@ -288,21 +311,21 @@ function submitDeletion() {
 		dates : selectedDates
 	}, function(data) {
 		jsonObject = JSON.parse(data);
-		$.unblockUI();
+		closePopup();
 		giveFeedback(jsonObject[0]);
 		refreshDates();
 	});
 }
 
-function submitLogin(){
+function submitLogin() {
 	var postTarget = base_url + 'index.php/stayOver/submit_login';
-	
 	var loginData = form2js('loginForm', '.');
-	$.post(postTarget, loginData , function(data){
+	$.post(postTarget, loginData, function(data) {
 		var jsonObject = JSON.parse(data);
-		var feedback = jsonObject[0];	// if successful, redirect, otherwise give feedback
+		var feedback = jsonObject[0]; // if successful, redirect, otherwise
+		// give feedback
 		var type = feedback.msgClass;
-		if(type == 'success'){
+		if (type == 'success') {
 			var redirectTarget = base_url + 'index.php/stayOver/home';
 			window.location.replace(redirectTarget);
 		} else {

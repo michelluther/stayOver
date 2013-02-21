@@ -10,6 +10,7 @@ class Mpm_calendar{
 	private static $db_date_format;
 	private static $db_time_format;
 	private static $user_date_format;
+	private static $user_date_format_js;
 	private static $user_time_format;
 	private static $locale;
 
@@ -17,10 +18,15 @@ class Mpm_calendar{
 		$CI =& get_instance();
 		self::$db_date_format = $CI->config->config['db_date_format'];
 		self::$user_date_format = $CI->config->config['user_date_format'];
+		self::$user_date_format_js = $CI->config->config['user_date_format_js'];
 		self::$db_time_format = $CI->config->config['db_time_format'];
 		self::$user_time_format = $CI->config->config['user_time_format'];
 	}
 
+	public static function get_user_date_format_js(){
+		return self::$user_date_format_js;
+	}
+	
 	public static function get_date_from_db_string($date_string){
 		$date = DateTime::createFromFormat(self::$db_date_format, $date_string);
 		return $date;

@@ -54,7 +54,7 @@ function deleteChild(kidID) {
 	var getTarget = base_url + 'index.php/settings/removeChild/' + kidID;
 	$.get(getTarget, function(data) {
 		jsonObject = JSON.parse(data);
-		$.unblockUI();
+		closePopup();
 		giveFeedback(jsonObject[0]);
 		reloadChildren();
 	});
