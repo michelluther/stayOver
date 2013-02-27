@@ -279,6 +279,13 @@ class Termin_model extends CI_Model{
 		$CI =& get_instance();
 		$successful = true;
 		$this->compareBeginAndEnd($date);
+		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
+		$beginTime = Mpm_calendar::format_time_for_DataBase($date->getBeginDate());
+		if($date->getEndDate() == null){
+			throw new Mpm_Exception('Endedatum nicht gesetzt');
+		}
+		$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
+		$endTime = Mpm_calendar::format_time_for_DataBase($date->getEndDate());
 		$this->db->trans_begin();
 		try{
 			// Base Data
@@ -361,7 +368,7 @@ class Termin_model extends CI_Model{
 		}
 	}
 
-	private function compareBeginAndEnd(SO_DateBase $date){
+	private function compareBeginAndEnd($date){
 		$beginDate = Mpm_Calendar::format_date_for_DataBase($date->getBeginDate());
 		$beginTime = Mpm_calendar::format_time_for_DataBase($date->getBeginDate());
 		if($date->getEndDate() == null){
@@ -369,7 +376,7 @@ class Termin_model extends CI_Model{
 		}
 		$endDate = Mpm_Calendar::format_date_for_DataBase($date->getEndDate());
 		$endTime = Mpm_calendar::format_time_for_DataBase($date->getEndDate());
-		if(($endDate < $beginDate) || (($endDate == $beginDate) && (endTime >= $beginTime))){
+		if(($endDate < $beginDate) || (($endDate == $beginDate) && ($endTime <= $beginTime))){
 			throw new Mpm_Exception('Das Ende muss hinter dem Anfang liegen');
 		}
 	}
