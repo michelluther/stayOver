@@ -92,6 +92,10 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT, IF_SO_Person, IF_SO_Parent, IF_
 		return $this->person->getLastName();
 	}
 
+	public function getGender(){
+		return $this->person->getGender();
+	}
+	
 	public function getBirthday(){
 		return $this->person->getBirthday();
 	}

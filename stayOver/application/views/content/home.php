@@ -16,7 +16,7 @@ if($display['helperDates'] == true){ ?>
 	<?php }
 if($display['helperOpenDates'] == true){ ?>
 	<div class="span6 functionalArea helperOpen">
-		<h2 class="blueBg">Offene Termine Deiner unterst&uuml;tzten Kinder</h2>
+		<h2>Offene Termine Deiner unterst&uuml;tzten Kinder</h2>
 		<div class="functionalAreaContent" id="openHelperDatesDiv">
 			<div>
 				<?php if(count($openDatesHelper) != 0){
@@ -34,8 +34,8 @@ if($display['helperOpenDates'] == true){ ?>
 <?php }
 if($display['parentDates'] == true){ ?>
 <div class="row">
-	<div class="span12 functionalArea">
-		<h2 class="redBg">Die n&auml;chsten Termine Deiner Kinder</h2>
+	<div class="span12 functionalArea parentDates">
+		<h2>Die n&auml;chsten Termine Deiner Kinder</h2>
 		<div class="functionalAreaContent">
 			<a href="#" class="btn btn-small" onclick="openAddDate()"><i
 				class="icon-plus"></i> Termin anlegen</a>

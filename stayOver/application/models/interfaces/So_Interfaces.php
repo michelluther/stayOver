@@ -27,11 +27,16 @@ interface IF_SO_Helper{
 
 interface IF_SO_Person{
 	
+	const genderMale = 'male';
+	const genderFemale = 'female';
+	
 	public function getFirstName();
 	
 	public function getLastName();
 	
 	public function getBirthday();
+	
+	public function getGender();
 }
 
 interface IF_BASE_SAVEABLE{

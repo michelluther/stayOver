@@ -6,7 +6,7 @@
 
 include_once 'so_base_controller.php';
 
-class Admin extends ML_Controller{
+class Admin extends SO_BaseController{
 
 	public function __construct(){
 		parent::__construct();
@@ -15,7 +15,7 @@ class Admin extends ML_Controller{
 
 	public function submit_login(){
 		parent::submit_login();
-		$this->content['view'] = 'home';
+		$this->content['view'] = 'admin';
 		$this->content['data'] = null;
 		$this->_callView();
 	}
@@ -34,7 +34,4 @@ class Admin extends ML_Controller{
 		$this->load->view('system_feedback', $return);
 	}
 
-	public function display_users(){
-		$this->load->model('Project_hours_admin');
-	}
 }

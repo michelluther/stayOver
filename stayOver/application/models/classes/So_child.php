@@ -35,6 +35,10 @@ class SO_Child implements IF_BASE_NAMED_OBJECT, IF_SO_Child, IF_SO_Person {
 	public function getBirthday(){
 		return $this->person->getBirthday();
 	}
+	
+	public function getGender(){
+		return $this->person->getGender();
+	}
 
 	public function getType(){
 		return BASE_OBJECT_TYPE_CHILD;

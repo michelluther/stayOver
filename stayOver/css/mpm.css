@@ -67,7 +67,7 @@ input[type="text"],input[type="password"],.input-append input[type="password"]
 
 /* End Popup Stuff */
 #logo {
-	background: url("../img/logo_2.png") no-repeat top left;
+	background: url("../img/logo_stayOver.png") no-repeat top left;
 	height: 80px;
 }
 
@@ -90,29 +90,15 @@ input[type="text"],input[type="password"],.input-append input[type="password"]
 	margin: 4px -40px;
 }
 /* End Preloader */
-
-/* Begin header backgrounds */
-.yellowBg {
-	background: url("../img/gelber_bg.gif");
-}
-
-.blueBg {
-	background: url("../img/blauer_bg.png");
-}
-
-.redBg {
-	background: url("../img/roter_bg.png");
-}
-
 .greenBg {
 	background: url("../img/gruener_bg.png");
 }
-/* End header backgrounds */
 
 /* Begin Areas */
 .functionalAreaContent { /*background-color: #f9f9f9;*/
 	border: solid 1px #cdcdce;
-	border-top: 0; margin-bottom : 10px;
+	border-top: 0;
+	margin-bottom: 10px;
 	background: #F6F6EC url("../img/fa-bg.png") no-repeat top center;
 	border-bottom-right-radius: 4px;
 	border-bottom-left-radius: 4px;
@@ -152,8 +138,28 @@ input[type="text"],input[type="password"],.input-append input[type="password"]
 	background: #fff url("../img/gelber_bg_sm.gif") repeat-x top;
 }
 
+.helperAssigned h2 {
+	background: url("../img/gelber_bg.gif");
+}
+
 .helperOpen .dateListEntry {
 	background: #fff url("../img/blauer_bg_sm.gif") repeat-x top;
+}
+
+.helperOpen h2 {
+	background: url("../img/blauer_bg.png");
+}
+
+.parentDates h2 {
+	background: url("../img/roter_bg.png");
+}
+
+.userData h2 {
+	background: url("../img/grau_h2_bg.gif");
+}
+
+.kidsData h2 {
+	background: url("../img/grau_h2_bg.gif");
 }
 
 .dateData {
@@ -175,6 +181,27 @@ input[type="text"],input[type="password"],.input-append input[type="password"]
 	float: right;
 }
 /* End Date lists */
+/* Kid Lists */
+
+.kidListEntry {
+	border: 1px solid #cdcdce;
+	margin: 0 0 10px 0;
+	padding: 15px 10px 10px 30px;
+	overflow: auto;
+	background: #fff;
+}
+
+.kidEntryBoy {
+	background: #fff url("../img/blau_f_jungs.gif") repeat-y left;
+}
+
+.kidButtons {
+	padding-left: 10px;
+	border-left: 1px dotted #999;
+	float: right;
+}
+/* End Kid Lists */
+
 /* End Areas */
 
 /* Login specific */
@@ -186,7 +213,7 @@ input[type="text"],input[type="password"],.input-append input[type="password"]
 }
 
 #login_banner {
-	background: url("../img/logo_2.png") no-repeat top right;
+	background: url("../img/logo_stayOver.png") no-repeat top right;
 	width: 260px;
 	height: 150px;
 	float: left;

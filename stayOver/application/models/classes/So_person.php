@@ -57,6 +57,10 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT, IF_BASE_SAV
 		return $this->birthday;
 	}
 	
+	public function getGender(){
+		return IF_SO_Person::genderMale;
+	}
+	
 	public function setFirstName($firstName){
 		$this->firstName = $firstName;
 	}
