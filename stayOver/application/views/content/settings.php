@@ -3,7 +3,7 @@
 <div class="row">
 	<div class="span12 functionalArea userData">
 		<h2>
-			<i class="icon-user icon-white"></i> Benutzerdaten hello
+			<i class="icon-user icon-white"></i> Benutzerdaten huhu
 		</h2>
 
 
