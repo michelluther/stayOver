@@ -15,7 +15,7 @@ class Admin extends SO_BaseController{
 
 	public function submit_login(){
 		parent::submit_login();
-		$this->content['view'] = 'admin';
+		$this->content['view'] = 'admin2';
 		$this->content['data'] = null;
 		$this->_callView();
 	}

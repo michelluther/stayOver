@@ -42,8 +42,8 @@ $active_group = 'default';
 $active_record = TRUE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = 'michel78';
+$db['default']['username'] = 'stayOver';
+$db['default']['password'] = 'stayOver';
 $db['default']['database'] = 'stayOver';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
