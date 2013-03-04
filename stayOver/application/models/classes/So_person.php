@@ -75,7 +75,7 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT, IF_BASE_SAV
 	
 	public function getEmail(){
 		if(!isset($this->email)){
-			$user = self::$model->getUserEmailByPerson($this);
+			$this->email = self::$model->getUserEmailByPerson($this);
 		}
 		return $this->email;
 	}

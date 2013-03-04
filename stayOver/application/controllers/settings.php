@@ -13,9 +13,9 @@ class Settings extends SO_BaseController{
 		$this->content['data']['user'] = $this->user;
 		$parent = $this->user->getParent();
 		if ($parent != null){
-			$kids = $parent->getChildren();
+			$kinder = $parent->getChildren();
 		}
-		$this->content['data']['kids'] = $kids;
+		$this->content['data']['kids'] = $kinder;
 		$this->content['view'] = 'settings';
 		$this->_callView();
 	}

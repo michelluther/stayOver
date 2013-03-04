@@ -42,12 +42,12 @@ function setTimePicker() {
 	$('.timepicker-default').timepicker({
 		showMeridian : false,
 		showInputs : false,
-		disableFocus : true
+		disableFocus : true,
 	});
 }
 
 function setDatePicker() {
-	$('.datePicker').datepicker();
+	$('.datepicker').datepicker();
 }
 
 function returnHome() {
@@ -171,7 +171,6 @@ function openAddDate() {
 	var getTarget = base_url + 'index.php/manageKidDates/getAddDate';
 	$.get(getTarget, null, function(data) {
 		setPopupContent($(data));
-		$(".datepicker").datepicker();
 		setTimePicker();
 		setDatePicker();
 	});
@@ -191,7 +190,8 @@ function openChangeDate(selectedID) {
 			+ selectedID;
 	$.post(postTarget, null, function(data) {
 		setPopupContent($(data));
-		$(".datepicker").datepicker();
+		setTimePicker();
+		setDatePicker();
 	});
 }
 

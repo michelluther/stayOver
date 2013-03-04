@@ -14,7 +14,7 @@ class StayOver extends SO_BaseController{
 
 	public function home(){
 		$helper = $this->user->getHelper();
-		$beginDate = new DateTime();
+		$beginDate = new DateTime(null, new DateTimeZone("Europe/Berlin"));
 		if($helper != null){
 			$this->content['data']['display']['helperDates'] = true;
 			$this->content['data']['display']['helperOpenDates'] = true;
@@ -27,7 +27,7 @@ class StayOver extends SO_BaseController{
 		if($parent != null){
 			$this->content['data']['display']['parentDates'] = true;
 			$user = $this->user;
-			$nextDatesParent = $user->getParent()->getDates(new DateTime());
+			$nextDatesParent = $user->getParent()->getDates(new DateTime(null, new DateTimeZone("Europe/Berlin")));
 			$this->content['data']['nextDatesParent'] = $nextDatesParent;
 			//	$nextDatesParent
 		}
@@ -68,15 +68,15 @@ class StayOver extends SO_BaseController{
 
 	public function sendIcalEntryToUser($dateID){
 		$date = SO_DateFactory::getDate($dateID);
-// 		$this->email->from('michel.luther@gmail.com', 'Michel Luther');
-// 		$this->email->to('luther@lutherundwinter.de');
-// 		$this->email->subject('Kalendereintrag für "' . $date->getTitle() . '"');
-// 		$this->email->message('eine Email für mich von mir ...');
+		$this->email->from('michel.luther@gmail.com', 'Michel Luther');
+		$this->email->to('luther@lutherundwinter.de');
+		$this->email->subject('Kalendereintrag für "' . $date->getTitle() . '"');
+		$this->email->message('eine Email für mich von mir ...');
 		$user = SO_User::getInstance();
 		$icalEntry = $this->so_ical->getIcalEntry($date, $user);
 		$this->load->helper('file');
 		if(write_file('name.txt', 'hallo')){
-// 			$this->email->send();
+			$this->email->send();
 		$this->_returnFeedback(BASE_MSG_SUCCESS, $this->email->print_debugger());
 		} else{
 			$this->_returnFeedback(BASE_MSG_ERROR, 'Konnte Datei nicht schreiben');
@@ -107,20 +107,24 @@ class StayOver extends SO_BaseController{
 		$parents = array();
 		foreach ($children as $child) {
 			$childParents = $child->getParents();
-			array_merge($parents, $childParents);
+			$parents = array_merge($parents, $childParents);
 		}
 		foreach ($parents as $parent) {
-			$this->email->to($parent->getEmail());
+			$emailAddress = $parent->getEmail();
+			$this->email->to($emailAddress);
 		}
 		$this->email->subject("Nachricht zu Termin: " . $date->getTitle());
-		$this->email->message($_POST['form']['mail']['text']);
+		$mailTest = $_POST['form']['mail']['text'];
+		$this->email->message($mailTest);
 		$this->email->from($this->user->getEmail(), $this->user->getName());
+		$this->email->send();
+		$this->_returnFeedback(BASE_MSG_SUCCESS, $this->email->print_debugger());
 	}
 
 	public function getNextHelperDates(){
 		$this->returnType = MLU_AJAX_CONTENT;
 		$helper = $this->user->getHelper();
-		$beginDate = new DateTime();
+		$beginDate = new DateTime(null, new DateTimeZone("Europe/Berlin"));
 		$nextDatesHelper = $helper->getDates($beginDate);
 		$this->content['data']['nextDatesHelper'] = $nextDatesHelper;
 		$this->content['view'] = 'include/nextDatesHelperTable';
@@ -130,7 +134,7 @@ class StayOver extends SO_BaseController{
 	public function getOpenHelperDates(){
 		$this->returnType = MLU_AJAX_CONTENT;
 		$helper = $this->user->getHelper();
-		$beginDate = new DateTime();
+		$beginDate = new DateTime(null, new DateTimeZone("Europe/Berlin"));
 		$openDatesHelper = $helper->getOpenDates($beginDate);
 		$this->content['data']['openDatesHelper'] = $openDatesHelper;
 		$this->content['view'] = 'include/nextOpenDatesHelperTable';
@@ -140,7 +144,7 @@ class StayOver extends SO_BaseController{
 	public function getParentDates(){
 		$this->returnType = MLU_AJAX_CONTENT;
 		$user = $this->user;
-		$nextDatesParent = $user->getParent()->getDates(new DateTime());
+		$nextDatesParent = $user->getParent()->getDates(new DateTime(null, new DateTimeZone("Europe/Berlin")));
 		$this->content['data']['nextDatesParent'] = $nextDatesParent;
 		$this->content['view'] = 'include/nextDatesParentTable';
 		$this->_callView();

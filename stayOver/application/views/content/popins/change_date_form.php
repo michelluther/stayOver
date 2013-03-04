@@ -11,22 +11,29 @@
 	</div>
 	<div class="row">
 		<div class="span2">
-			<label>Beginndatum:</label>
+			<label>Beginn</label>
 		</div>
 		<div class="span3">
-			<input type="text" name="date.beginDate" class="datepicker"
+			<input type="text" name="date.beginDate" class="datepicker dateDateInput"
 				data-date-format="<?php echo Mpm_calendar::get_user_date_format_js(); ?>"
 				value="<?php echo Mpm_calendar::format_date_for_User($date->getBeginDate()) ?>" />
+			<input class="timepicker-default dateTimeInput" 
+				data-default-time="<?php echo Mpm_calendar::format_time_for_User($date->getBeginDate()); ?>" type="text" style="width: 75px;" name="date.beginTime" 
+				value="<?php echo Mpm_calendar::format_time_for_User($date->getBeginDate()); ?>">
+				<i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
 		</div>
 	</div>
 	<div class="row">
 		<div class="span2">
-			<label>Endedatum:</label>
+			<label>Ende</label>
 		</div>
 		<div class="span3">
-			<input type="text" name="date.endDate" class="datepicker"
+			<input type="text" name="date.endDate" class="datepicker dateDateInput"
 				data-date-format="<?php echo Mpm_calendar::get_user_date_format_js(); ?>"
 				value="<?php  echo Mpm_calendar::format_date_for_User($date->getEndDate()) ?>" />
+				<input class="timepicker-default dateTimeInput" data-default-time="<?php echo Mpm_calendar::format_time_for_User($date->getEndDate()); ?>" type="text" style="width: 75px;" name="date.endTime" 
+					value="<?php echo Mpm_calendar::format_time_for_User($date->getEndDate()); ?>">
+				<i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
 		</div>
 	</div>
 	<div class="row">

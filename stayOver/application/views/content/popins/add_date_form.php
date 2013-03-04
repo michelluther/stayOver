@@ -15,8 +15,8 @@
 			<label>Beginn</label>
 		</div>
 		<div class="span4">
-			<input type="text" name="date.beginDate" class="datepicker" data-date-format="<?php echo Mpm_calendar::get_user_date_format_js(); ?>" style="width:95px"></input>
-				<input class="timepicker-default" type="text" style="width: 75px;" name="date.beginTime">
+			<input type="text" name="date.beginDate" class="datepicker dateDateInput" data-date-format="<?php echo Mpm_calendar::get_user_date_format_js(); ?>" style="width:95px"></input>
+				<input class="timepicker-default dateTimeInput" type="text" style="width: 75px;" name="date.beginTime">
 				<i class="icon-time" style="margin: -2px 0 0 -22.5px; pointer-events: none; position: relative;"></i>
 	</div>
 	</div>

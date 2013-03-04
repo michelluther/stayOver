@@ -39,6 +39,10 @@ class SO_Helper implements IF_BASE_NAMED_OBJECT{
 		return $this->person->getLastName();
 	}
 	
+	public function getEmail(){
+		return $this->person->getEmail();
+	}
+	
 	public function getBirthday(){
 		return $this->person->getBirthday();
 	}
@@ -62,7 +66,7 @@ class SO_Helper implements IF_BASE_NAMED_OBJECT{
 	public function getOpenDates(DateTime $beginDate = null, DateTime $endDate = null){
 		$children = $this->getChildren();
 		if($endDate == null){
-			$endDate = new DateTime();
+			$endDate = new DateTime(null, new DateTimeZone("Europe/Berlin"));
 			$endDate->setDate(2015, 12, 31);
 		}
 		$returnDates = array();

@@ -180,6 +180,14 @@ input[type="text"],input[type="password"],.input-append input[type="password"]
 	border-left: 1px dotted #999;
 	float: right;
 }
+
+.dateDateInput {
+	width: 75px;
+}
+
+dateDateInput {
+	width: 75px;
+}
 /* End Date lists */
 /* Kid Lists */
 

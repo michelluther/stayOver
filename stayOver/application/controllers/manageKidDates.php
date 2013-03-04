@@ -12,7 +12,7 @@ class ManageKidDates extends SO_BaseController{
 		$this->content['view'] = 'manageKidDatesStart';
 		try {
 			$user = SO_User::getInstance();
-			$this->content['data']['parentDates'] = $user->getParent()->getDates(new DateTime());
+			$this->content['data']['parentDates'] = $user->getParent()->getDates(new DateTime(null, new DateTimeZone(DateT::Europe)));
 			$this->content['data']['parentChildren'] = $user->getParent()->getChildren();
 		} catch (Mpm_Exception $e) {
 			$this->content['data']['parentDates'] = null;
@@ -23,7 +23,7 @@ class ManageKidDates extends SO_BaseController{
 	public function getDates(){
 		$this->returnType = MLU_AJAX_CONTENT;
 		$user = SO_User::getInstance();
-		$this->content['data']['parentDates'] = $user->getParent()->getDates(new DateTime());
+		$this->content['data']['parentDates'] = $user->getParent()->getDates(new DateTime(null, new DateTimeZone(DateT::Europe)));
 		$this->content['view'] = 'include/dateTable';
 		$this->_callView();
 	}
@@ -66,15 +66,17 @@ class ManageKidDates extends SO_BaseController{
 		try{
 			$clientArray = $_POST["form"]["date"];
 			$date = SO_DateFactory::getDate($dateID);
-			$beginDate = Mpm_calendar::get_date_from_user_string($clientArray["beginDate"]);
-			$endDate = Mpm_calendar::get_date_from_user_string($clientArray["endDate"]);
+			$begin = Mpm_calendar::get_date_from_user_string($clientArray["beginDate"]);
+			Mpm_calendar::set_time_from_user_string($begin, $clientArray["beginTime"]);
+			$end = Mpm_calendar::get_date_from_user_string($clientArray["endDate"]);
+			Mpm_calendar::set_time_from_user_string($end, $clientArray["endTime"]);
 			$childPerson = SO_PeopleFactory::getPerson($clientArray["kid"]);
 			$child = new SO_Child($childPerson);
 			$title = $clientArray['title'];
 			$note = $clientArray['note'];
 			$date->setTitle($title);
-			$date->setBeginDate($beginDate);
-			$date->setEndDate($endDate);
+			$date->setBeginDate($begin);
+			$date->setEndDate($end);
 			$date->setNote($note);
 			$date->removeChildren();
 			$date->addChild($child);
