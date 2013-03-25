@@ -6,6 +6,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 
 	static private $instance = null;
 	private static $userModel;
+	private static $authorizationModel;
 	private static $personModel;
 
 	private $uname;
@@ -26,7 +27,25 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	public static function setPersonModel($model){
 		self::$personModel = $model;
 	}
+	
+	public static function setAuthorizationModel($model){
+		self::$authorizationModel = $model;
+	}
 
+	// Creator
+	public static function createUser($uname, $pw, $email, $firstName, $lastName){
+		self::$userModel->createUser($uname, $pw, $email);
+		$user = new SO_User($uname);
+		$person = SO_PeopleFactory::createPerson($firstName, $lastName);
+		$person->assignUser($user);
+		if($person->save() != true){
+			throw new Mpm_Exception('Fehler beim Anlegen der Person');
+		}
+		$user->setPerson($person);
+		$user->assignRole(ROLE_PARENT);
+		return $user;
+	}
+	
 	// Singleton
 	public static function getInstance(){
 		if (!isset(self::$instance)){
@@ -83,7 +102,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	}
 	
 	private function init(){
-		$this->roles = self::$userModel->getRoles($this->uname);
+		$this->roles = self::$authorizationModel->getRoleData($this->uname);
 		$this->person = SO_PeopleFactory::getPersonByUser($this);
 		$this->setEmail(self::$userModel->getEmail($this));
 		$this->addParent();
@@ -124,6 +143,16 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 			};
 		}
 		return $hasRole;
+	}
+	
+	public function assignRole($role){
+		if(!$this->hasRole($role)){
+			
+		}
+	}
+	
+	public function getRoles(){
+		return $this->roles;
 	}
 	
 	public function setPerson($person){

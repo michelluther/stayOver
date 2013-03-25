@@ -13,25 +13,26 @@ class Admin extends SO_BaseController{
 		$this->controller_name = strtolower(get_class($this));
 	}
 
-	public function submit_login(){
-		parent::submit_login();
-		$this->content['view'] = 'admin2';
+	public function start(){
+		$this->content['view'] = 'admin';
+		$this->header['data']['js'] = array('admin');
 		$this->content['data'] = null;
 		$this->_callView();
 	}
-	
-	public function create_user_init(){
-		$this->load->view('create_user_input');
-	}
 
-	public function create_user_submit(){
-		$uname = $_POST['uname'];
-		$pw	= $_POST['pw'];
-		$this->load->model('Project_hours_admin');
-		$this->Project_hours_admin->create_user($uname, $pw);
-		$return = array('msg_class' => 'msg_success',
-										'msg_text'	=> 'Der User wurde erfolgreich angelegt');
-		$this->load->view('system_feedback', $return);
+	public function addUser(){
+		try{
+			$uname = $_POST['form']['user']['uname'];
+			$pw	= $_POST['form']['user']['password'];
+			$email = $_POST['form']['user']['email'];
+			$firstName = $_POST['form']['user']['firstName'];
+			$lastName = $_POST['form']['user']['lastName'];
+			$user = SO_User::createUser($uname, $pw, $email, $firstName, $lastName);
+			
+			$this->_returnFeedback(BASE_MSG_SUCCESS, "Der User wurde erfolgreich angelegt");
+		} catch(Mpm_Exception $e){
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
+		}
 	}
 
 }

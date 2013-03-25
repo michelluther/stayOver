@@ -34,7 +34,7 @@ function toggleHelpContentDisplay(event){
 
 function setSubmitOnEnter() {
 	$(".submitOnEnter").keypress(function(e) {
-		submitLogin();
+		//submitLogin();
 	});
 }
 

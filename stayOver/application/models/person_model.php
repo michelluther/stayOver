@@ -127,7 +127,7 @@ class Person_model extends CI_Model{
 
 	public function removeHelperToChildAssignment(IF_BASE_NAMED_OBJECT $child, IF_BASE_NAMED_OBJECT $helper){
 		$this->db->where(array(	'child_id' => $child->getID(),
-													  'helper_id' => $helper->getID()));
+								'helper_id' => $helper->getID()));
 		$query = $this->db->delete('so_helper_child');
 	}
 	
@@ -146,7 +146,8 @@ class Person_model extends CI_Model{
 	
 	public function insertPerson(SO_Person $person){
 		$data = array( 'first_name' => $person->getFirstName(),
-									 'last_name' => $person->getLastName()
+					   'last_name' => $person->getLastName(),
+					   'uname' => $person->getUname()
 		);
 		$query = $this->db->insert('base_people', $data);
 		$id = $this->db->insert_id();

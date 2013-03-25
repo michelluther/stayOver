@@ -1,18 +1,18 @@
 <?php
 class Mpm_navigation {
-	
+
 	private $navigation;
-	
+
 	public function &get_navigation($activities){
 		usort($activities, function($a, $b){
 			return strcmp($a->index, $b->index);
 		});
 		if ($this->navigation == null){
-			$this->navigation = new MPM_NavigationObject($activities);	
+			$this->navigation = new MPM_NavigationObject($activities);
 		}
 		return $this->navigation;
 	}
-	
+
 	public function set_active_entry(&$navigation, $activity){
 		$navigation->set_active_entry($activity);
 	}
@@ -27,7 +27,7 @@ class MPM_NavigationObject{
 			$navigationEntry = new MPM_NavigationEntry($activity);
 			$this->navigationEntries[$navigationEntry->get_index()] = $navigationEntry;
 		}
-		
+
 		return $this;
 	}
 
@@ -43,14 +43,16 @@ class MPM_NavigationObject{
 		}
 		// Set default: first Entry
 		if($activeEntryFound == false){
-			$this->navigationEntries[1]->set_active();
+			if(isset($this->navigationEntries[1])){
+				$this->navigationEntries[1]->set_active();
+			}
 		}
 	}
-	
+
 	public function get_navigationEntries(){
 		return $this->navigationEntries;
 	}
-	
+
 	private function get_entry_index(&$navigationEntry){
 		$index = $navigationEntry->get_index();
 		return $index;
@@ -67,7 +69,7 @@ class MPM_NavigationEntry{
 	private $active;
 	private $index;
 	private $is_active;
-	
+
 	public function __construct($activity, $target = null){
 		$this->name = $activity->description;
 		$this->activity =  $activity->activity;
@@ -79,11 +81,11 @@ class MPM_NavigationEntry{
 	public function set_active(){
 		$this->is_active = true;
 	}
-	
+
 	public function set_inactive(){
 		$this->is_active = false;
 	}
-	
+
 	public function get_name(){
 		return $this->name;
 	}
@@ -95,7 +97,7 @@ class MPM_NavigationEntry{
 	public function get_target(){
 		return $this->target;
 	}
-	
+
 	public function get_index(){
 		return $this->index;
 	}

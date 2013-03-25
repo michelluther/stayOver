@@ -8,10 +8,38 @@ class User_model extends CI_Model{
 	public function __construct(){
 		SO_User::setUserModel($this);
 	}
-		
+
+	/*
+	 * User Management
+	*/
+	public function createUser($uname, $pw, $email){
+		$pw_array = $this->_create_hash_array($pw);
+		$user_data = array(	'uname' => $uname,
+							'password' => $pw_array['pw_hash'],
+							'salt'	=> $pw_array['salt'] );
+		$result = $this->db->insert('base_users', $user_data);
+		if ($result == false){
+			throw new Exception('User konnte nicht angelegt werden');
+		}
+	}
+
+
+	private function _create_salt(){
+		$salt = mt_rand();
+		return $salt;
+	}
+
+	private function _create_hash_array($pw){
+		$salt = $this->_create_salt();
+		$hash = md5($pw . $salt);
+		$security_data = array( 'pw_hash' => $hash,
+								'salt'	=> $salt );
+		return $security_data;
+	}
+
 	/*
 	 * Login Procedure
-	 */
+	*/
 	public function login($uname, $pw){
 		$salt = $this->_get_salt($uname);
 		$this->_check_hashed_pw($uname, $pw, $salt);
@@ -33,7 +61,7 @@ class User_model extends CI_Model{
 	private function _check_hashed_pw($uname, $pw, $salt){
 		$pw_hashed = md5($pw . $salt);
 		$where = array(	'uname' 	=> $uname,
-					   				'password'	=> $pw_hashed);
+						'password'	=> $pw_hashed);
 		$query = $this->db->get_where('base_users', $where);
 		if(count($query->result()) > 0){
 			$this->_resetFailedAttampts($uname);
@@ -55,22 +83,19 @@ class User_model extends CI_Model{
 		$this->db->where = $where;
 		$this->db->update('base_users', $data);
 	}
-	
+
 	private function _resetFailedAttampts($uname){
 		$where = array(	'uname' 	=> $uname);
 		$data = array('failed_attempts' => 0);
 		$this->db->where = $where;
 		$this->db->update('base_users', $data);
 	}
-	
-	/*
-	 * Init user data for logged in user
-	 */
+
 	public function updateUserData(SO_User $user){
 		// Currently, only the email-address, other (like name and so on) is saved via Person model
 		$changesMade = false;
 		$data = array('uname' => $user->getID(),
-									'email' => $user->getEmail());
+				'email' => $user->getEmail());
 		$query = $this->db->get_where('base_users', $data);
 		if(count($query->result()) == 0){
 			$this->db->where = array( 'uname' => $user->getID());
@@ -80,14 +105,14 @@ class User_model extends CI_Model{
 			} else {
 				$changesMade = true;
 			}
-		} 
+		}
 		return $changesMade;
 	}
 
 	public function changeUserPassword($pw){
-		/* TODO: Change User Password in Model */		
+		/* TODO: Change User Password in Model */
 	}
-	
+
 	private function _set_pernr(){
 		$where = array(	'uname' => $this->uname);
 		$query = $this->db->get_where('base_people', $where);
@@ -95,25 +120,11 @@ class User_model extends CI_Model{
 		$user_data = $hitlist[0];
 		$this->user->personal_id = $user_data->pernr;
 	}
-	
+
 	/*
-	* Initialization, user roles, etc.
+	 * Initialization.
 	*/
-	public function getRoles($userID){
-		$where = array(	'uname' => $userID);
-		$returnArray = array();
-		$query = $this->db->get_where('sec_role_user_assignments', $where);
-		$role_assignments = $query->result();
-		foreach ($role_assignments as $role_assignment) {
-			$where = array('role_id' => $role_assignment->role_id);
-			$query = $this->db->get_where('sec_roles', $where);
-			$roleArray = $query->result();
-			$role = $roleArray[0];
-			$returnArray[$role->role_id] = $role;
-		}
-		return $returnArray;
-	}
-	
+
 	public function getEmail(IF_BASE_NAMED_OBJECT $user){
 		$where = array('uname' => $user->getID());
 		$this->db->where($where);
@@ -123,5 +134,5 @@ class User_model extends CI_Model{
 		$userEmail = $userEmails[0]->email;
 		return $userEmail;
 	}
-	
+
 }

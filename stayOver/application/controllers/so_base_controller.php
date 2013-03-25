@@ -113,6 +113,8 @@ class SO_BaseController extends CI_Controller{
 	 */
 
 	protected function _redirect_to_login(){
+		// TODO: Set Cookie Information for Redirect after successful login
+		$this->session->set_userdata('redirected_from', 'admin/start');
 		$loginURL = base_url() . 'index.php/' . $this->router->fetch_class() . '/login';
 		redirect($loginURL);
 	}

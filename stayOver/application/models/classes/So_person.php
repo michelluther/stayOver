@@ -10,6 +10,7 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT, IF_BASE_SAV
 	protected $lastName;
 	protected $email;
 	protected $birthday;
+	protected $user;
 
 	public function __construct($id = null){
 		if($id != null){
@@ -73,11 +74,20 @@ class SO_Person extends SO_JSONData implements IF_BASE_NAMED_OBJECT, IF_BASE_SAV
 		$this->birthday = $birthday;
 	}
 	
+	
 	public function getEmail(){
 		if(!isset($this->email)){
 			$this->email = self::$model->getUserEmailByPerson($this);
 		}
 		return $this->email;
+	}
+	
+	public function getUname(){
+		return $this->user->getID();
+	}
+	
+	public function assignUser($user){
+		$this->user = $user;
 	}
 	
 	public function init(){
