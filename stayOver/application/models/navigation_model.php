@@ -15,7 +15,7 @@ class Navigation_model extends CI_Model{
 	private function _set_navigation(){
 		$activities = array();
 		foreach ($this->user->roles as $role) {
-			$where = array('role_id' => $role->role_id,
+			$where = array('role_id' => $role->getID(),
 										 'navigation' => true);
 			$this->db->select('*');
 			$this->db->from('sec_role_content_assignments');

@@ -1,7 +1,17 @@
 <?php
 
 class SecAuthorizations {
-	
+
+	public static function checkIfRoleAssigned(SO_User $user, $roleID){
+		$return = false;
+		foreach ($user->getRoles() as $role) {
+			if($role->getID() == $roleID){
+				$return = true;
+			}
+		}
+		return $return;
+	}
+
 	public static function checkActivity(SO_User $user, $activity){
 		$return = false;
 		foreach ($user->getRoles() as $role) {
@@ -14,15 +24,17 @@ class SecAuthorizations {
 }
 
 class SecRole {
-	
+
 	protected $id;
 	protected $activities = array();
-	
-	public function __construct($id, $activities){
+
+	public function __construct($id, $activities = null){
 		$this->id = $id;
-		$this->activities = $activities;		
+		if ($activities != null){
+			$this->activities = $activities;
+		}
 	}
-	
+
 	public function checkActivity($activity){
 		$return = false;
 		foreach ($this->activities as $currentActivity) {
@@ -32,7 +44,7 @@ class SecRole {
 		}
 		return $return;
 	}
-	
+
 	public function getID(){
 		return $this->id;
 	}

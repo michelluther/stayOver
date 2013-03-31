@@ -34,5 +34,18 @@ class Admin extends SO_BaseController{
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
 	}
+	
+	public function unlockUser(){
+		try {
+			$uname = $_POST['form']['user']['uname'];
+			$user = new SO_User($uame);
+			$user->unlock();
+			$this->_returnFeedback(BASE_MSG_SUCCESS, "Der User wurde entsperrt");
+		} catch (Mpm_Exception $e) {
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
+		}
+		
+		
+	}
 
 }

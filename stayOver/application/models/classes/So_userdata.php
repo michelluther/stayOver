@@ -1,6 +1,7 @@
 <?php
 
 include_once 'application/models/interfaces/So_Interfaces.php';
+include_once 'application/models/classes/SEC_Authorizations.php';
 
 class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 
@@ -38,11 +39,11 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 		$user = new SO_User($uname);
 		$person = SO_PeopleFactory::createPerson($firstName, $lastName);
 		$person->assignUser($user);
+		$user->setPerson($person);
+		$user->assignRole(new SecRole(ROLE_PARENT));
 		if($person->save() != true){
 			throw new Mpm_Exception('Fehler beim Anlegen der Person');
 		}
-		$user->setPerson($person);
-		$user->assignRole(ROLE_PARENT);
 		return $user;
 	}
 	
@@ -102,7 +103,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	}
 	
 	private function init(){
-		$this->roles = self::$authorizationModel->getRoleData($this->uname);
+		$this->roles = self::$authorizationModel->getRoles($this->uname);
 		$this->person = SO_PeopleFactory::getPersonByUser($this);
 		$this->setEmail(self::$userModel->getEmail($this));
 		$this->addParent();
@@ -115,6 +116,10 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 		} else {
 			throw Mpm_Exception('Benutzername oder Passwort falsch');
 		}
+	}
+	
+	public function unlock(){
+		self::$userModel->unlockUser($this);
 	}
 
 	public function setEmail($email){
@@ -138,7 +143,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	public function hasRole($role){
 		$hasRole = false;
 		foreach ($this->roles as $currentRole) {
-			if ($role == $currentRole->role_id) {
+			if ($role == $currentRole->getID()) {
 				$hasRole = true;
 			};
 		}
@@ -147,7 +152,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	
 	public function assignRole($role){
 		if(!$this->hasRole($role)){
-			
+			self::$authorizationModel->assignRole($this, $role);
 		}
 	}
 	

@@ -1,5 +1,5 @@
 <?php
-if($display['helperDates'] == true){ ?>
+if(isset($display['helperDates'])){ ?>
 
 <div class="row">
 	<div class="span6 functionalArea helperAssigned">
@@ -14,7 +14,7 @@ if($display['helperDates'] == true){ ?>
 	</div>
 
 	<?php }
-if($display['helperOpenDates'] == true){ ?>
+if(isset($display['helperOpenDates'])){ ?>
 	<div class="span6 functionalArea helperOpen">
 		<h2>Offene Termine Deiner unterst&uuml;tzten Kinder</h2>
 		<div class="functionalAreaContent" id="openHelperDatesDiv">

@@ -24,13 +24,13 @@ class Authorization_model extends CI_Model{
 			$query = $this->db->get_where('sec_roles', $where);
 			$roleArray = $query->result();
 			$role = $roleArray[0];
-			$returnArray[$role->role_id] = $role;
+			$returnArray[$role->role_id] = new SecRole($role->role_id);
 		}
 		return $returnArray;
 	}
 	
 	public function assignRole(SO_User $user, SecRole $role){
-		$data = array('user_id' => $user->getID(),
+		$data = array('uname' => $user->getID(),
 					  'role_id' => $role->getID() );
 		$query = $this->db->insert('sec_role_user_assignments', $data);
 		if($query == false){
