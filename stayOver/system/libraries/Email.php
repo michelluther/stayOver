@@ -1,15 +1,17 @@
+
+
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 /**
  * CodeIgniter
  *
  * An open source application development framework for PHP 5.1.6 or newer
  *
- * @package		CodeIgniter
- * @author		ExpressionEngine Dev Team
- * @copyright	Copyright (c) 2008 - 2011, EllisLab, Inc.
- * @license		http://codeigniter.com/user_guide/license.html
- * @link		http://codeigniter.com
- * @since		Version 1.0
+ * @package             CodeIgniter
+ * @author              ExpressionEngine Dev Team
+ * @copyright   Copyright (c) 2008 - 2011, EllisLab, Inc.
+ * @license             http://codeigniter.com/user_guide/license.html
+ * @link                http://codeigniter.com
+ * @since               Version 1.0
  * @filesource
  */
 
@@ -20,12 +22,13 @@
  *
  * Permits email to be sent using Mail, Sendmail, or SMTP.
  *
- * @package		CodeIgniter
- * @subpackage	Libraries
- * @category	Libraries
- * @author		ExpressionEngine Dev Team
- * @link		http://codeigniter.com/user_guide/libraries/email.html
+ * @package             CodeIgniter
+ * @subpackage  Libraries
+ * @category    Libraries
+ * @author              ExpressionEngine Dev Team
+ * @link                http://codeigniter.com/user_guide/libraries/email.html
  */
+
 class CI_Email {
 
 	var	$useragent		= "CodeIgniter";
@@ -71,6 +74,13 @@ class CI_Email {
 	var	$_attach_name	= array();
 	var	$_attach_type	= array();
 	var	$_attach_disp	= array();
+
+	// added to store source of attachment - file or string,
+	//and attachment content - only relevant for string attachments. ~aidanf
+	var 	$_attach_source = array();
+	var 	$_attach_content = array();
+	// end add
+
 	var	$_protocols		= array('mail', 'sendmail', 'smtp');
 	var	$_base_charsets	= array('us-ascii', 'iso-2022-');	// 7-bit charsets (excluding language suffix)
 	var	$_bit_depths	= array('7bit', '8bit');
@@ -161,6 +171,11 @@ class CI_Email {
 			$this->_attach_name = array();
 			$this->_attach_type = array();
 			$this->_attach_disp = array();
+
+			//clearing additional arrays. ~aidanf
+			$this->_attach_source = array();
+			$this->_attach_content = array();
+			// end add.
 		}
 
 		return $this;
@@ -397,8 +412,32 @@ class CI_Email {
 		$this->_attach_name[] = $filename;
 		$this->_attach_type[] = $this->_mime_types(next(explode('.', basename($filename))));
 		$this->_attach_disp[] = $disposition; // Can also be 'inline'  Not sure if it matters
+
+		//added source variable. ~aidanf
+		$this->_attach_source[] = 'file';
+		//end add.
+
 		return $this;
 	}
+
+	/**
+	 * Added to assign string attachments. ~aidanf
+	 *
+	 * @access	public
+	 * @param	string
+	 * @return	void
+	 */
+	public function string_attach($str_file, $filename, $mime, $disposition = 'attachment')
+	{
+		$this->_attach_name[] = $filename;
+		$this->_attach_type[] = $mime;
+		$this->_attach_disp[] = $disposition; // Can also be 'inline'  Not sure if it matters
+		$this->_attach_source[] = 'string';
+		$this->_attach_content[] = $str_file;
+
+		return $this;
+	}
+	// end add.
 
 	// --------------------------------------------------------------------
 
@@ -897,7 +936,7 @@ class CI_Email {
 			}
 
 			$temp = '';
-			while ((strlen($line)) > $charlim)
+			while((strlen($line)) > $charlim)
 			{
 				// If the over-length word is a URL we won't wrap it
 				if (preg_match("!\[url.+\]|://|wwww.!", $line))
@@ -973,7 +1012,7 @@ class CI_Email {
 		reset($this->_headers);
 		$this->_header_str = "";
 
-		foreach ($this->_headers as $key => $val)
+		foreach($this->_headers as $key => $val)
 		{
 			$val = trim($val);
 
@@ -1123,6 +1162,7 @@ class CI_Email {
 
 		$z = 0;
 
+		/* modified to handle string attachments. ~aidanf
 		for ($i=0; $i < count($this->_attach_name); $i++)
 		{
 			$filename = $this->_attach_name[$i];
@@ -1153,6 +1193,49 @@ class CI_Email {
 			$attachment[$z++] = chunk_split(base64_encode(fread($fp, $file)));
 			fclose($fp);
 		}
+		*/
+		
+		//my version of above for loop. ~aidanf
+		for ($i=0; $i < count($this->_attach_name); $i++)
+		{
+			$filename = $this->_attach_name[$i];
+			$basename = basename($filename);
+			$ctype = $this->_attach_type[$i];
+
+			if($this->_attach_source[$i] == 'file')
+			{
+				if ( ! file_exists($filename))
+				{
+					$this->_set_error_message('email_attachment_missing', $filename);
+					return FALSE;
+				}
+
+				$file = filesize($filename) +1;
+
+				if ( ! $fp = fopen($filename, FOPEN_READ))
+				{
+					$this->_set_error_message('email_attachment_unreadable', $filename);
+					return FALSE;
+				}
+
+				$file_content = fread($fp, $file);
+				fclose($fp);
+			}
+			else
+			{
+				$file_content =& $this->_attach_content[$i];
+			}
+
+			$h  = "--".$this->_atc_boundary.$this->newline;
+			$h .= "Content-type: ".$ctype."; ";
+			$h .= "name=\"".$basename."\"".$this->newline;
+			$h .= "Content-Disposition: ".$this->_attach_disp[$i].";".$this->newline;
+			$h .= "Content-Transfer-Encoding: base64".$this->newline;
+
+			$attachment[$z++] = $h;
+			$attachment[$z++] = chunk_split(base64_encode($file_content));
+		}
+		//end mod.
 
 		$body .= implode($this->newline, $attachment).$this->newline."--".$this->_atc_boundary."--";
 
@@ -1536,7 +1619,6 @@ class CI_Email {
 		{
 			// most documentation of sendmail using the "-f" flag lacks a space after it, however
 			// we've encountered servers that seem to require it to be in place.
-
 			if ( ! mail($this->_recipients, $this->_subject, $this->_finalbody, $this->_header_str, "-f ".$this->clean_email($this->_headers['From'])))
 			{
 				return FALSE;
@@ -1607,14 +1689,14 @@ class CI_Email {
 
 		$this->_send_command('from', $this->clean_email($this->_headers['From']));
 
-		foreach ($this->_recipients as $val)
+		foreach($this->_recipients as $val)
 		{
 			$this->_send_command('to', $val);
 		}
 
 		if (count($this->_cc_array) > 0)
 		{
-			foreach ($this->_cc_array as $val)
+			foreach($this->_cc_array as $val)
 			{
 				if ($val != "")
 				{
@@ -1625,7 +1707,7 @@ class CI_Email {
 
 		if (count($this->_bcc_array) > 0)
 		{
-			foreach ($this->_bcc_array as $val)
+			foreach($this->_bcc_array as $val)
 			{
 				if ($val != "")
 				{
@@ -1652,6 +1734,7 @@ class CI_Email {
 		}
 
 		$this->_send_command('quit');
+
 		return TRUE;
 	}
 
@@ -1672,7 +1755,7 @@ class CI_Email {
 										$errstr,
 										$this->smtp_timeout);
 
-		if ( ! is_resource($this->_smtp_connect))
+		if( ! is_resource($this->_smtp_connect))
 		{
 			$this->_set_error_message('email_smtp_error', $errno." ".$errstr);
 			return FALSE;
@@ -2059,4 +2142,5 @@ class CI_Email {
 // END CI_Email class
 
 /* End of file Email.php */
-/* Location: ./system/libraries/Email.php */
+/* Location: ./application/libraries/Email.php */
+

@@ -67,22 +67,19 @@ class StayOver extends SO_BaseController{
 	}
 
 	public function sendIcalEntryToUser($dateID){
-		$date = SO_DateFactory::getDate($dateID);
-		$this->email->from('michel.luther@gmail.com', 'Michel Luther');
-		$this->email->to('luther@lutherundwinter.de');
-		$this->email->subject('Kalendereintrag für "' . $date->getTitle() . '"');
-		$this->email->message('eine Email für mich von mir ...');
-		$user = SO_User::getInstance();
-		$icalEntry = $this->so_ical->getIcalEntry($date, $user);
-		$this->load->helper('file');
-		if(write_file('name.txt', 'hallo')){
+		try {
+			$date = SO_DateFactory::getDate($dateID);
+			$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
+			$this->email->to($this->user->getEmail());
+			$this->email->subject('Kalendereintrag für "' . $date->getTitle() . '"');
+			$this->email->message('eine Email für mich von mir ...');
+			$icalEntry = $this->so_ical->getIcalEntry($date, $this->user);
+			$this->email->string_attach($icalEntry, 'stayOver_ical_entry.ics', 'text/calendar');
 			$this->email->send();
-		$this->_returnFeedback(BASE_MSG_SUCCESS, $this->email->print_debugger());
-		} else{
-			$this->_returnFeedback(BASE_MSG_ERROR, 'Konnte Datei nicht schreiben');
+			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Der Kalendereintrag wurde Dir per E-Mail zugesendet');
+		} catch (Exception $e) {
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
-// 		$icalEntryPath = $icalEntry->save();
-		
 	}
 
 	public function openEmailToParents($dateID){
@@ -127,20 +124,20 @@ class StayOver extends SO_BaseController{
 		$beginDate = new DateTime(null, new DateTimeZone("Europe/Berlin"));
 		$nextDatesHelper = $helper->getDates($beginDate);
 		$this->content['data']['nextDatesHelper'] = $nextDatesHelper;
-		$this->content['view'] = 'include/nextDatesHelperTable';
+		$this->content['view'] = 'include/nextDatesHelperList';
 		$this->_callView();
 	}
-	
+
 	public function getOpenHelperDates(){
 		$this->returnType = MLU_AJAX_CONTENT;
 		$helper = $this->user->getHelper();
 		$beginDate = new DateTime(null, new DateTimeZone("Europe/Berlin"));
 		$openDatesHelper = $helper->getOpenDates($beginDate);
 		$this->content['data']['openDatesHelper'] = $openDatesHelper;
-		$this->content['view'] = 'include/nextOpenDatesHelperTable';
+		$this->content['view'] = 'include/nextOpenDatesHelperList';
 		$this->_callView();
 	}
-	
+
 	public function getParentDates(){
 		$this->returnType = MLU_AJAX_CONTENT;
 		$user = $this->user;

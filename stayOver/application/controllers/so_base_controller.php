@@ -10,6 +10,8 @@ define("BASE_OBJECT_TYPE_DATE", "DATE");
 define("BASE_OBJECT_TYPE_PERSON", "PERSON");
 define("BASE_OBJECT_TYPE_USER", "USER");
 define("BASE_OBJECT_TYPE_CHILD", "CHILD");
+define("BASE_MAIL_FROM", 'do.not.reply@michelsplayground.com');
+define("BASE_MAIL_FROM_TEXT", 'do not reply');
 
 class SO_BaseController extends CI_Controller{
 

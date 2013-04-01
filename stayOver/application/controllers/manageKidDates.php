@@ -46,8 +46,9 @@ class ManageKidDates extends SO_BaseController{
 				$newDate->setNote($clientArray["note"]);
 			}
 			$newDate->save();
+			$this->informHelpersOfNewDate($newDate);
 			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Termin erfolgreich angelegt');
-		} catch (Mpm_Exception $e) {
+		} catch (Exception $e) {
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
 	}
@@ -164,7 +165,6 @@ class ManageKidDates extends SO_BaseController{
 		$this->_callView();
 	}
 
-
 	public function getDeleteDatesConfirm($dateID){
 		$this->returnType = MLU_AJAX_CONTENT;
 		$date = SO_DateFactory::getDate($dateID);
@@ -245,6 +245,32 @@ class ManageKidDates extends SO_BaseController{
 		$helpers = array();
 		foreach ($children as $child) {
 			$childHelpers = $child->getHelpers();
+		}
+	}
+
+	private function informHelpersOfNewDate(SO_DateChild $date){
+		// Compose Mail
+
+		// Get Recipients
+		$kids = $date->getChildren();
+		foreach ($kids as $kid) {
+			$this->email->clear();
+			$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
+			$this->email->subject('Ein neuer Termin für eines Deiner Helfer-Kinder');
+			$this->email->message('<p>Hallo lieber Helfer</p><p>f&uuml;r Dein Helfer-Kind gibt es einen neuen Termin am '
+					. Mpm_calendar::format_date_for_User($date->getBeginDate())
+					. '</p><p>Du kannst Dich bei StayOver anmelden und Dir die offenen Termine ansehen.</p>'
+					. '<p>Liebe Grüße<br />
+					Dein StayOver</p>');
+			$helpers = $kid->getHelpers();
+			foreach ($helpers as $helper) {
+				try{
+					$this->email->to($helper->getEmail());
+					$this->email->send();
+				} catch (Mpm_Exception $e) {
+					// do nothing
+				}
+			}
 		}
 	}
 }

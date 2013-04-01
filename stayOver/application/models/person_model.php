@@ -78,8 +78,10 @@ class Person_model extends CI_Model{
 		$this->db->select('base_users.email');
 		$query = $this->db->get();
 		$result = $query->result();
-		foreach ($result as $email) {
-			return $email->email;
+		if(count($result) != 0){
+			return $result[0]->email;
+		} else {
+			throw new Mpm_Exception('Keine Emailadresse gepflegt.');
 		}
 	}
 
