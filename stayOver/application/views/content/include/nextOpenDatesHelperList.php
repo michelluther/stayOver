@@ -31,7 +31,7 @@
 					class="icon-eye-open"></i> </a> <a class="btn btn-small"
 					onclick="openAssignDateToSelf(<?php echo $date->getID() ?>)"><i
 					class="icon-resize-small"></i> </a> <a class="btn btn-small"
-					onclick="downLoadCalendarEntry(<?php echo $date->getID() ?>)"><i
+					onclick="openCalendarEntry(<?php echo $date->getID() ?>)"><i
 					class="icon-calendar"></i> </a>
 			</div>
 		</div>

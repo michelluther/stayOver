@@ -129,7 +129,7 @@ input[type="text"],input[type="password"],.input-append input[type="password"]
 /* Date lists */
 .dateListEntry {
 	border: 1px solid #cdcdce;
-	margin: 0 0 10px 0;
+	margin: 0 0 2px 0;
 	padding: 15px 10px 10px 10px;
 	overflow: auto;
 }
@@ -187,13 +187,31 @@ input[type="text"],input[type="password"],.input-append input[type="password"]
 
 /* End Date lists */
 /* Kid Lists */
-
 .kidListEntry {
+	width: 380px;
 	border: 1px solid #cdcdce;
-	margin: 0 0 10px 0;
+	margin: 0 0 2px 0;
 	padding: 15px 10px 10px 30px;
 	overflow: auto;
 	background: #fff;
+}
+
+.kidListEntry h4 {
+	margin-bottom: 10px;
+}
+
+.kidListEntry hr {
+	margin: 5px 0;
+	color: #333333;	
+}
+
+.kidHelpers {
+	overflow: auto;
+	background-color: #cdcdce;
+}
+
+.kidListEntry hr {
+	clear: both;
 }
 
 .kidEntryBoy {
@@ -204,6 +222,7 @@ input[type="text"],input[type="password"],.input-append input[type="password"]
 	padding-left: 10px;
 	border-left: 1px dotted #999;
 	float: right;
+	padding-bottom: 10px;
 }
 /* End Kid Lists */
 
