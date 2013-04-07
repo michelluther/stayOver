@@ -4,10 +4,9 @@
 <?php $basePath = base_url(); 
 	include 'view_date.php';
 ?>
-<div class="row">
-	<div class="span6">
-
-<p><input type="button" value="OK"
-				onclick="deleteDate(<?php echo $date->getID() ?>)"
-				class="btn" /></p>
+<div class="buttonRow">
+<a onclick="deleteDate(<?php echo $date->getID() ?>)"
+				class="btn btn-small"><i class="icon-trash"></i> Ja, Termin l&ouml;schen</a>
+<a class="btn btn-small" onclick="$.unblockUI()"><i class="icon-remove"></i> Abbrechen</a>					
+</div>
 				

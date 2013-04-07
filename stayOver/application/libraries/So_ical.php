@@ -19,6 +19,7 @@ class SO_Ical{
 	// Fields
 	const organizerField = 'ORGANIZER:';
 	const dateBeginField = 'DTSTART:';
+	const dateEndField = 'DTEND:';
 	const generationTimeStampField = 'DTSTAMP:';
 	const subjectField = 'SUMMARY:';
 	const sequenceField = 'SEQUENCE:';
@@ -65,6 +66,13 @@ class SO_Ical_Entry{
 				$CI->file_helper->write_file('file.ics', 'test');
 	}
 	
+	public function getiCalString(){
+		if($this->calendarString == null){
+			$this->setICalString();
+		}
+		return $this->calendarString;
+	}
+	
 	private function setHeader(){
 		header('Content-Type: application/calendar');
 // 		header('Content-Disposition: attachment; filename="stay_over_appointment.txt"');
@@ -82,6 +90,8 @@ class SO_Ical_Entry{
 		$this->calendarString .= SO_Ical::organizerField . "michel.luther@gmail.com" . "\r\n";
 		$beginDate = $this->getBeginDate();
 		$this->calendarString .= SO_Ical::dateBeginField . $beginDate . "\r\n";
+		$endDate = $this->getEndDate();
+		$this->calendarString .= SO_Ical::dateEndField . $endDate . "\r\n";
 		$generationTimeStamp = $this->getGenerationTimeStamp();
 		$this->calendarString .= SO_Ical::generationTimeStampField . $generationTimeStamp . "\r\n";
 		$subject = $this->getSubject();
@@ -101,9 +111,17 @@ class SO_Ical_Entry{
 	}
 	
 	private function getBeginDate(){
-		$beginDate = Mpm_calendar::format_date_for_DataBase($this->date->getBeginDate());
-		$beginTime = '200000';
+		$bedinDateObject = Mpm_calendar::getUTCObject($this->date->getBeginDate());	// we HAVE to work with UTC-Times
+		$beginDate = Mpm_calendar::format_date_for_DataBase($bedinDateObject);
+		$beginTime = Mpm_calendar::format_time_for_DataBase($bedinDateObject);
 		return $beginDate . 'T' . $beginTime . 'Z';
+	}
+	
+	private function getEndDate(){
+		$endDateObject = Mpm_calendar::getUTCObject($this->date->getEndDate());	// we HAVE to work with UTC-Times
+		$endDate = Mpm_calendar::format_date_for_DataBase($endDateObject);
+		$endTime =  Mpm_calendar::format_time_for_DataBase($endDateObject);
+		return $endDate . 'T' . $endTime . 'Z';
 	}
 	
 	private function getSubject(){
@@ -111,7 +129,7 @@ class SO_Ical_Entry{
 	}
 	
 	private function getUid(){
-		return $this->recipient . '.' . $this->date->getID() . '@stayOver';
+		return $this->recipient->getID() . '.' . $this->date->getID() . '@stayOver';
 	}
 	
 	private function getDescription(){

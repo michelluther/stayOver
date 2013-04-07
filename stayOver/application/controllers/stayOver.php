@@ -39,7 +39,7 @@ class StayOver extends SO_BaseController{
 		try{
 			$date = SO_DateFactory::getDate($dateID);
 			$this->returnType = MLU_AJAX_CONTENT;
-			$this->content['view'] = 'popins/view_date';
+			$this->content['view'] = 'popins/view_date_full';
 			$this->content['data']['date'] = $date;
 			$this->_callView();
 		} catch(Mpm_Exception $e){
@@ -74,7 +74,8 @@ class StayOver extends SO_BaseController{
 			$this->email->subject('Kalendereintrag für "' . $date->getTitle() . '"');
 			$this->email->message('eine Email für mich von mir ...');
 			$icalEntry = $this->so_ical->getIcalEntry($date, $this->user);
-			$this->email->string_attach($icalEntry, 'stayOver_ical_entry.ics', 'text/calendar');
+			$icalString = $icalEntry->getiCalString();
+			$this->email->string_attach($icalString, 'stayOver_ical_entry.ics', 'text/calendar');
 			$this->email->send();
 			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Der Kalendereintrag wurde Dir per E-Mail zugesendet');
 		} catch (Exception $e) {

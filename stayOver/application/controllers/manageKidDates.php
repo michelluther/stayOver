@@ -82,6 +82,7 @@ class ManageKidDates extends SO_BaseController{
 			$date->removeChildren();
 			$date->addChild($child);
 			$changesMade = $date->save();
+			$this->informHelpersOfChangeToDate($date);
 			if($changesMade == true){
 				$this->_returnFeedback(BASE_MSG_SUCCESS, 'Termin erfolgreich gespeichert');
 			} else {
@@ -250,18 +251,45 @@ class ManageKidDates extends SO_BaseController{
 
 	private function informHelpersOfNewDate(SO_DateChild $date){
 		// Compose Mail
-
 		// Get Recipients
 		$kids = $date->getChildren();
 		foreach ($kids as $kid) {
 			$this->email->clear();
 			$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
-			$this->email->subject('Ein neuer Termin für eines Deiner Helfer-Kinder');
-			$this->email->message('<p>Hallo lieber Helfer</p><p>f&uuml;r Dein Helfer-Kind gibt es einen neuen Termin am '
+			$this->email->subject('Ein neuer Termin für ' . $kid->getName() );
+			$emailMessage = $this->_setEmailHTMLHeader();
+			$emailMessage .= $this->_setEmailHTMLBody('<p>Hallo lieber Helfer</p><p>f&uuml;r Dein Helfer-Kind ' . $kid->getName() . ' gibt es einen neuen Termin am '
 					. Mpm_calendar::format_date_for_User($date->getBeginDate())
 					. '</p><p>Du kannst Dich bei StayOver anmelden und Dir die offenen Termine ansehen.</p>'
 					. '<p>Liebe Grüße<br />
 					Dein StayOver</p>');
+			$emailMessage .= $this->_setEmailHTMLFooter();
+			$this->email->message($emailMessage);
+			$helpers = $kid->getHelpers();
+			foreach ($helpers as $helper) {
+				try{
+					$this->email->to($helper->getEmail());
+					$this->email->send();
+				} catch (Mpm_Exception $e) {
+					// do nothing
+				}
+			}
+		}
+	}
+
+	private function informHelpersOfChangeToDate(SO_DateChild $date){
+		$kids = $date->getChildren();
+		foreach ($kids as $kid) {
+			$this->email->clear();
+			$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
+			$this->email->subject('Änderungen an Termin für ' . $kid->getName() );
+			$emailMessage = $this->_setEmailHTMLHeader();
+			$emailMessage .= $this->_setEmailHTMLBody('<p>Hallo lieber Helfer,</p>'
+					. '<p>f&uuml;r Dein Helfer-Kind ' . $kid->getName() . ' gab es eine Änderung an dem Termin "'
+					. $date->getTitle() .'" am ' .Mpm_calendar::format_date_for_User($date->getBeginDate())
+					. '.</p><p>Du kannst Dich bei StayOver anmelden und Dir die Änderungen ansehen.</p>');
+			$emailMessage .= $this->_setEmailHTMLFooter();
+			$this->email->message($emailMessage);
 			$helpers = $kid->getHelpers();
 			foreach ($helpers as $helper) {
 				try{

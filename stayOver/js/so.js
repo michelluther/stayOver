@@ -27,6 +27,10 @@ $(document).ready(function() {
 	resetTest = true;
 });
 
+function openHelp(){
+	window.open('http://www.michelsplayground.com', 'stayOver Hilfe');
+}
+
 function toggleHelpContentDisplay(event){
 	var target = event.target;
 	$(target).children().show();

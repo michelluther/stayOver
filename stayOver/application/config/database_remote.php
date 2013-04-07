@@ -41,10 +41,10 @@
 $active_group = 'default';
 $active_record = TRUE;
 
-$db['default']['hostname'] = 'localhost';
-$db['default']['username'] = 'root';
-$db['default']['password'] = 'michel78';
-$db['default']['database'] = 'stayOver';
+$db['default']['hostname'] = 'db464881551.db.1and1.com';
+$db['default']['username'] = 'dbo464881551';
+$db['default']['password'] = 'b2m1fBzGgM';
+$db['default']['database'] = 'db464881551';
 $db['default']['dbdriver'] = 'mysql';
 $db['default']['dbprefix'] = '';
 $db['default']['pconnect'] = TRUE;

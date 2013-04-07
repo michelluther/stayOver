@@ -117,4 +117,10 @@ class Mpm_calendar{
 		return array('beginDate' => $beginDateString,
 					 			 'endDate'   => $endDateString);
 	}
+	
+	public static function getUTCObject(DateTime $date){
+		$utcTimeZone = new DateTimeZone("UTC");
+		$date->setTimezone($utcTimeZone);
+		return $date;
+	}
 }

@@ -50,14 +50,12 @@
 		</div>
 		<div class="span4">
 			<textarea name="date.note" cols="40" rows="4"></textarea>
-			</td>
 		</div>
 	</div>
-	<div class="row">
-		<div class="span2 offset2">
-			<input type="button" value="Termin anlegen"
+	<div class="buttonRow">
+			<a type="button"
 				onclick="submitFormAndRefresh('addKidDateForm', '<?= $basePath ?>index.php/manageKidDates/addDate')"
-				class="btn" />
-		</div>
+				class="btn btn-small" ><i class="icon-plus"></i> Termin anlegen</a>
+			<a class="btn btn-small" onclick="$.unblockUI()"><i class="icon-remove"></i> Abbrechen</a>	
 	</div>
 </form>

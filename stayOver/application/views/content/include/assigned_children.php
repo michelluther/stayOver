@@ -1,14 +1,14 @@
 <?php
 $iterator = 1;
 foreach ($kids as $kid) { ?>
-<form id="kidDataForm_<?php echo $kid->getID(); ?>">
-	<?php if ($kid->getGender() == IF_SO_Person::genderMale){
-		$genderClass = 'kidEntryBoy';
-	} else {
+
+<?php if ($kid->getGender() == IF_SO_Person::genderMale){
+	$genderClass = 'kidEntryBoy';
+} else {
 		$genderClass = 'kidEntryGirl';
 	}  ?>
-	<div class="kidListEntry offset1 <?php echo $genderClass; ?>">
-
+<div class="kidListEntry offset1 <?php echo $genderClass; ?>">
+	<form id="kidDataForm_<?php echo $kid->getID(); ?>">
 		<h4>
 			<?php echo $kid->getFirstName(); ?>
 		</h4>
@@ -37,7 +37,7 @@ foreach ($kids as $kid) { ?>
 				$helpers = $kid->getHelpers();
 				$iterator = 1;
 				if(count($helpers) > 0)
-					foreach ($helpers as $helper) {
+				foreach ($helpers as $helper) {
 					if($iterator > 1){
 						echo ",&nbsp;";
 					}
@@ -55,6 +55,13 @@ foreach ($kids as $kid) { ?>
 				class="icon-pencil"></i>
 			</a>
 		</div>
-	</div>
-</form>
+	</form>
+</div>
+
 <?php } ?>
+<div class="kidListEntry offset1 kidEntryBoy">
+	<div class="newKidButton">
+		<a class="btn btn-small" onClick="openAddChildPopup()"><i
+			class="icon-plus"></i> Neues Kind</a>
+	</div>
+</div>

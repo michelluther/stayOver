@@ -1,19 +1,13 @@
-<form id="assignKidDateForm" action="">
+
 <?php $basePath = base_url(); ?>
-	<table class="alignment">
-		<tr>
-			<td colspan="2"><p>Du kannst Dir den folgenden Termin zuweisen:</p>
-				<ul>
-					<?php foreach ($dates as $date) { ?>
-					<li><?= $date->getTitle(); ?></li>
-					<?php }?>
-				</ul>
-			</td>
-		</tr>
-		<tr>
-			<td colspan="2"><input type="button" value="Speichern"
-				onclick="assignDateToSelf(<?php echo $date->getID(); ?>);"
-				class="btn" /></td>
-		</tr>
-	</table>
-</form>
+<?php foreach ($dates as $date) { ?>
+<p>
+	M&ouml;chtest Du Dir den Termin "<?= $date->getTitle(); ?>" zuweisen?
+</p>
+
+<?php }?>
+<div class="buttonRow">
+	<a onclick="assignDateToSelf(<?php echo $date->getID(); ?>);"
+		class="btn btn-small"><i class="icon-resize-small"></i> Ja, Termin &uuml;bernehmen</a> <a
+		class="btn btn-small" onclick="$.unblockUI()"><i class="icon-remove"></i> Abbrechen</a>
+</div>

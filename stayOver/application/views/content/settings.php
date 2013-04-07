@@ -5,8 +5,6 @@
 		<h2>
 			<i class="icon-user icon-white"></i> Benutzerdaten h&auml;h&auml;
 		</h2>
-
-
 		<div class="functionalAreaContent">
 			<form id="UserDataForm" action="">
 				<div class="row">
@@ -60,13 +58,12 @@
 			<i class="icon-heart icon-white"></i> Kinder
 		</h2>
 		<div class="functionalAreaContent">
-			<div id="assignedChildren">
-				<?php include_once 'include/assigned_children.php'?>
-			</div>
 			<div class="row">
-				<span class="span4 offset1"><a class="btn btn-small"
-					onClick="openAddChildPopup()"><i class="icon-plus"></i> Neues Kind</a>
-				</span>
+				<div class="span12">
+					<div id="assignedChildren">
+						<?php include_once 'include/assigned_children.php'?>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

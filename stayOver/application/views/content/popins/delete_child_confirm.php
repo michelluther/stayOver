@@ -1,4 +1,5 @@
 <p>M&ouml;chtest Du <?php echo $child->getName() ?> wirklich l&ouml;schen?</p>
-<p><input type="button" value="Ja, Kind l&ouml;schen"
+<div class="buttonRow"><a 
 				onclick="deleteChild(<?php echo $child->getID() ?>)"
-				class="btn" /></p>
+				class="btn btn-small" >Ja, Kind l&ouml;schen</a>
+				<a onclick="$.unblockUI()" class="btn btn-small">Nein, Kind behalten</a></div>

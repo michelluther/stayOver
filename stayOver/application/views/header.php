@@ -6,9 +6,16 @@
 <?php
 $basePath = base_url();
 ?>
+
 <link rel=stylesheet
 	href="<?php echo $basePath . 'css/bootstrap.css'?>" type="text/css"
 	media=screen>
+	<link rel=stylesheet
+	href="<?php echo $basePath . 'css/bootstrap-responsive.css'?>" type="text/css"
+	media=screen>
+<!-- <link rel=stylesheet
+	href="<?php echo $basePath . 'css/font-awesome.min.css'?>" type="text/css"
+	media=screen> -->
 <script type="text/javascript">
 			var base_url = "<?= $basePath ?>";
 		</script>
@@ -29,9 +36,6 @@ $basePath = base_url();
 <?php
 	}
 } ?>
-<link rel=stylesheet
-	href="<?php echo $basePath . 'css/ui_lightness/jquery_ui.css'?>"
-	type="text/css" media=screen>
 	<link rel=stylesheet
 	href="<?php echo $basePath . 'css/timepicker.css'?>"
 	type="text/css" media=screen>
@@ -41,6 +45,6 @@ $basePath = base_url();
 <link rel=stylesheet href="<?php echo $basePath . 'css/mpm.css'?>"
 	type="text/css" media=screen>
 <!-- <link href='http://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'> -->
-<!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">  -->
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
 </head>
 <body>

@@ -29,6 +29,7 @@ class SO_BaseController extends CI_Controller{
 	protected $current_activity;
 	
 	public function __construct(){
+		date_default_timezone_set('Europe/Berlin');
 		parent::__construct();
 		set_exception_handler(array($this, '_handleError'));
 		$this->banner['view'] = 'banner';
@@ -170,7 +171,6 @@ class SO_BaseController extends CI_Controller{
 		}
 		$this->content['data'] = $e->get_fault_data();
 		$this->_callView();
-		//		$this->load->view('system_feedback');
 	}
 	
 	protected function _setFeedback($msgClass, $msgText){
@@ -180,7 +180,24 @@ class SO_BaseController extends CI_Controller{
 	protected function _returnFeedback($msgClass, $msgText){
 		$msg = $this->base_messager->get_message($msgClass, $msgText);
 		$this->load->view('ajax_data', array('ajax_data' => array($msg)));
-	//	if()
-		//$this->load->view('ajax_data', $return);
+	}
+	
+	protected function _setEmailHTMLHeader(){
+		$returnString = '<html><head><style type="text/css">' 
+				. 'font-family:"Calibri", "Arial", sans-serif'
+				. '</style></head><body><table><tr><td><img src="' . base_url() . '/img/logo_stayOver.png"/></td></tr>';
+		return $returnString;
+	}
+	
+	protected function _setEmailHTMLBody($bodyText){
+		$returnString = '<tr><td>' . $bodyText . '</td></tr>';
+		return $returnString;
+	}
+	
+	protected function _setEmailHTMLFooter(){
+		$returnString = '<tr><td><p>Liebe Grüße<br />
+					Dein StayOver</p>
+				<p><a href=" ' . base_url() . 'index.php/stayOver/login">Besuche uns ...</a></td></tr></table></body></html>';
+		return $returnString;
 	}
 }

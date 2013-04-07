@@ -41,9 +41,13 @@
 			<label>Kind:</label>
 		</div>
 		<div class="span3">
-			<select name="date.kid">
+			<?php 
+				$dateChildren = $date->getChildren();
+				$dateChild = $dateChildren[0];
+			?>
+			<select name="date.kid" d >
 				<?php foreach ($parentChildren as $child) { ?>
-				<option value="<?= $child->getID() ?>">
+				<option value="<?= $child->getID() ?>" <?php if ($child->getID() == $dateChild->getID()){ echo ' SELECTED'; }?>>
 					<?= $child->getName() ?>
 				</option>
 				<?php }?>
@@ -55,26 +59,14 @@
 			<label>Anmerkungen:</label>
 		</div>
 		<div class="span3">
-			<textarea name="date.note" cols="40" rows="4">
-				<?php 
+			<textarea name="date.note" cols="40" rows="4"><?php 
 				echo $date->getNote();
-				?>
-			</textarea>
+				?></textarea>
 		</div>
 	</div>
-
-
-	<div class="row">
-		<div class="span2 offset2">
-			<input type="button" value="Speichern"
-				onclick="submitFormAndRefresh('changeKidDateForm', '<?= $basePath ?>index.php/manageKidDates/changeDate/<?php echo $date->getID() ?>', 'formSubmitted')"
-				class="btn" />
-		</div>
-	</div>
-
-	<div class="loaderText" style="display: none">
-		<p>
-			<img src="" /> ... der Termin wird gesendet.
-		</p>
+	<div class="buttonRow">
+			<a onclick="submitFormAndRefresh('changeKidDateForm', '<?= $basePath ?>index.php/manageKidDates/changeDate/<?php echo $date->getID() ?>', 'formSubmitted')"
+				class="btn btn-small"><i class="icon-ok" /> Speichern</a>
+			<a onclick="$.unblockUI()" class="btn btn-small"><i class="icon-remove"></i> Abbrechen</a>
 	</div>
 </form>

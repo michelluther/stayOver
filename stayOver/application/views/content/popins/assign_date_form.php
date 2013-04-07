@@ -21,8 +21,8 @@
 			</select>
 		</div>
 	</div>
-	<div class="row">
-		<div class="span6"><input type="button" value="Speichern"
-			onclick="assignDate(<?php echo $date->getID(); ?>);" class="btn" /></div>
+	<div class="buttonRow">
+		<a onclick="assignDate(<?php echo $date->getID(); ?>);" class="btn btn-small" ><i class="icon-resize-small"></i> Termin zuweisen</a>
+		<a class="btn btn-small" onclick="$.unblockUI()"><i class="icon-remove"></i> Abbrechen</a>	
 	</div>
 </form>
