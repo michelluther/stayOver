@@ -10,7 +10,9 @@ $basePath = base_url();
 <link rel=stylesheet
 	href="<?php echo $basePath . 'css/bootstrap.css'?>" type="text/css"
 	media=screen>
-	<link rel=stylesheet
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 	<link rel=stylesheet
 	href="<?php echo $basePath . 'css/bootstrap-responsive.css'?>" type="text/css"
 	media=screen>
 <!-- <link rel=stylesheet

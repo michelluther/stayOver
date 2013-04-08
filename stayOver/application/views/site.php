@@ -5,26 +5,27 @@ if(isset($header['data'])){
 } else {
 	$this->load->view('header');
 }
-/*
-if ($banner['view'] != null) {
-	$this->load->view('banner/' . $banner['view'], $banner['data'] );
-}*/
-
 ?>
 
-<div id="content" class="container"><?php
-if ($navigation['view'] != null){
+
+<div id="content" class="container">
+	<?php
+	if ($navigation['view'] != null){
 	$this->load->view('navigation/' . $navigation['view'], $navigation['data']);
 }?>
-<div id="feedbackArea" class="container">&nbsp;</div>
-<?php
-$this->load->view('content/' . $content['view'], $content['data']);
-?></div>
+	<div id="feedbackArea" class="container">&nbsp;</div>
+	<?php
+	$this->load->view('content/' . $content['view'], $content['data']);
+	if($content['view'] != 'login_screen'){
+		$this->load->view('footer/' . $footer['view'], $footer['data']);
+	}
+	?>
+</div>
 <div id="debugArea"></div>
 <?php
 $this->load->view('preloader');
 $this->load->view('popup');
-$this->load->view('footer/' . $footer['view'], $footer['data']);
+
 ?>
 
 

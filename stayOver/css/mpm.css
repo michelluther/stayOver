@@ -21,7 +21,7 @@ h4 {
 	margin: 0;
 	height: 40px;
 	padding: 10px;
-	font-size: 16px;
+	font-size: 16pt;
 	color: #fff;
 	text-shadow: -1px -1px 1px rgba(0, 0, 0, 0.2);
 }
@@ -271,14 +271,22 @@ label {
 /* Login specific */
 #login_wrapper {
 	text-align: left;
-	width: 700px;
-	margin: 100px auto;
+	width: 480px;
+	height: 200px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -100px -240px;
 	padding: 20px;
+}
+
+.form_wrapper{
+	padding: 4px;
 }
 
 #login_banner {
 	background: url("../img/logo_stayOver.png") no-repeat top right;
-	width: 260px;
+	width: 120px;
 	height: 150px;
 	float: left;
 	margin-right: 30px;

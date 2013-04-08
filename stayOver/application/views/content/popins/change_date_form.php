@@ -45,9 +45,12 @@
 				$dateChildren = $date->getChildren();
 				$dateChild = $dateChildren[0];
 			?>
-			<select name="date.kid" d >
+			<select name="date.kid" >
 				<?php foreach ($parentChildren as $child) { ?>
-				<option value="<?= $child->getID() ?>" <?php if ($child->getID() == $dateChild->getID()){ echo ' SELECTED'; }?>>
+				<option value="<?= $child->getID() ?>" <?php 
+				if ($child->getID() == $dateChild->getID()){ 
+					echo ' SELECTED'; }
+				?>>
 					<?= $child->getName() ?>
 				</option>
 				<?php }?>
