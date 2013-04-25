@@ -1,6 +1,4 @@
 <form id="addKidDateForm" action="">
-
-
 <?php $basePath = base_url(); ?>
 	<div class="row">
 		<div class="span2">
@@ -56,6 +54,6 @@
 			<a type="button"
 				onclick="submitFormAndRefresh('addKidDateForm', '<?= $basePath ?>index.php/manageKidDates/addDate')"
 				class="btn btn-small" ><i class="icon-plus"></i> Termin anlegen</a>
-			<a class="btn btn-small" onclick="$.unblockUI()"><i class="icon-remove"></i> Abbrechen</a>	
+			<a class="btn btn-small" onclick="closePopup()"><i class="icon-remove"></i> Abbrechen</a>	
 	</div>
 </form>

@@ -7,6 +7,6 @@
 <div class="buttonRow">
 <a onclick="deleteDate(<?php echo $date->getID() ?>)"
 				class="btn btn-small"><i class="icon-trash"></i> Ja, Termin l&ouml;schen</a>
-<a class="btn btn-small" onclick="$.unblockUI()"><i class="icon-remove"></i> Abbrechen</a>					
+<a class="btn btn-small" onclick="closePopup()"><i class="icon-remove"></i> Abbrechen</a>					
 </div>
 				

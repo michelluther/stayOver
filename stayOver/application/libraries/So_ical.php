@@ -87,6 +87,7 @@ class SO_Ical_Entry{
 		$this->calendarString .= SO_Ical::methodStatement . "\r\n";
 		// Date definition
 		$this->calendarString .= SO_Ical::openEventStatement . "\r\n";
+		
 		$this->calendarString .= SO_Ical::organizerField . "michel.luther@gmail.com" . "\r\n";
 		$beginDate = $this->getBeginDate();
 		$this->calendarString .= SO_Ical::dateBeginField . $beginDate . "\r\n";
@@ -112,15 +113,15 @@ class SO_Ical_Entry{
 	
 	private function getBeginDate(){
 		$bedinDateObject = Mpm_calendar::getUTCObject($this->date->getBeginDate());	// we HAVE to work with UTC-Times
-		$beginDate = Mpm_calendar::format_date_for_DataBase($bedinDateObject);
-		$beginTime = Mpm_calendar::format_time_for_DataBase($bedinDateObject);
+		$beginDate = Mpm_calendar::format_date_for_ical($bedinDateObject);
+		$beginTime = Mpm_calendar::format_time_for_ical($bedinDateObject);
 		return $beginDate . 'T' . $beginTime . 'Z';
 	}
 	
 	private function getEndDate(){
 		$endDateObject = Mpm_calendar::getUTCObject($this->date->getEndDate());	// we HAVE to work with UTC-Times
-		$endDate = Mpm_calendar::format_date_for_DataBase($endDateObject);
-		$endTime =  Mpm_calendar::format_time_for_DataBase($endDateObject);
+		$endDate = Mpm_calendar::format_date_for_ical($endDateObject);
+		$endTime =  Mpm_calendar::format_time_for_ical($endDateObject);
 		return $endDate . 'T' . $endTime . 'Z';
 	}
 	

@@ -15,7 +15,7 @@
 	</div>
 </div>  -->
 <div class="row">
-	<div class="span6">
+	<div class="span5">
 		<p>Aktuell sind folgende Helfer zugeordnet:</p>
 		<table class="table table-bordered table-condensed"
 			id="assignedHelpers">
@@ -31,7 +31,7 @@
 	</div>
 </div>
 <div class="row helperResults">
-	<div class="span6">
+	<div class="span5">
 		<table class="table table-bordered table-condensed"
 			id="helperSearchHits">
 		</table>

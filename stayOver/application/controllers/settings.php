@@ -9,7 +9,7 @@ class Settings extends SO_BaseController{
 	}
 
 	public function start(){
-		$this->header['data']['js'] = array('settings');
+		array_push($this->header['data']['js'], 'settings');
 		$this->content['data']['user'] = $this->user;
 		$parent = $this->user->getParent();
 		if ($parent != null){

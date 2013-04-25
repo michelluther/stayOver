@@ -17,6 +17,7 @@ class SO_BaseController extends CI_Controller{
 
 	protected $returnType;
 	protected $header = array();
+	protected $css;
 	protected $content = array();
 	protected $footer = array();
 	protected $banner = array();
@@ -36,8 +37,9 @@ class SO_BaseController extends CI_Controller{
 		$this->banner['data'] = null;
 		$this->footer['view'] = 'footer';
 		$this->footer['data'] = null;
-		$this->navigation['view'] = 'navArea';
+		$this->navigation['view'] = 'navAreaIcons';
 		$this->navigation['data'] = null;
+		$this->_manageDeviceDependencies();
 		if ($this->router->fetch_method() != 'login' &&  $this->router->fetch_method() != 'submit_login'){
 			$this->_get_logged_in_user();
 		}
@@ -125,7 +127,7 @@ class SO_BaseController extends CI_Controller{
 	protected function _init_navigation(){
 		if ($this->user != null){
 			$this->navigation_data = $this->Navigation_model->init_navigation($this->user);
-			$this->navigation['view'] = 'navArea';
+			$this->navigation['view'] = 'navAreaIcons';
 		}
 	}
 
@@ -156,6 +158,19 @@ class SO_BaseController extends CI_Controller{
 									 'footer' => $this->footer 
 								);
 				$this->load->view('site', $view_array);
+		}
+	}
+	
+	/*
+	 * Mobile Management
+	 */
+	private function _manageDeviceDependencies(){
+		if($this->mobile_detect->isMobile() == true && $this->mobile_detect->isTablet() == false ){
+			$this->header['data']['js'] = array('so_mobile');
+			$this->header['data']['css'] = array('bootstrap-responsive');
+		} else {
+			$this->header['data']['js'] = array('so_desktop');
+			$this->header['data']['css'] = array('bootstrap-responsive');
 		}
 	}
 	

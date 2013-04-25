@@ -12,6 +12,6 @@
 	</div>
 	<div class="buttonRow">
 		<a class="btn btn-small" onClick="addChild()" href="#"><i class="icon-plus"></i> Kind hinzuf&uuml;gen</a>
-		<a onclick="$.unblockUI()" class="btn btn-small"><i class="icon-remove"></i> Abbrechen</a>
+		<a onclick="closePopup()" class="btn btn-small"><i class="icon-remove"></i> Abbrechen</a>
 	</div>
 </form>

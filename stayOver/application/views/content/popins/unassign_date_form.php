@@ -9,7 +9,7 @@
 </div>
 <div class="buttonRow">
 		<a onclick="unassignDate(<?php echo $date->getID() ?>)" class="btn btn-small"><i class="icon-resize-full"></i> Termin freigeben</a>
-		<a onclick="$.unblockUI();" href="#"
+		<a onclick="closePopup();" href="#"
 				class="btn btn-small" ><i class="icon-remove"></i> Termin behalten</a>
 </div>
 

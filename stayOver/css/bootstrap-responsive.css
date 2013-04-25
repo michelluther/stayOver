@@ -7,6 +7,12 @@
  *
  * Designed and built with all the love in the world @twitter by @mdo and @fat.
  */
+ 
+@-webkit-viewport{width:device-width}
+@-moz-viewport{width:device-width}
+@-ms-viewport{width:device-width}
+@-o-viewport{width:device-width}
+@viewport{width:device-width}
 
 .clearfix {
   *zoom: 1;

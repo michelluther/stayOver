@@ -13,6 +13,6 @@
 		class="icon-envelope"></i> Per E-Mail zusenden</a></span>
 		
 		<a
-		class="btn btn-small" onclick="$.unblockUI()"><i class="icon-remove"></i>
+		class="btn btn-small" onclick="closePopup()"><i class="icon-remove"></i>
 		Abbrechen</a>
 </div>

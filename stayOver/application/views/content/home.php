@@ -1,9 +1,8 @@
 <?php
 if(isset($display['helperDates'])){ ?>
-
 <div class="row">
 	<div class="span6 functionalArea helperAssigned">
-		<h2 class="yellowBg">Deine n&auml;chsten Termine</h2>
+		<div class="pillow"><h2 class="yellowBg">N&auml;chste Termine</h2></div>
 		<div class="functionalAreaContent" id="nextHelperDatesDiv">
 			<?php if(count($nextDatesHelper) != 0){
 				include "include/nextDatesHelperList.php";
@@ -12,11 +11,10 @@ if(isset($display['helperDates'])){ ?>
 			<?php } ?>
 		</div>
 	</div>
-
 	<?php }
 if(isset($display['helperOpenDates'])){ ?>
 	<div class="span6 functionalArea helperOpen">
-		<h2>Offene Termine Deiner unterst&uuml;tzten Kinder</h2>
+		<div class="pillow"><h2>Offene Termine</h2></div>
 		<div class="functionalAreaContent" id="openHelperDatesDiv">
 			<div>
 				<?php if(count($openDatesHelper) != 0){
@@ -30,12 +28,11 @@ if(isset($display['helperOpenDates'])){ ?>
 		</div>
 	</div>
 </div>
-
 <?php }
 if($display['parentDates'] == true){ ?>
 <div class="row hidden-phone">
 	<div class="span12 functionalArea parentDates">
-		<h2>Die n&auml;chsten Termine Deiner Kinder</h2>
+		<div class="pillow"><h2>Termine Deiner Kinder</h2></div>
 		<div class="functionalAreaContent">
 			<a href="#" class="btn btn-small" onclick="openAddDate()"><i
 				class="icon-plus"></i> Termin anlegen</a>
@@ -50,6 +47,22 @@ if($display['parentDates'] == true){ ?>
 		</div>
 	</div>
 </div>
-
+<div class="row visible-phone">
+	<div class="span12 functionalArea parentDates">
+		<div class="pillow"><h2>Termine Deiner Kinder</h2></div>
+		<div class="functionalAreaContent">
+			<a href="#" class="btn btn-small" onclick="openAddDate()"><i
+				class="icon-plus"></i> Termin anlegen</a>
+			<div id="nextParentDatesDiv">
+				<?php
+				if(count($nextDatesParent) != 0){
+				include "include/nextDatesParentList.php";
+			} else { ?>
+				<p>keine n&auml;chsten Daten</p>
+				<?php }?>
+			</div>
+		</div>
+	</div>
+</div>
 <?php 
 } ?>

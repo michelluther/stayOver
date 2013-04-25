@@ -1,4 +1,5 @@
-<table class="table table-bordered table-condensed table-striped" id="kidDatesTable">
+<table class="table table-bordered table-condensed table-striped"
+	id="kidDatesTable">
 	<thead>
 		<tr>
 			<th>Termin</th>
@@ -10,23 +11,23 @@
 		</tr>
 	</thead>
 	<tbody>
-	<?php
-	foreach ($nextDatesParent as $date) { ?>
+		<?php
+		foreach ($nextDatesParent as $date) { ?>
 		<tr so_data.id="<?php echo $date->getID() ?>">
-			<td>
-			<?= $date->getTitle() ?>
+			<td><?= $date->getTitle() ?>
 			</td>
 			<td><?php $children = $date->getChildren(); 
 			foreach ($children as $child) {
 				echo $child->getFirstName();
 			}?></td>
-			<td><?= Mpm_Calendar::format_date_for_User($date->getBeginDate()) ?>, <?php 
-	echo Mpm_calendar::format_time_for_User($date->getBeginDate())
-	 ?>
+			<td><?= Mpm_Calendar::format_date_for_User($date->getBeginDate()) ?>,
+				<?php 
+				echo Mpm_calendar::format_time_for_User($date->getBeginDate())
+				?>
 			</td>
 			<td><?= Mpm_Calendar::format_date_for_User($date->getEndDate()) ?>, <?php 
-	echo Mpm_calendar::format_time_for_User($date->getEndDate())
-	 ?>
+			echo Mpm_calendar::format_time_for_User($date->getEndDate())
+			?>
 			</td>
 			<td><?php 
 			$helpers = $date->getHelpers();
@@ -45,13 +46,8 @@
 			?></td>
 			<td>
 				<div class="btn-group">
-					<a class="btn btn-small" onclick="openChangeDate(<?php echo $date->getID() ?>)"><i class="icon-pencil"></i></a>
-					<a class="btn btn-small" onclick="openAssignDate(<?php echo $date->getID() ?>)"><i class="icon-resize-small"></i></a> 
-					<a class="btn btn-small" onclick="openUnassignDate(<?php echo $date->getID() ?>)"><i class="icon-resize-full"></i></a> 
-					<a class="btn btn-small" onclick="openDeleteDate(<?php echo $date->getID() ?>)"><i class="icon-trash"></i></a>
-		</div>
-	<!-- <a class="btn btn-small" onclick="openSendEmail()"><i class="icon-calendar"></i></a>  -->	
-				</div>
+					<?php include 'buttons/buttonRowNextDatesParent.php'?>
+				</div> <!-- <a class="btn btn-small" onclick="openSendEmail()"><i class="icon-calendar"></i></a>  -->
 			</td>
 		</tr>
 		<?php } ?>

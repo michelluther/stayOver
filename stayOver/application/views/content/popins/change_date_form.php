@@ -70,6 +70,6 @@
 	<div class="buttonRow">
 			<a onclick="submitFormAndRefresh('changeKidDateForm', '<?= $basePath ?>index.php/manageKidDates/changeDate/<?php echo $date->getID() ?>', 'formSubmitted')"
 				class="btn btn-small"><i class="icon-ok" /> Speichern</a>
-			<a onclick="$.unblockUI()" class="btn btn-small"><i class="icon-remove"></i> Abbrechen</a>
+			<a onclick="closePopup()" class="btn btn-small"><i class="icon-remove"></i> Abbrechen</a>
 	</div>
 </form>

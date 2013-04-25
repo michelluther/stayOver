@@ -12,6 +12,8 @@ class Mpm_calendar{
 	private static $user_date_format;
 	private static $user_date_format_js;
 	private static $user_time_format;
+	private static $ical_date_format;
+	private static $ical_time_format;
 	private static $locale;
 
 	public function __construct(){
@@ -21,6 +23,8 @@ class Mpm_calendar{
 		self::$user_date_format_js = $CI->config->config['user_date_format_js'];
 		self::$db_time_format = $CI->config->config['db_time_format'];
 		self::$user_time_format = $CI->config->config['user_time_format'];
+		self::$ical_date_format = $CI->config->config['ical_date_format'];
+		self::$ical_time_format = $CI->config->config['ical_time_format'];
 	}
 
 	public static function get_user_date_format_js(){
@@ -78,6 +82,28 @@ class Mpm_calendar{
 
 	public static function format_time_for_User(DateTime $dateTime){
 		return $returnString = $dateTime->format(self::$user_time_format);
+	}
+	
+	public static function format_date_for_ical(DateTime $dateTime){
+		return $returnString = $dateTime->format(self::$ical_date_format);
+	}
+	
+	public static function format_time_for_ical(DateTime $dateTime){
+		return $returnString = $dateTime->format(self::$ical_time_format);
+	}
+	
+	public static function format_period_for_User(DateTime $begin, DateTime $end){
+		$beginDateString = self::format_date_for_User($begin);
+		$endDateString = self::format_date_for_User($end);
+		$beginTimeString = self::format_time_for_User($begin);
+		$endTimeString = self::format_time_for_User($end);
+		$returnString = $beginDateString . ', ' . $beginTimeString . ' bis ';
+		if($beginDateString == $endDateString){
+			$returnString .= $endTimeString;
+		} else {
+			$returnString .= $endDateString . ', ' . $endTimeString;
+		}
+		return $returnString;
 	}
 
 	public static function get_week_day($dateTime){

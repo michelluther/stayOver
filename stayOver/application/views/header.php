@@ -6,15 +6,26 @@
 <?php
 $basePath = base_url();
 ?>
+<link rel=stylesheet href="<?php echo $basePath . 'css/bootstrap.css'?>"
+	type="text/css" media=screen>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script type="text/javascript">
+if (navigator.userAgent.match(/IEMobile\/10\.0/)) {
+  var msViewportStyle = document.createElement("style");
+  msViewportStyle.appendChild(
+    document.createTextNode(
+      "@-ms-viewport{width:auto!important}"
+    )
+  );
+  document.getElementsByTagName("head")[0].
+    appendChild(msViewportStyle);
+}
+</script>
+<?php foreach ($css as $cssEntry) { ?>
+<link rel=stylesheet href="<?php echo $basePath . 'css/' . $cssEntry . '.css' ?>"
+	type="text/css" media=screen>
+<?php } ?>
 
-<link rel=stylesheet
-	href="<?php echo $basePath . 'css/bootstrap.css'?>" type="text/css"
-	media=screen>
-	
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
- 	<link rel=stylesheet
-	href="<?php echo $basePath . 'css/bootstrap-responsive.css'?>" type="text/css"
-	media=screen>
 <!-- <link rel=stylesheet
 	href="<?php echo $basePath . 'css/font-awesome.min.css'?>" type="text/css"
 	media=screen> -->
@@ -23,30 +34,33 @@ $basePath = base_url();
 		</script>
 <script type="text/javascript" src="<?= $basePath ?>js/jquery_1.7.js"></script>
 <!-- <script type="text/javascript" src="<?= $basePath ?>js/bootstrap.min.js"></script>  -->
-<script type="text/javascript" src="<?= $basePath ?>js/bootstrap.alert.js"></script>
-<script type="text/javascript" src="<?= $basePath ?>js/bootstrap.timepicker.js"></script>
-<script type="text/javascript" src="<?= $basePath ?>js/bootstrap-datepicker.js"></script>
+<script type="text/javascript"
+	src="<?= $basePath ?>js/bootstrap.alert.js"></script>
+<script type="text/javascript"
+	src="<?= $basePath ?>js/bootstrap.timepicker.js"></script>
+<script type="text/javascript"
+	src="<?= $basePath ?>js/bootstrap-datepicker.js"></script>
 <script type="text/javascript"
 	src="<?= $basePath ?>js/jquery.blockUI.js"></script>
 <script type="text/javascript" src="<?= $basePath ?>js/form2js.js"></script>
 <script type="text/javascript" src="<?= $basePath ?>js/so.js"></script>
+<script type="text/javascript" src="<?= $basePath ?>js/so_mobile.js"></script>
 <?php if(isset($js)){
 	foreach ($js as $jsEntry) {
 		?>
 <script type="text/javascript"
 	src="<?= $basePath ?>js/<?= $jsEntry ?>.js"></script>
-<?php
-	}
+<?php }
 } ?>
-	<link rel=stylesheet
-	href="<?php echo $basePath . 'css/timepicker.css'?>"
-	type="text/css" media=screen>
-	<link rel=stylesheet
-	href="<?php echo $basePath . 'css/datepicker.css'?>"
-	type="text/css" media=screen>
+<link rel=stylesheet
+	href="<?php echo $basePath . 'css/timepicker.css'?>" type="text/css"
+	media=screen>
+<link rel=stylesheet
+	href="<?php echo $basePath . 'css/datepicker.css'?>" type="text/css"
+	media=screen>
 <link rel=stylesheet href="<?php echo $basePath . 'css/mpm.css'?>"
 	type="text/css" media=screen>
 <!-- <link href='http://fonts.googleapis.com/css?family=Satisfy' rel='stylesheet' type='text/css'> -->
-<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin">
+<!-- <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Ubuntu:regular,bold&subset=Latin"> -->
 </head>
 <body>

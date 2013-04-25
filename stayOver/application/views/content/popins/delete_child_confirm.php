@@ -2,4 +2,4 @@
 <div class="buttonRow"><a 
 				onclick="deleteChild(<?php echo $child->getID() ?>)"
 				class="btn btn-small" >Ja, Kind l&ouml;schen</a>
-				<a onclick="$.unblockUI()" class="btn btn-small">Nein, Kind behalten</a></div>
+				<a onclick="closePopup()" class="btn btn-small">Nein, Kind behalten</a></div>
