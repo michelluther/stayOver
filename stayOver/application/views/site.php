@@ -22,8 +22,8 @@ if(isset($header['data'])){
 			$this->load->view('content/' . $content['view'], $content['data']);
 			if($content['view'] != 'login_screen'){
 				$this->load->view('footer/' . $footer['view'], $footer['data']);
-			}
-			?>
+	}
+	?>
 		</div>
 	</div>
 </div>

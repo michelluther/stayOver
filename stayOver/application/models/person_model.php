@@ -72,7 +72,7 @@ class Person_model extends CI_Model{
 	}
 	
 	public function getUserEmailByPerson(IF_BASE_NAMED_OBJECT $person){
-		$where = array('base_people.pernr' => $person);
+		$where = array('base_people.pernr' => $person->getID());
 		$this->db->from('base_users');
 		$this->db->join('base_people', 'base_users.uname = base_people.uname');
 		$this->db->select('base_users.email');

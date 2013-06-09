@@ -61,13 +61,11 @@
 	</div>
 </div>
 <!--  Kinderdaten -->
+<?php if(isset($display['parentKids'])){ ?>
 <div class="row">
 	<div class="span12 functionalArea kidsData">
 		<h2>Kinder</h2>
-		<div class="functionalAreaContentNoPadding">
-			<div class="row assignedChildren">
-				<?php include_once 'include/assigned_children.php'?>
-			</div>
-		</div>
+		<?php include_once 'include/assigned_children.php'?>
 	</div>
 </div>
+<?php } ?>

@@ -24,11 +24,11 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	public static function setUserModel($model){
 		self::$userModel = $model;
 	}
-	
+
 	public static function setPersonModel($model){
 		self::$personModel = $model;
 	}
-	
+
 	public static function setAuthorizationModel($model){
 		self::$authorizationModel = $model;
 	}
@@ -46,7 +46,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 		}
 		return $user;
 	}
-	
+
 	// Singleton
 	public static function getInstance(){
 		if (!isset(self::$instance)){
@@ -60,25 +60,25 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 		$instance = new self($uname);
 		self::$instance->init();
 	}
-	
+
 	// Begin of Object
 	private function __construct($uname){
 		$this->uname = $uname;
 	}
-	
+
 	// IF_BASE_NAMED_OBJECT
 	public function getType(){
 		return BASE_OBJECT_TYPE_USER;
 	}
-	
+
 	public function getID(){
 		return $this->uname;
 	}
-	
+
 	public function getName(){
 		return $this->person->getName();
 	}
-	
+
 	// IF_BASE_SAVEABLE
 	public function save(){
 		$changesMade = false;
@@ -86,22 +86,22 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 		$changesPerson = self::$personModel->updatePersonalData($this->person);
 		if($changesPerson == true || $changesUser == true){
 			$changesMade = true;
-		} 
+		}
 		return $changesMade;
 	}
-	
+
 	public function getFirstName(){
 		return $this->person->getFirstName();
 	}
-	
+
 	public function getLastName(){
 		return $this->person->getLastName();
 	}
-	
+
 	public function getEmail(){
 		return $this->email;
 	}
-	
+
 	private function init(){
 		$this->roles = self::$authorizationModel->getRoles($this->uname);
 		$this->person = SO_PeopleFactory::getPersonByUser($this);
@@ -109,7 +109,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 		$this->addParent();
 		$this->addHelper();
 	}
-	
+
 	public static function login($uname, $pw){
 		if(self::$userModel->login($uname, $pw)){
 			self::setInstance($uname);
@@ -117,7 +117,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 			throw Mpm_Exception('Benutzername oder Passwort falsch');
 		}
 	}
-	
+
 	public function unlock(){
 		self::$userModel->unlockUser($this);
 	}
@@ -125,19 +125,23 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	public function setEmail($email){
 		$this->email = $email;
 	}
-	
+
 	public function setFirstName($firstName){
 		$this->person->setFirstName($firstName);
 	}
-	
+
 	public function setLastName($lastName){
 		$this->person->setLastName($lastName);
 	}
-	
+
 	public static function getLoggedInUser($uname, $sessionID){
 		/* TODO: Verification of session id */
 		self::setInstance($uname);
 		return self::$instance;
+	}
+
+	public function changePassword($oldPassword, $newPassword){
+		self::$userModel->changeUserPassword($this, $oldPassword, $newPassword);
 	}
 
 	public function hasRole($role){
@@ -149,17 +153,17 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 		}
 		return $hasRole;
 	}
-	
+
 	public function assignRole($role){
 		if(!$this->hasRole($role)){
 			self::$authorizationModel->assignRole($this, $role);
 		}
 	}
-	
+
 	public function getRoles(){
 		return $this->roles;
 	}
-	
+
 	public function setPerson($person){
 		$this->person = $person;
 	}
@@ -171,7 +175,11 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	}
 
 	public function getParent(){
-		return $this->parent;
+		if($this->hasRole(ROLE_PARENT)){
+			return $this->parent;
+		} else {
+			return null;
+		}
 	}
 
 	public function addHelper(){
@@ -179,7 +187,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 			$this->helper = new SO_Helper($this->person);
 		}
 	}
-	
+
 	public function getHelper(){
 		return $this->helper;
 	}

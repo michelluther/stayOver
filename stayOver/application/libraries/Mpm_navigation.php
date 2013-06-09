@@ -65,6 +65,7 @@ class MPM_NavigationEntry{
 	private $name;
 	private $activity;
 	private $target;
+	private $icon;
 	private $enabled;
 	private $active;
 	private $index;
@@ -75,6 +76,7 @@ class MPM_NavigationEntry{
 		$this->activity =  $activity->activity;
 		$this->target = $target;
 		$this->index = $activity->index;
+		$this->icon = $activity->icon;
 		return $this;
 	}
 
@@ -102,6 +104,10 @@ class MPM_NavigationEntry{
 		return $this->index;
 	}
 
+	public function get_icon(){
+		return $this->icon;
+	}
+	
 	public function get_is_active(){
 		return $this->is_active;
 		//return true;

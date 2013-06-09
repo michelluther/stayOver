@@ -14,8 +14,10 @@ class Settings extends SO_BaseController{
 		$parent = $this->user->getParent();
 		if ($parent != null){
 			$kinder = $parent->getChildren();
+			$this->content['data']['display']['parentKids'] = true;
+			$this->content['data']['kids'] = $kinder;
 		}
-		$this->content['data']['kids'] = $kinder;
+		
 		$this->content['view'] = 'settings';
 		$this->_callView();
 	}
@@ -37,6 +39,20 @@ class Settings extends SO_BaseController{
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
 
+	}
+
+	public function changePassWord(){
+		try {
+			$clientArray = $_POST["form"]["password"];
+			if($clientArray["newPassword"] != $clientArray["newPasswordConfirm"]){
+				throw new Mpm_Exception('Bitte gib zwei Mal das selbe neue Passwort ein.');
+			}
+			$user = $this->user;
+			$user->changePassword($clientArray["password"], $clientArray["newPassword"]);
+			$this->_returnFeedback(BASE_MSG_SUCCESS, "Passwort erfolgreich geändert.");
+		} catch (Mpm_Exception $e){
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
+		}
 	}
 
 	public function removeHelper($childID, $helperID){
@@ -116,7 +132,7 @@ class Settings extends SO_BaseController{
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
 	}
-	
+
 	public function addChild(){
 		$firstName = $_POST["form"]["kid"]['firstName'];
 		$lastName = $_POST["form"]["kid"]['lastName'];
@@ -133,7 +149,7 @@ class Settings extends SO_BaseController{
 		$this->content['view'] ='popins/add_child_form';
 		$this->_callView();
 	}
-	
+
 	public function getAssignedChildren(){
 		$this->returnType = MLU_AJAX_CONTENT;
 		$parent = $this->user->getParent();
@@ -144,7 +160,7 @@ class Settings extends SO_BaseController{
 		$this->content['view'] = 'include/assigned_children';
 		$this->_callView();
 	}
-	
+
 	public function manageHelpersPopup($childID){
 		try{
 			$this->returnType = MLU_AJAX_CONTENT;

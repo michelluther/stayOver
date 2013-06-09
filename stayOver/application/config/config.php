@@ -368,7 +368,7 @@ $config['user_date_format_js'] = 'dd.mm.yyyy';
 $config['db_time_format'] = 'H:i:s';
 $config['user_time_format'] = 'H:i';
 $config['ical_date_format'] = 'Ymd';
-$config['ical_time_format'] = 'HHMMII';
+$config['ical_time_format'] = 'His';
 
 
 /* End of file config.php */

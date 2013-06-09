@@ -254,20 +254,20 @@ class ManageKidDates extends SO_BaseController{
 		// Get Recipients
 		$kids = $date->getChildren();
 		foreach ($kids as $kid) {
-			$this->email->clear();
-			$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
-			$this->email->subject('Ein neuer Termin für ' . $kid->getName() );
-			$emailMessage = $this->_setEmailHTMLHeader();
-			$emailMessage .= $this->_setEmailHTMLBody('<p>Hallo lieber Helfer</p><p>f&uuml;r Dein Helfer-Kind ' . $kid->getName() . ' gibt es einen neuen Termin am '
-					. Mpm_calendar::format_date_for_User($date->getBeginDate())
-					. '</p><p>Du kannst Dich bei StayOver anmelden und Dir die offenen Termine ansehen.</p>'
-					. '<p>Liebe Grüße<br />
-					Dein StayOver</p>');
-			$emailMessage .= $this->_setEmailHTMLFooter();
-			$this->email->message($emailMessage);
 			$helpers = $kid->getHelpers();
 			foreach ($helpers as $helper) {
 				try{
+					$this->email->clear();
+					$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
+					$this->email->subject('Ein neuer Termin für ' . $kid->getName() );
+					$emailMessage = $this->_setEmailHTMLHeader();
+					$emailMessage .= $this->_setEmailHTMLBody('<p>Hallo lieber ' . $helper->getName() .  '</p><p>f&uuml;r Dein Helfer-Kind ' . $kid->getName() . ' gibt es einen neuen Termin am '
+							. Mpm_calendar::format_date_for_User($date->getBeginDate())
+							. '</p><p>Du kannst Dich bei StayOver anmelden und Dir die offenen Termine ansehen.</p>'
+							. '<p>Liebe Grüße<br />
+							Dein StayOver</p>');
+					$emailMessage .= $this->_setEmailHTMLFooter();
+					$this->email->message($emailMessage);	
 					$this->email->to($helper->getEmail());
 					$this->email->send();
 				} catch (Mpm_Exception $e) {

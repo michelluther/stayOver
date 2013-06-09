@@ -72,7 +72,13 @@ class StayOver extends SO_BaseController{
 			$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
 			$this->email->to($this->user->getEmail());
 			$this->email->subject('Kalendereintrag für "' . $date->getTitle() . '"');
-			$this->email->message('eine Email für mich von mir ...');
+			$emailMessage = $this->_setEmailHTMLHeader();
+			$emailMessage .= $this->_setEmailHTMLBody('<p>Hallo lieber Helfer,</p>'
+													. '<p>hier ist der Kalendereintrag für den Termin am '
+													. Mpm_calendar::format_date_for_User($date->getBeginDate())
+													. '.</p>');
+			$emailMessage .= $this->_setEmailHTMLFooter();
+			$this->email->message($emailMessage);
 			$icalEntry = $this->so_ical->getIcalEntry($date, $this->user);
 			$icalString = $icalEntry->getiCalString();
 			$this->email->string_attach($icalString, 'stayOver_ical_entry.ics', 'text/calendar');

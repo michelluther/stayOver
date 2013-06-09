@@ -12,16 +12,24 @@ foreach ($kids as $kid) {
 	}
 	$kidCount ++;
 }
+$kidToAdd = 'neues Kind';
+if ($kidCount % 2 == 0){
+	array_push($evenKids, $kidToAdd);
+} else {
+	array_push($oddKids, $kidToAdd);
+}
 ?>
-<div class="span6 kidColumn" id="oddKidColumn">
-	<?php 
-	foreach ($oddKids as $kid) {
+<div class="row">
+	<div class="span6 kidColumn" id="oddKidColumn">
+		<?php 
+		foreach ($oddKids as $kid) {
 	include 'child.php';
 	 } ?>
-</div>
-<div class="span6 kidColumn" id="evenKidColumn">
-	<?php 
-	foreach ($evenKids as $kid) {
+	</div>
+	<div class="span6 kidColumn" id="evenKidColumn">
+		<?php 
+		foreach ($evenKids as $kid) {
 	include 'child.php';
 	 } ?>
+	</div>
 </div>

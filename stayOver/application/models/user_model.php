@@ -135,7 +135,7 @@ class User_model extends CI_Model{
 	
 	public function changeUserPassword(SO_User $user, $old_pw, $new_pw){
 		if($this->login($user->getID(), $old_pw) == true){
-			$security_array = $this->_create_hash_array($new_pw);
+			$pw_array = $this->_create_hash_array($new_pw);
 			$this->db->where(array('uname' => $user->getID()));
 			$data = array('password' => $pw_array['pw_hash'],
 						  'salt'	=> $pw_array['salt'] );

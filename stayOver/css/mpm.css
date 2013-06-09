@@ -274,13 +274,9 @@ label {
 }
 
 .kidColumn {
-	padding: 5px;
-	border: 1px solid;
+	padding: 5px 0;
 }
 
-#evenKidColumn {
-	margin-left: -15px;
-}
 
 .kidsData h2 {
 	background: url("../img/roter_bg.gif") repeat-x bottom;
@@ -324,9 +320,10 @@ label {
 /* Kid Lists */
 .kidListEntry {
 	border: 1px solid #cdcdce;
-	margin: 0 0 2px 0;
+	margin: 0 5px 2px 5px;
 	padding: 15px 10px 10px 10px;
 	overflow: auto;
+	min-height: 165px;
 }
 
 .newKidButton {
@@ -334,6 +331,7 @@ label {
 	margin-right: auto;
 	vertical-align: middle;
 	margin-top: 65px;
+	margin-bottom: 65px;
 	width: 110px;
 }
 
@@ -356,7 +354,7 @@ label {
 }
 
 .kidEntryBoy {
-	background: #fff url("../img/blau_f_jungs.gif") repeat-y left;
+	background: #fff;
 }
 
 .kidButtons {
@@ -386,11 +384,12 @@ label {
 }
 
 #login_banner {
-	background: url("../img/logo_stayOver.png") no-repeat top right;
+	background: url("../img/littlesHelper.png") no-repeat top right;
 	width: 120px;
 	height: 150px;
 	float: left;
 	margin-right: 30px;
+	margin-top: 5px;
 }
 
 /* Tables */

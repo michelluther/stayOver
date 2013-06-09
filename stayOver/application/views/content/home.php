@@ -29,7 +29,7 @@ if(isset($display['helperOpenDates'])){ ?>
 	</div>
 </div>
 <?php }
-if($display['parentDates'] == true){ ?>
+if(isset($display['parentDates'])){ ?>
 <div class="row hidden-phone">
 	<div class="span12 functionalArea parentDates">
 		<div class="pillow"><h2>Termine Deiner Kinder</h2></div>
