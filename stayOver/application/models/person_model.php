@@ -76,6 +76,7 @@ class Person_model extends CI_Model{
 		$this->db->from('base_users');
 		$this->db->join('base_people', 'base_users.uname = base_people.uname');
 		$this->db->select('base_users.email');
+		$this->db->where($where);
 		$query = $this->db->get();
 		$result = $query->result();
 		if(count($result) != 0){
