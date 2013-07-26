@@ -2,11 +2,13 @@
 
 include_once 'classes/So_userdata.php';
 include_once 'classes/mpm_exception.php';
+include_once "classes/Base_registration.php";
 
 class User_model extends CI_Model{
 
 	public function __construct(){
 		SO_User::setUserModel($this);
+		Base_Registration::setUserModel($this);
 	}
 
 	/*
@@ -15,9 +17,9 @@ class User_model extends CI_Model{
 	public function createUser($uname, $pw, $email){
 		$pw_array = $this->_create_hash_array($pw);
 		$user_data = array(	'uname' => $uname,
-							'password' => $pw_array['pw_hash'],
-							'salt'	=> $pw_array['salt'],
-							'email' => $email );
+				'password' => $pw_array['pw_hash'],
+				'salt'	=> $pw_array['salt'],
+				'email' => $email );
 		$result = $this->db->insert('base_users', $user_data);
 		if ($result == false){
 			throw new Exception('User konnte nicht angelegt werden');
@@ -28,7 +30,7 @@ class User_model extends CI_Model{
 		$salt = mt_rand();
 		$hash = md5($pw . $salt);
 		$security_data = array( 'pw_hash' => $hash,
-								'salt'	=> $salt );
+				'salt'	=> $salt );
 		return $security_data;
 	}
 
@@ -50,7 +52,7 @@ class User_model extends CI_Model{
 			throw new Mpm_Exception('Benutzer ist gesperrt');
 		}
 	}
-	
+
 	private function _get_salt($uname){
 		$this->db->select('salt')->from('base_users')->where('uname', $uname);
 		$query = $this->db->get();
@@ -66,7 +68,7 @@ class User_model extends CI_Model{
 	private function _check_hashed_pw($uname, $pw, $salt){
 		$pw_hashed = md5($pw . $salt);
 		$where = array(	'uname' 	=> $uname,
-						'password'	=> $pw_hashed);
+				'password'	=> $pw_hashed);
 		$query = $this->db->get_where('base_users', $where);
 		if(count($query->result()) > 0){
 			$this->_resetFailedAttampts($uname);
@@ -98,10 +100,10 @@ class User_model extends CI_Model{
 		$this->db->where($where);
 		$this->db->update('base_users', $data);
 	}
-	
+
 	private function _lockUser($uname){
 		$this->db->where(array( 'uname' => $uname,
-								'locked' => false ));
+				'locked' => false ));
 		$data = array('locked' => true );
 		$this->db->update('base_users', $data);
 	}
@@ -109,7 +111,7 @@ class User_model extends CI_Model{
 	public function updateUserData(SO_User $user){
 		// Currently, only the email-address, other (like name and so on) is saved via Person model
 		$changesMade = false;
-		$data = array('uname' => $user->getID(),
+		$data = array(	'uname' => $user->getID(),
 				'email' => $user->getEmail());
 		$query = $this->db->get_where('base_users', $data);
 		if(count($query->result()) == 0){
@@ -123,26 +125,41 @@ class User_model extends CI_Model{
 		}
 		return $changesMade;
 	}
-	
+
 	public function unlockUser(SO_User $user){
+		$currentUser = SO_User::getInstance();
+		if(!$currentUser->hasRole(ROLE_ADMIN)){
+			throw new Mpm_Exception("Das darf nur ein Administrator");
+		}
 		$changesMade = false;
-	
 		$this->db->where(array( 'uname' => $user->getID(),
-				'locked' => true ));
+								'locked' => true ));
 		$data = array('locked' => false );
 		$this->db->update('base_users', $data);
 	}
-	
+
 	public function changeUserPassword(SO_User $user, $old_pw, $new_pw){
 		if($this->login($user->getID(), $old_pw) == true){
 			$pw_array = $this->_create_hash_array($new_pw);
 			$this->db->where(array('uname' => $user->getID()));
 			$data = array('password' => $pw_array['pw_hash'],
-						  'salt'	=> $pw_array['salt'] );
+						  'salt'	 => $pw_array['salt'] );
 			$this->db->update('base_users', $data);
 		} else {
 			throw new Mpm_Exception('Benutzername falsch');
 		}
+	}
+
+	public function changeUserPasswordAdmin(SO_User $user, $new_pw){
+		$currentUser = SO_User::getInstance();
+		if(!$currentUser->hasRole(ROLE_ADMIN)){
+			throw new Mpm_Exception("Du bist kein Administrator");
+		}
+		$pw_array = $this->_create_hash_array($new_pw);
+		$this->db->where(array('uname' => $user->getID()));
+		$data = array('password' => $pw_array['pw_hash'],
+					  'salt'	 => $pw_array['salt'] );
+		$this->db->update('base_users', $data);
 	}
 
 	private function _set_pernr(){
@@ -165,6 +182,19 @@ class User_model extends CI_Model{
 		$userEmails = $query->result();
 		$userEmail = $userEmails[0]->email;
 		return $userEmail;
+	}
+	
+	public function getUserNameForEmail($emailAddress){
+		$this->db->where(array('email' => $emailAddress));
+		$this->db->select('uname');
+		$query = $this->db->get('base_users');
+		$uname = null;
+		if(count($query->result()) != 0){
+			foreach ($query->result() as $unameFound) {
+				$uname = $unameFound;
+			}
+		}
+		return $uname;
 	}
 
 }

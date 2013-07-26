@@ -6,12 +6,16 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT, IF_SO_Person, IF_SO_Parent, IF_
 
 	// Model is injected
 	protected static $model;
-
+	protected static $registrationModel;
 	private $person;
 	private $children = array();		// SO_Person
 
 	public static function setPersonModel($model){
 		self::$model = $model;
+	}
+	
+	public static function setRegistrationModel($model){
+		self::$registrationModel = $model;
 	}
 
 	public function __construct(IF_BASE_NAMED_OBJECT &$person){
@@ -106,5 +110,22 @@ class SO_Parent implements IF_BASE_NAMED_OBJECT, IF_SO_Person, IF_SO_Parent, IF_
 	// IF_BASE_SAVEABLE
 	public function save(){
 
+	}
+	
+	public function inviteHelper($emailAddress, SO_Child $childForInvitation){
+		$children = $this->getChildren();
+		$notYourChild = true;
+		foreach ($children as $child) {
+			if($child->getID() == $childForInvitation->getID() ){
+				$notYourChild = false;
+			}
+		}
+		if($notYourChild == true){
+			throw new Mpm_Exception("Das ist gar nicht Dein Kind, da kannst Du auch keine Einladung zu aussprechen.");
+		}
+		$invitation = Base_Registration::createNewInvitation($emailAddress);
+		$invitation->setAssociatedChild($childForInvitation);
+		$invitation->save();
+		return $invitation;
 	}
 }

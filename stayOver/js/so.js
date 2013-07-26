@@ -338,6 +338,25 @@ function submitLogin() {
 	});
 }
 
+function submitRegistrationKey(){
+	var postTarget = base_url + 'index.php/registration/submitRegistrationKey';
+	var loginData = form2js('registrationForm', '.');
+	$.post(postTarget, loginData, function(data) {
+		var jsonObject = JSON.parse(data);
+		var feedback = jsonObject[0]; // if successful, redirect, otherwise
+		// give feedback
+		var type = feedback.msgClass;
+		if (type == 'success') {
+			var redirectTarget = base_url + 'index.php/registration/userSetupForm';
+			window.location.replace(redirectTarget);
+		} else {
+			giveFeedback(feedback);
+		}
+	});
+}
+
+
+
 function openCalendarEntry(dateID) {
 	var getTarget = base_url + 'index.php/stayOver/icalEntryPopup/' + dateID;
 	openPopup('Kalendereintrag zusenden oder downloaden', null);

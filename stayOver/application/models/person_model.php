@@ -181,7 +181,7 @@ class Person_model extends CI_Model{
 	public function getPeopleBySearchString($searchString){
 		// searching by first name, last name
 		$searchTerms = explode(" ", $searchString);
-		$whereIsHelperString = "`is_helper` = TRUE";
+		$whereIsHelperString = "`is_public_helper` = TRUE";
 		$iterator = 0;
 		$searchNameString = "";
 		foreach ($searchTerms as $searchTerm) {

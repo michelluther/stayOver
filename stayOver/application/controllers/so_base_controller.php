@@ -6,6 +6,7 @@ define("MLU_AJAX_CONTENT", "ajaxContent");
 define("MLU_AJAX_DATA", "ajaxData");
 define("ROLE_PARENT", "eltern");
 define("ROLE_HELPER", "helfer");
+define("ROLE_ADMIN", "admin");
 define("BASE_OBJECT_TYPE_DATE", "DATE");
 define("BASE_OBJECT_TYPE_PERSON", "PERSON");
 define("BASE_OBJECT_TYPE_USER", "USER");
@@ -40,7 +41,12 @@ class SO_BaseController extends CI_Controller{
 		$this->navigation['view'] = 'navAreaIcons';
 		$this->navigation['data'] = null;
 		$this->_manageDeviceDependencies();
-		if ($this->router->fetch_method() != 'login' &&  $this->router->fetch_method() != 'submit_login'){
+		$controllerMethod = $this->router->fetch_method();
+		$controllerClass = $this->router->fetch_class();
+		if (( $controllerClass != 'registration' ) && 
+			( $controllerMethod != 'login' 
+				&& $controllerMethod != 'submit_login'))
+		{
 			$this->_get_logged_in_user();
 		}
 		$this->_init_navigation();

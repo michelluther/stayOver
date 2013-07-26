@@ -32,7 +32,7 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	public static function setAuthorizationModel($model){
 		self::$authorizationModel = $model;
 	}
-
+	
 	// Creator
 	public static function createUser($uname, $pw, $email, $firstName, $lastName){
 		self::$userModel->createUser($uname, $pw, $email);
@@ -65,7 +65,15 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 	private function __construct($uname){
 		$this->uname = $uname;
 	}
-
+	
+	public static function getUserAdmin($uname){
+		$currentUser = SO_User::getInstance();
+		if(!$currentUser->hasRole(ROLE_ADMIN)){
+			throw new Mpm_Exception("Du bist kein Administrator");
+		}
+		$user = new SO_User($uname);
+		return $user;
+	}
 	// IF_BASE_NAMED_OBJECT
 	public function getType(){
 		return BASE_OBJECT_TYPE_USER;
@@ -186,6 +194,14 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 		if($this->hasRole(ROLE_HELPER)){
 			$this->helper = new SO_Helper($this->person);
 		}
+	}
+	
+	public function resetPassword($newPassword){
+		$currentUser = SO_User::getInstance();
+		if(!$currentUser->hasRole(ROLE_ADMIN)){
+			throw new Mpm_Exception("Du bist kein Administrator");
+		}
+		self::$userModel->changeUserPasswordAdmin($this, $newPassword);
 	}
 
 	public function getHelper(){

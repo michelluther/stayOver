@@ -282,7 +282,7 @@ class ManageKidDates extends SO_BaseController{
 		foreach ($kids as $kid) {
 			$this->email->clear();
 			$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
-			$this->email->subject('Änderungen an Termin für ' . $kid->getName() );
+			$this->email->subject('�nderungen an Termin für ' . $kid->getName() );
 			$emailMessage = $this->_setEmailHTMLHeader();
 			$emailMessage .= $this->_setEmailHTMLBody('<p>Hallo lieber Helfer,</p>'
 					. '<p>f&uuml;r Dein Helfer-Kind ' . $kid->getName() . ' gab es eine Änderung an dem Termin "'

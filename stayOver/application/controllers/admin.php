@@ -11,13 +11,11 @@ class Admin extends SO_BaseController{
 	public function __construct(){
 		try {
 			parent::__construct();
-			$this->controller_name = strtolower(get_class($this));
 			if (!$this->user->hasRole('admin')) {
 				throw new Mpm_Exception('Du bist kein Administrator');
 			}
 		} catch(Mpm_Exception $e){
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
-			exit;
 		}
 	}
 
@@ -36,7 +34,6 @@ class Admin extends SO_BaseController{
 			$firstName = $_POST['form']['user']['firstName'];
 			$lastName = $_POST['form']['user']['lastName'];
 			$user = SO_User::createUser($uname, $pw, $email, $firstName, $lastName);
-				
 			$this->_returnFeedback(BASE_MSG_SUCCESS, "Der User wurde erfolgreich angelegt");
 		} catch(Mpm_Exception $e){
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
@@ -46,14 +43,25 @@ class Admin extends SO_BaseController{
 	public function unlockUser(){
 		try {
 			$uname = $_POST['form']['user']['uname'];
-			$user = new SO_User($uame);
+			$user = SO_User::getUserAdmin($uname);
 			$user->unlock();
 			$this->_returnFeedback(BASE_MSG_SUCCESS, "Der User wurde entsperrt");
 		} catch (Mpm_Exception $e) {
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
-
-
 	}
 
+	public function resetPWAdmin(){
+		try{
+			$uname = $_POST['form']['user']['uname'];
+			$user = SO_User::getUserAdmin($uname);
+			$newPassword = $_POST['form']['user']['pw_new'];
+			$user->resetPassword($newPassword);
+			$this->_returnFeedback(BASE_MSG_SUCCESS, "Das Passwort des Benutzers wurde zurückgesetzt");
+		} catch (Mpm_Exception $e) {
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
+		}
+	}
+		
+	
 }

@@ -24,10 +24,12 @@
 	</div>
 </div>
 <div class="buttonRow">
- Weitere Helfer finden 
+	Weitere Helfer finden
 	<div class="input-append" id="searchInput">
 		<input type="text" class="span3" id="helperSearchString" />
-		<button class="btn" type="button" onClick="searchHelper()"><i class="icon-search"></i></button>
+		<button class="btn" type="button" onClick="searchHelper()">
+			<i class="icon-search"></i>
+		</button>
 	</div>
 </div>
 <div class="row helperResults">
@@ -35,5 +37,16 @@
 		<table class="table table-bordered table-condensed"
 			id="helperSearchHits">
 		</table>
+	</div>
+</div>
+<div class="buttonRow">
+	<p>
+		Weitere Helfer einladen:<br />
+	<div class="input-append" id="searchInput">
+		<form id="inviteHelperForm">
+			<label>E-Mailadresse des Helfers</label><input type="text"
+				class="span3" name="inviteeEmail" />
+			<button class="btn" type="button" onClick="inviteHelper()">Absenden</button>
+		</form>
 	</div>
 </div>

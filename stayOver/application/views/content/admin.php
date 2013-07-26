@@ -68,7 +68,36 @@
 		</div>
 	</div>
 </div>
-<ul>
+<div class="row">
+	<div class="functionalArea span12 userData">
+		<h2>
+			<i class="icon-user icon-white"></i> Passwort zur&uuml;cksetzen
+		</h2>
+		<div class="functionalAreaContent">
+			<form id="resetPasswordForm">
+				<div class="row">
+					<label class="span2 offset1" for="user.uname">Benutzername</label>
+					<div class="span3">
+						<input name="user.uname" type="text" placeholder="Benutzername" />
+					</div>
+				</div>
+				<div class="row">
+					<label class="span2 offset1" for="user.pw_new">Neues Passwort</label>
+					<div class="span3">
+						<input name="user.pw_new" type="text" placeholder="Neues Passwort" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="span2 offset1">
+						<a class="btn btn-small" onClick="resetUserPW();"><i class="icon-save"></i>User
+							entsperren</a>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>	
+		<ul>
 	<li>User anlegen</li>
 	<li>User l&ouml;schen</li>
 	<li>Mail an User</li>

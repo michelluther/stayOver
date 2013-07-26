@@ -92,6 +92,11 @@ function searchHelper(){
 	});
 }
 
+function inviteHelper(){
+	var target = base_url + 'index.php/settings/inviteHelper/' + childInChange;
+	submitForm(inviteHelperForm, target);
+}
+
 function replaceHelperSearchHits(hits){
 	var additional_dom = "";
 	$.each(hits, (function(i, hit){
@@ -99,6 +104,6 @@ function replaceHelperSearchHits(hits){
 					  '</td><td width="40px"><a class="btn btn-small" onClick="addHelperToChild(' + 
 					  childInChange + ', ' + hit.id + ')"><i class="icon-plus"></i></a>' + '</td></tr>';
 		additional_dom = additional_dom + new_row;
-	}))
+	}));
 	$('#helperSearchHits').html(additional_dom);
 }

@@ -17,7 +17,6 @@ class Settings extends SO_BaseController{
 			$this->content['data']['display']['parentKids'] = true;
 			$this->content['data']['kids'] = $kinder;
 		}
-		
 		$this->content['view'] = 'settings';
 		$this->_callView();
 	}
@@ -182,5 +181,38 @@ class Settings extends SO_BaseController{
 		$this->returnType = MLU_AJAX_DATA;
 		$this->content['data']['ajax_data'] = SO_PeopleFactory::searchPeopleGeneric($searchString);
 		$this->_callView();
+	}
+	
+	public function inviteHelper($childID){
+		try{
+			$this->returnType = MLU_AJAX_DATA;
+			$parent = $this->user->getParent();
+			$childPerson = SO_PeopleFactory::getPerson($childID);
+			$child = new SO_Child($childPerson);
+			$emailAddress = $_POST["form"]["inviteeEmail"];
+			$this->load->model('Registration_model');
+			$invitation = $parent->inviteHelper($emailAddress, $child);
+			$this->_sendInvitationMail($emailAddress, $invitation->getRegistrationKey(), $child);
+			$this->_returnFeedback(BASE_MSG_SUCCESS, "Der Helfer wurde eingeladen");
+		} catch (Mpm_Exception $e){
+			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
+		}
+	}
+
+	private function _sendInvitationMail($recipient, $registrationKey, $kid){
+		$currentUser = SO_User::getInstance();
+		$this->email->clear();
+		$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
+		$this->email->subject('Änderungen an Termin fÃ¼r ' . $kid->getName() );
+		$emailMessage = $this->_setEmailHTMLHeader();
+		$emailMessage .= $this->_setEmailHTMLBody('<p>Hallo lieber Helfer,</p>'
+				. '<p>' . $currentUser->getName( ) . ' hat Dich eingeladen, als Helfer von ' . $kid->getName() . ' bei dem Programm "LittlesHelper" mitzumachen.</p>'
+				. '<p>Du kannst Dich unter mit folgendem Registrierungsschlüssel bei LittlesHelper.de anmelden.</p>' 
+				. '<p><b>' . $registrationKey . '</b></p>'
+				. '<p>Wir freuen uns auf Dich.</p>');
+		$emailMessage .= $this->_setEmailHTMLFooter();
+		$this->email->message($emailMessage);
+		$this->email->to($recipient);
+	//	$this->email->send();
 	}
 }

@@ -16,5 +16,6 @@ $baseURL = base_url();
 			</div>
 		</form>
 	</div>
+	<div><a href="<?= $baseURL ?>index.php/stayOver/forgot">Passwort vergessen?</a></div>
 	<br style="clear: both" />
 </div>
