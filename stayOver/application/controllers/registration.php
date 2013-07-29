@@ -28,10 +28,11 @@ class Registration extends SO_BaseController{
 			$invitation = Base_Registration::verifyRegistration($email, $registrationKey);
 			$userID = $invitation->getAssociatedUser();
 			if($userID == null){
-				$this->_setCookieUserGeneration();
+				$this->_setCookieUserGeneration($registrationKey);
+				$this->_returnFeedback(BASE_MSG_SUCCESS, "Registrierungsschl&uumlssel wurde erkannt");
 			}
 			// 			$this->_callView();
-			$this->_returnFeedback(BASE_MSG_SUCCESS, "Ich w&uuml;rde Dir jetzt auch echt einen anlegen...");
+			
 		} catch (Mpm_Exception $e) {
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
@@ -54,6 +55,17 @@ class Registration extends SO_BaseController{
 	public function submitUserRegistration(){
 		try {
 			$this->_validateUserGenerationKey();
+			$uname = $_POST['user']['uname'];
+			$pw	= $_POST['user']['pw'];
+			if ($pw != $_POST['user']['pw_repeat']){
+				throw new Mpm_Exception('Passwort nicht zwei mal gleich');
+			}
+			$email = $_POST['user']['email'];
+			$firstName = $_POST['user']['firstName'];
+			$lastName = $_POST['user']['lastName'];
+			$this->_clear_session();
+			$user = SO_User::createUser($uname, $pw, $email, $firstName, $lastName);
+			SO_User::login($uname, $pw);
 			$this->_returnFeedback(BASE_MSG_SUCCESS, "Der Benutzer wurde erfolgreich angelegt, viel Spa&szlig;!!");
 		} catch (Exception $e) {
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
@@ -64,7 +76,7 @@ class Registration extends SO_BaseController{
 		$this->session->set_userdata('userGenerationKey', md5(mt_rand()));
 		$this->session->set_userdata('registrationKey', $registrationKey);
 	}
-
+	
 	private function _validateUserGenerationKey(){
 		if(!isset($this->session->userdata['userGenerationKey'])){
 			throw new Mpm_Exception("Fehler beim Anlegen des Benutzers");

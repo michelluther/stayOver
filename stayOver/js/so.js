@@ -330,7 +330,7 @@ function submitLogin() {
 		// give feedback
 		var type = feedback.msgClass;
 		if (type == 'success') {
-			var redirectTarget = base_url + 'index.php/stayOver/home';
+			var redirectTarget = base_url + 'index.php/' + feedback.redirectTarget ;
 			window.location.replace(redirectTarget);
 		} else {
 			giveFeedback(feedback);
@@ -355,7 +355,22 @@ function submitRegistrationKey(){
 	});
 }
 
-
+function submitUserRegistration(){
+	var postTarget = base_url + 'index.php/registration/submitUserRegistration';
+	var loginData = form2js('createUserForm', '.');
+	$.post(postTarget, loginData, function(data) {
+		var jsonObject = JSON.parse(data);
+		var feedback = jsonObject[0]; // if successful, redirect, otherwise
+		// give feedback
+		var type = feedback.msgClass;
+		if (type == 'success') {
+			var redirectTarget = base_url + 'index.php/stayOver/home';
+			window.location.replace(redirectTarget);
+		} else {
+			giveFeedback(feedback);
+		}
+	});
+}
 
 function openCalendarEntry(dateID) {
 	var getTarget = base_url + 'index.php/stayOver/icalEntryPopup/' + dateID;

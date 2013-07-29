@@ -78,10 +78,12 @@ class SO_BaseController extends CI_Controller{
 			$pw = $credentials['pw'];
 			SO_User::login($uname, $pw);
 			$this->user = SO_User::getInstance();
-		//	$this->_init_navigation();								// needs to be redone, because it would fail in constructor
 			$this->_init_session_cookie($this->user);
-			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Du bist eingeloggt');
-			//$this->_setFeedback(BASE_MSG_SUCCESS, 'Du bist eingeloggt');
+			$redirectTarget = $this->_get_redirect_target();
+			$redirect = new Base_Redirect($redirectTarget);
+			$this->content['data']['ajax_data'] = $returnArray;
+			$this->returnType = MLU_AJAX_DATA;
+			$this->_callView();
 		} catch(Exception $e){
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
@@ -125,11 +127,19 @@ class SO_BaseController extends CI_Controller{
 
 	protected function _redirect_to_login(){
 		// TODO: Set Cookie Information for Redirect after successful login
-		$this->session->set_userdata('redirected_from', 'admin/start');
+		$this->session->set_userdata('redirected_from', $this->router->fetch_class() . '/' . $this->router->fetch_method() );
 		$loginURL = base_url() . 'index.php/' . $this->router->fetch_class() . '/login';
 		redirect($loginURL);
 	}
 
+	private function _get_redirect_target(){
+		if(isset($this->session->userdata['redirected_from'])){
+			return $this->session->userdata['redirected_from'];
+		} else {
+			return 'stayOver/home';
+		}
+	}
+	
 	protected function _init_navigation(){
 		if ($this->user != null){
 			$this->navigation_data = $this->Navigation_model->init_navigation($this->user);
@@ -221,4 +231,14 @@ class SO_BaseController extends CI_Controller{
 				<p><a href=" ' . base_url() . 'index.php/stayOver/login">Besuche uns ...</a></td></tr></table></body></html>';
 		return $returnString;
 	}
+}
+
+class Base_redirect{
+
+	private $redirectTarget;
+
+	public function __construct($target) {
+		$this->redirectTarget = $target;
+	}
+
 }
