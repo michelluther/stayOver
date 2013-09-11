@@ -2,7 +2,7 @@
 <!--  Userdaten -->
 <div class="row">
 	<div class="span6 functionalArea userData">
-		<h2>Benutzerdaten</h2>
+		<div class="personSlanted background-right iconHeading"><h2>Benutzerdaten</h2></div>
 		<div class="functionalAreaContent">
 			<form id="UserDataForm" action="">
 				<div class="row">
@@ -35,7 +35,7 @@
 		</div>
 	</div>
 	<div class="span6 functionalArea userData">
-		<h2>Passwort</h2>
+		<div class="passwordSlanted background-left iconHeading"><h2>Passwort</h2></div>
 		<div class="functionalAreaContent">
 			<form id="ChangePasswordForm" action="">
 				<div class="row">
@@ -64,7 +64,7 @@
 <?php if(isset($display['parentKids'])){ ?>
 <div class="row">
 	<div class="span12 functionalArea kidsData">
-		<h2>Kinder</h2>
+		<div class="kidsSlanted background-right iconHeading"><h2>Kinder</h2></div>
 		<?php include_once 'include/assigned_children.php'?>
 	</div>
 </div>

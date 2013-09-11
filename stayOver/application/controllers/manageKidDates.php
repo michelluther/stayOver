@@ -8,7 +8,7 @@ class ManageKidDates extends SO_BaseController{
 		$this->fault_view = 'manageKidDatesStart';
 	}
 	// Date Management
-	public function start(){
+	public function index(){
 		$this->content['view'] = 'manageKidDatesStart';
 		try {
 			$user = SO_User::getInstance();
@@ -45,8 +45,12 @@ class ManageKidDates extends SO_BaseController{
 			if ($clientArray["note"] != 'null') {
 				$newDate->setNote($clientArray["note"]);
 			}
+			if ($clientArray["helperPending"] != '0'){
+				$helper = SO_PeopleFactory::getPerson($clientArray["helperPending"]);
+				$newDate->addHelperPending($helper);
+			}
 			$newDate->save();
-			$this->informHelpersOfNewDate($newDate);
+			//	$this->informHelpersOfNewDate($newDate);
 			$this->_returnFeedback(BASE_MSG_SUCCESS, 'Termin erfolgreich angelegt');
 		} catch (Exception $e) {
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
@@ -162,7 +166,14 @@ class ManageKidDates extends SO_BaseController{
 		$this->returnType = MLU_AJAX_CONTENT;
 		$this->content['view'] = 'popins/add_date_form';
 		$user = SO_User::getInstance();
-		$this->content['data']['children'] = $user->getParent()->getChildren();
+		$children = $user->getParent()->getChildren();
+		$this->content['data']['children'] = $children;
+		$helpers = array();
+		foreach ($children as $child) {
+			$helpersOfChild = $child->getHelpers();
+			$helpers = array_merge($helpersOfChild, $helpers);
+		}
+		$this->content['data']['helpers'] = $helpers;
 		$this->_callView();
 	}
 
@@ -252,29 +263,44 @@ class ManageKidDates extends SO_BaseController{
 	private function informHelpersOfNewDate(SO_DateChild $date){
 		// Compose Mail
 		// Get Recipients
-		$kids = $date->getChildren();
-		foreach ($kids as $kid) {
-			$helpers = $kid->getHelpers();
+		if($date->getHelpersPending() == null){
+			$kids = $date->getChildren();
+			foreach ($kids as $kid) {
+				$helpers = $kid->getHelpers();
+				foreach ($helpers as $helper) {
+					try{
+						$this->composeHelperMailNewDate($date, $helper);
+					} catch (Mpm_Exception $e) {
+						// do nothing
+					}
+				}
+			}
+		} else {
+			$helpers = $date->getHelpersPending();
 			foreach ($helpers as $helper) {
 				try{
-					$this->email->clear();
-					$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
-					$this->email->subject('Ein neuer Termin für ' . $kid->getName() );
-					$emailMessage = $this->_setEmailHTMLHeader();
-					$emailMessage .= $this->_setEmailHTMLBody('<p>Hallo lieber ' . $helper->getName() .  '</p><p>f&uuml;r Dein Helfer-Kind ' . $kid->getName() . ' gibt es einen neuen Termin am '
-							. Mpm_calendar::format_date_for_User($date->getBeginDate())
-							. '</p><p>Du kannst Dich bei Littles Helper anmelden und Dir die offenen Termine ansehen.</p>'
-							. '<p>Liebe Grüße<br />
-							Dein Littles Helperr</p>');
-					$emailMessage .= $this->_setEmailHTMLFooter();
-					$this->email->message($emailMessage);	
-					$this->email->to($helper->getEmail());
-					$this->email->send();
+					$this->composeHelperMailNewDate($date, $helper);
 				} catch (Mpm_Exception $e) {
 					// do nothing
 				}
-			}
+			}			
 		}
+	}
+
+	private function composeHelperMailNewDate(SO_DateChild $date, SO_Person $helper){
+		$this->email->clear();
+		$this->email->from(BASE_MAIL_FROM, BASE_MAIL_FROM_TEXT);
+		$this->email->subject('Ein neuer Termin für ' . $kid->getName() );
+		$emailMessage = $this->_setEmailHTMLHeader();
+		$emailMessage .= $this->_setEmailHTMLBody('<p>Hallo lieber ' . $helper->getName() .  '</p><p>f&uuml;r Dein Helfer-Kind ' . $kid->getName() . ' gibt es einen neuen Termin am '
+				. Mpm_calendar::format_date_for_User($date->getBeginDate())
+				. '</p><p>Du kannst Dich bei Littles Helper anmelden und Dir die offenen Termine ansehen.</p>'
+				. '<p>Liebe Grüße<br />
+				Dein Littles Helperr</p>');
+		$emailMessage .= $this->_setEmailHTMLFooter();
+		$this->email->message($emailMessage);
+		$this->email->to($helper->getEmail());
+		$this->email->send();
 	}
 
 	private function informHelpersOfChangeToDate(SO_DateChild $date){

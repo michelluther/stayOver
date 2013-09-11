@@ -64,6 +64,43 @@ label {
 	background: url("../img/pillow_cut.png") no-repeat bottom right;
 }
 
+.iconHeading {
+	padding-top: 30px;
+}
+
+.alarmClock {
+	background: url("../img/alarm_clock_slanted.png") no-repeat;
+}
+
+
+.calendar {
+	background: url("../img/calendar_slanted.png") no-repeat;
+}
+.questionMark {
+	background: url("../img/question_mark_slanted.png") no-repeat;
+}
+
+.personSlanted {
+	background: url("../img/person_slanted.png") no-repeat;
+}
+
+.passwordSlanted {
+	background: url("../img/password_slanted.png") no-repeat;
+}
+
+.kidsSlanted {
+	background: url("../img/kids_slanted.png") no-repeat;
+}
+
+.background-right {
+	background-position: bottom right;
+}
+
+.background-left {
+	background-position: bottom left;
+	text-align: right;
+}
+
 /* End helper classes */
 
 /* Begin Navigation */
@@ -169,17 +206,15 @@ label {
 	margin: 4px -40px;
 }
 /* End Preloader */
-.greenBg {
-	background: url("../img/gruener_bg.png");
-}
 /*
 /* Begin Areas
 */
 /* Begin functional areas */
 .functionalArea h2 {
 	margin: 0;
-	height: 40px;
+	height: 30px;
 	padding: 10px;
+	vertical-align: bottom;
 	font-size: 16pt;
 	color: #999;
 }
@@ -196,7 +231,7 @@ label {
 	border: solid 1px #cdcdce;
 	border-top: 0;
 	margin-bottom: 10px;
-	background: #F6F6EC url("../img/fa-bg.png") no-repeat top center;
+	background: #F6F6EC no-repeat top center;
 	border-bottom-right-radius: 4px;
 	border-bottom-left-radius: 4px;
 	padding: 10px;
@@ -208,7 +243,7 @@ label {
 	border: solid 1px #cdcdce;
 	border-top: 0;
 	margin-bottom: 10px;
-	background: #F6F6EC url("../img/fa-bg.png") no-repeat top center;
+	background: #F6F6EC no-repeat top center;
 	border-bottom-right-radius: 4px;
 	border-bottom-left-radius: 4px;
 	margin-bottom: 10px;
@@ -244,25 +279,29 @@ label {
 }
 
 .helperAssigned .dateListEntry {
-	background: #fff url("../img/gelbe_ecke.png") no-repeat top right;
+	background: #fff;
+	border-radius: 4px;
+	border-color: #f1d31a;
 }
 
 .helperAssigned h2 {
-	background: url("../img/gelber_bg.png") repeat-x bottom;
+	border-bottom: 1px solid #f1d31a; 
 }
 
 .helperOpen .dateListEntry {
-	background: #fff url("../img/blaue_ecke.png") no-repeat top right;
+	background: #fff;
+	border-radius: 4px;
+	border-color: #1086b8;
 }
 
 
 
 .helperOpen h2 {
-	background: url("../img/blauer_bg.gif") repeat-x bottom;
+	border-bottom: 1px solid #1086b8;
 }
 
 .parentDates h2 {
-	background: url("../img/roter_bg.gif") repeat-x bottom;
+	border-bottom: 1px solid #f25e99;
 }
 
 .parentDates .dateListEntry {
@@ -270,7 +309,7 @@ label {
 }
 
 .userData h2 {
-	background: url("../img/blauer_bg.gif") repeat-x bottom;
+	border-bottom: 1px solid #1086b8;
 }
 
 .kidColumn {
@@ -279,7 +318,7 @@ label {
 
 
 .kidsData h2 {
-	background: url("../img/roter_bg.gif") repeat-x bottom;
+	border-bottom: 1px solid #f25e99;
 }
 
 .dateData {
@@ -370,13 +409,11 @@ label {
 /* Login specific */
 #login_wrapper {
 	text-align: left;
-	width: 480px;
-	height: 200px;
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	margin: -100px -240px;
 	padding: 20px;
+	margin: -100px -250px;
 }
 
 .form_wrapper {
@@ -390,6 +427,15 @@ label {
 	float: left;
 	margin-right: 30px;
 	margin-top: 5px;
+}
+
+.centeredTop {
+	text-align: left;
+	position: absolute;
+	left: 50%;
+	width: 500px;
+	padding: 20px;
+	margin: 0 -250px;
 }
 
 /* Tables */

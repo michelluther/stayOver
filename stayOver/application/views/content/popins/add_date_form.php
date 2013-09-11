@@ -42,6 +42,21 @@
 			</select>
 		</div>
 	</div>
+		<div class="row">
+		<div class="span2">
+			<label>Helfer</label>
+		</div>
+		<div class="span4">
+			<select name="date.helperPending">
+			<option value="0">Alle</option>
+			<?php foreach ($helpers as $helper) { ?>
+				<option value="<?= $helper->getID() ?>">
+				<?= $helper->getName() ?>
+				</option>
+			<?php }?>
+			</select>
+		</div>
+	</div>
 	<div class="row">
 		<div class="span2">
 			<label>Anmerkungen</label>

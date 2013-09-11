@@ -8,6 +8,10 @@ class StayOver extends SO_BaseController{
 		parent::__construct();
 	}
 
+	public function index(){
+		$this->home();
+	}
+	
 	public function submit_login(){
 		parent::submit_login();
 	}

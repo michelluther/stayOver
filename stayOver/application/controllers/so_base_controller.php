@@ -29,7 +29,7 @@ class SO_BaseController extends CI_Controller{
 	protected $fault_view;
 	protected $controller_name;
 	protected $current_activity;
-	
+
 	public function __construct(){
 		date_default_timezone_set('Europe/Berlin');
 		parent::__construct();
@@ -43,14 +43,14 @@ class SO_BaseController extends CI_Controller{
 		$this->_manageDeviceDependencies();
 		$controllerMethod = $this->router->fetch_method();
 		$controllerClass = $this->router->fetch_class();
-		if (( $controllerClass != 'registration' ) && 
-			( $controllerMethod != 'login' 
-				&& $controllerMethod != 'submit_login'))
+		if (( $controllerClass != 'registration' && $controllerClass != 'forgot' ) &&
+				( $controllerMethod != 'login'
+						&& $controllerMethod != 'submit_login'))
 		{
 			$this->_get_logged_in_user();
 		}
 		$this->_init_navigation();
-		$this->current_activity = $this->router->fetch_class() . '/' . $this->router->fetch_method();
+		$this->current_activity = $this->router->fetch_class();
 	}
 
 	public function index(){
@@ -59,13 +59,17 @@ class SO_BaseController extends CI_Controller{
 
 	/*
 	 * Login
-	 */
+	*/
 
-	public function login(){
+	public function login($firstTime = false){
 		$this->content['view'] = 'login_screen';
 		$this->content['data'] = null;
 		$this->navigation['view'] = null;
 		$this->banner['view'] = null;
+		$this->footer['view'] = null;
+		if($firstTime == true){
+			
+		}
 		$this->_callView();
 	}
 
@@ -81,14 +85,14 @@ class SO_BaseController extends CI_Controller{
 			$this->_init_session_cookie($this->user);
 			$redirectTarget = $this->_get_redirect_target();
 			$redirect = new Base_Redirect($redirectTarget);
-			$this->content['data']['ajax_data'] = $returnArray;
+			$this->content['data']['ajax_data'] = array($redirect);
 			$this->returnType = MLU_AJAX_DATA;
 			$this->_callView();
 		} catch(Exception $e){
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
 	}
-	
+
 	public function logout(){
 		$this->_clear_session();
 		$this->login();
@@ -96,13 +100,13 @@ class SO_BaseController extends CI_Controller{
 
 	protected function _extract_credentials(){
 		$credentials = array('uname' => $_POST['login']['uname'],
-							 'pw'	 => $_POST['login']['pw'] );
+				'pw'	 => $_POST['login']['pw'] );
 		return $credentials;
 	}
 
 	/*
 	 * Sessionmanagement
-	 */
+	*/
 
 	protected function _init_session_cookie(SO_User $user){
 		$this->session->set_userdata('uname', $user->getID());
@@ -116,20 +120,29 @@ class SO_BaseController extends CI_Controller{
 			$this->_redirect_to_login();
 		}
 	}
-	
+
 	protected function _clear_session(){
 		$this->session->sess_destroy();
 	}
 
 	/*
 	 * Navigation
-	 */
+	*/
 
 	protected function _redirect_to_login(){
-		// TODO: Set Cookie Information for Redirect after successful login
-		$this->session->set_userdata('redirected_from', $this->router->fetch_class() . '/' . $this->router->fetch_method() );
+		$this->_set_redirect_cookie();	
 		$loginURL = base_url() . 'index.php/' . $this->router->fetch_class() . '/login';
 		redirect($loginURL);
+	}
+
+	private function _set_redirect_cookie(){
+		if($this->router->fetch_class() != 'stayOver'){
+			$this->session->set_userdata('redirected_from', $this->router->fetch_class() . '/' . $this->router->fetch_method() );
+		}
+	}
+
+	protected function _redirect_ajax($target){
+
 	}
 
 	private function _get_redirect_target(){
@@ -139,7 +152,7 @@ class SO_BaseController extends CI_Controller{
 			return 'stayOver/home';
 		}
 	}
-	
+
 	protected function _init_navigation(){
 		if ($this->user != null){
 			$this->navigation_data = $this->Navigation_model->init_navigation($this->user);
@@ -149,7 +162,7 @@ class SO_BaseController extends CI_Controller{
 
 	/*
 	 * Output to browser
-	 */
+	*/
 
 	protected function _callView(){
 		switch ($this->returnType) {
@@ -157,29 +170,29 @@ class SO_BaseController extends CI_Controller{
 				$view_array = array('content' => $this->content );
 				$this->load->view('ajax_content', $view_array);
 				break;
-			case MLU_AJAX_DATA:		
+			case MLU_AJAX_DATA:
 				$view_data = array();
 				$this->load->view('ajax_data', $this->content['data']);
 				break;
 			default:
 				if($this->navigation_data != null){
-					$this->mpm_navigation->set_active_entry($this->navigation_data, $this->current_activity);
-				}
-				$this->navigation['data'] = $this->navigation_data;
-				$view_array = array( 'banner' => $this->banner,
-									 'header' => $this->header,
-									 'navigation' => $this->navigation,
-									 'msg' => $this->msg,
-									 'content' => $this->content,
-									 'footer' => $this->footer 
-								);
-				$this->load->view('site', $view_array);
+				$this->mpm_navigation->set_active_entry($this->navigation_data, $this->current_activity);
+			}
+			$this->navigation['data'] = $this->navigation_data;
+			$view_array = array( 'banner' => $this->banner,
+					'header' => $this->header,
+					'navigation' => $this->navigation,
+					'msg' => $this->msg,
+					'content' => $this->content,
+					'footer' => $this->footer
+			);
+			$this->load->view('site', $view_array);
 		}
 	}
-	
+
 	/*
 	 * Mobile Management
-	 */
+	*/
 	private function _manageDeviceDependencies(){
 		if($this->mobile_detect->isMobile() == true && $this->mobile_detect->isTablet() == false ){
 			$this->header['data']['js'] = array('so_mobile');
@@ -189,13 +202,13 @@ class SO_BaseController extends CI_Controller{
 			$this->header['data']['css'] = array('bootstrap-responsive');
 		}
 	}
-	
+
 	/*
 	 * Error and Success Handling
-	 */
+	*/
 	protected function _handleError(Exception $e){
 		$this->msg = array(	'msg_class' => 'msg_error',
-						   	'msg_text'	=> $e->getMessage());
+				'msg_text'	=> $e->getMessage());
 		$this->content['view'] = $e->get_fault_view();
 		if($this->content['view'] == null){
 			$this->content['view'] = 'login_screen';
@@ -203,32 +216,32 @@ class SO_BaseController extends CI_Controller{
 		$this->content['data'] = $e->get_fault_data();
 		$this->_callView();
 	}
-	
+
 	protected function _setFeedback($msgClass, $msgText){
 		$this->msg = $this->base_messager->get_message($msgClass, $msgText);
 	}
-	
+
 	protected function _returnFeedback($msgClass, $msgText){
 		$msg = $this->base_messager->get_message($msgClass, $msgText);
 		$this->load->view('ajax_data', array('ajax_data' => array($msg)));
 	}
-	
+
 	protected function _setEmailHTMLHeader(){
-		$returnString = '<html><head><style type="text/css">' 
-				. 'font-family:"Calibri", "Arial", sans-serif'
-				. '</style></head><body><table><tr><td><img src="' . base_url() . '/img/logo_stayOver.png"/></td></tr>';
+		$returnString = '<html><head><style type="text/css">'
+		. 'font-family:"Calibri", "Arial", sans-serif'
+		. '</style></head><body><table><tr><td><img src="' . base_url() . '/img/logo_stayOver.png"/></td></tr>';
 		return $returnString;
 	}
-	
+
 	protected function _setEmailHTMLBody($bodyText){
 		$returnString = '<tr><td>' . $bodyText . '</td></tr>';
 		return $returnString;
 	}
-	
+
 	protected function _setEmailHTMLFooter(){
 		$returnString = '<tr><td><p>Liebe Grüße<br />
-					Dein StayOver</p>
-				<p><a href=" ' . base_url() . 'index.php/stayOver/login">Besuche uns ...</a></td></tr></table></body></html>';
+		Dein StayOver</p>
+		<p><a href=" ' . base_url() . 'index.php/stayOver/login">Besuche uns ...</a></td></tr></table></body></html>';
 		return $returnString;
 	}
 }
@@ -239,6 +252,10 @@ class Base_redirect{
 
 	public function __construct($target) {
 		$this->redirectTarget = $target;
+	}
+
+	public function getJSONableData(){
+		return get_object_vars($this);
 	}
 
 }

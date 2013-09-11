@@ -16,10 +16,13 @@ class User_model extends CI_Model{
 	*/
 	public function createUser($uname, $pw, $email){
 		$pw_array = $this->_create_hash_array($pw);
+		if(!$this->_validateEmail($email)){
+			throw new Mpm_Exception('Die Emailadresse ist nicht g&uuml;ltig.');
+		}
 		$user_data = array(	'uname' => $uname,
-				'password' => $pw_array['pw_hash'],
-				'salt'	=> $pw_array['salt'],
-				'email' => $email );
+							'password' => $pw_array['pw_hash'],
+							'salt'	=> $pw_array['salt'],
+							'email' => $email );
 		$result = $this->db->insert('base_users', $user_data);
 		if ($result == false){
 			throw new Exception('User konnte nicht angelegt werden');
@@ -30,7 +33,7 @@ class User_model extends CI_Model{
 		$salt = mt_rand();
 		$hash = md5($pw . $salt);
 		$security_data = array( 'pw_hash' => $hash,
-				'salt'	=> $salt );
+								'salt'	=> $salt );
 		return $security_data;
 	}
 
@@ -103,7 +106,7 @@ class User_model extends CI_Model{
 
 	private function _lockUser($uname){
 		$this->db->where(array( 'uname' => $uname,
-				'locked' => false ));
+								'locked' => false ));
 		$data = array('locked' => true );
 		$this->db->update('base_users', $data);
 	}
@@ -111,8 +114,11 @@ class User_model extends CI_Model{
 	public function updateUserData(SO_User $user){
 		// Currently, only the email-address, other (like name and so on) is saved via Person model
 		$changesMade = false;
+		if(!$this->_validateEmail($user->getEmail())){
+			throw new Mpm_Exception('Die Emailadresse ist nicht g&uuml;ltig.');
+		}
 		$data = array(	'uname' => $user->getID(),
-				'email' => $user->getEmail());
+						'email' => $user->getEmail());
 		$query = $this->db->get_where('base_users', $data);
 		if(count($query->result()) == 0){
 			$this->db->where(array( 'uname' => $user->getID()));
@@ -140,11 +146,8 @@ class User_model extends CI_Model{
 
 	public function changeUserPassword(SO_User $user, $old_pw, $new_pw){
 		if($this->login($user->getID(), $old_pw) == true){
-			$pw_array = $this->_create_hash_array($new_pw);
-			$this->db->where(array('uname' => $user->getID()));
-			$data = array('password' => $pw_array['pw_hash'],
-						  'salt'	 => $pw_array['salt'] );
-			$this->db->update('base_users', $data);
+			$userName = $user->getID();
+			$this->_setPW($userName, $new_pw);
 		} else {
 			throw new Mpm_Exception('Benutzername falsch');
 		}
@@ -154,11 +157,50 @@ class User_model extends CI_Model{
 		$currentUser = SO_User::getInstance();
 		if(!$currentUser->hasRole(ROLE_ADMIN)){
 			throw new Mpm_Exception("Du bist kein Administrator");
+		} else {
+			$userName = $user->getID();
+			$this->_setPW($userName, $new_pw);
 		}
-		$pw_array = $this->_create_hash_array($new_pw);
-		$this->db->where(array('uname' => $user->getID()));
+	}
+	
+	public function createPasswordResetToken($email){
+		$passwordResetToken = md5(mt_rand());
+		if(!$this->_validateEmail($email)){
+			throw new Mpm_Exception('Die Emailadresse ist nicht g&uuml;ltig.');
+		}
+		$data = array(	'email' => $email,
+						'token'	=> $passwordResetToken);
+		$this->db->where(array('email' => $email));
+		$query = $this->db->insert('base_pw_reset', $data);
+		return $passwordResetToken;
+	}
+	
+	public function resetPasswordViaToken($email, $token, $pw){
+		if($this->_validatePasswordResetToken($email, $token)){
+			$userName = $this->getUserNameForEmail($email);
+			$this->_setPW($userName, $pw);
+		} else {
+			throw new Mpm_Exception("Der Token ist nicht g&uuml;ltig.");
+		}
+	}
+	
+	private function _validatePasswordResetToken($email, $passwordResetToken){
+		$where = array(	'email' => $email,
+						'token' => $passwordResetToken );
+		$this->db->where($where);
+		$query = $this->db->get('base_pw_reset');
+		if(count($query->result()) == 1){
+			return true;
+		} else {
+			return false;
+		}	
+	}
+	
+	private function _setPW($userName, $pw){
+		$pw_array = $this->_create_hash_array($pw);
+		$this->db->where(array('uname' => $userName));
 		$data = array('password' => $pw_array['pw_hash'],
-					  'salt'	 => $pw_array['salt'] );
+				'salt'	 => $pw_array['salt'] );
 		$this->db->update('base_users', $data);
 	}
 
@@ -191,10 +233,14 @@ class User_model extends CI_Model{
 		$uname = null;
 		if(count($query->result()) != 0){
 			foreach ($query->result() as $unameFound) {
-				$uname = $unameFound;
+				$uname = $unameFound->uname;
 			}
 		}
 		return $uname;
+	}
+	
+	private function _validateEmail($email){
+		return filter_var($email, FILTER_VALIDATE_EMAIL);
 	}
 
 }

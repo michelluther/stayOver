@@ -4,6 +4,7 @@ class SO_DateChild extends SO_DateBase{
 	protected $children = array();
 	protected $things = array();
 	protected $helpers = array();
+	protected $helpersPending = array();
 	
 	public function __construct($id = null){
 		parent::__construct($id);
@@ -30,6 +31,10 @@ class SO_DateChild extends SO_DateBase{
 		$this->helpers[$helper->getID()] = $helper;
 	}
 	
+	public function addHelperPending(SO_Person $helper){
+		$this->helpersPending[$helper->getID()] = $helper;
+	}
+	
 	public function removeHelpers(){
 		$this->helpers = array();
 	}
@@ -48,5 +53,9 @@ class SO_DateChild extends SO_DateBase{
 	
 	public function getHelpers(){
 		return $this->helpers;
+	}
+	
+	public function getHelpersPending(){
+		return $this->helpersPending;
 	}
 }

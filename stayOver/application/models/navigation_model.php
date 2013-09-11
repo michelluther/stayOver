@@ -6,17 +6,20 @@ class Navigation_model extends CI_Model{
 	private $user;
 	private $navigation;
 
-	public function init_navigation(&$user){
+	public function init_navigation(&$user, $area = null){
 		$this->user = $user;
-		$this->_set_navigation();
+		$this->_set_navigation($area);
 		return $this->navigation;
 	}
 
-	private function _set_navigation(){
+	private function _set_navigation($area){
 		$activities = array();
 		foreach ($this->user->roles as $role) {
 			$where = array('role_id' => $role->getID(),
 										 'navigation' => true);
+			if($area != null){
+				$where['id'] = 'logout';
+			}
 			$this->db->select('*');
 			$this->db->from('sec_role_content_assignments');
 			$this->db->join('sec_role_content', 'sec_role_content_assignments.content_id = sec_role_content.id', 'inner'); 

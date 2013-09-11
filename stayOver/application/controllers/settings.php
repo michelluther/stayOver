@@ -8,7 +8,7 @@ class Settings extends SO_BaseController{
 		parent::__construct();
 	}
 
-	public function start(){
+	public function index(){
 		array_push($this->header['data']['js'], 'settings');
 		$this->content['data']['user'] = $this->user;
 		$parent = $this->user->getParent();

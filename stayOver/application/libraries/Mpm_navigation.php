@@ -12,7 +12,7 @@ class Mpm_navigation {
 		}
 		return $this->navigation;
 	}
-
+	
 	public function set_active_entry(&$navigation, $activity){
 		$navigation->set_active_entry($activity);
 	}

@@ -9,12 +9,13 @@ class Registration extends SO_BaseController{
 		$this->load->model('Registration_model');
 	}
 
-	public function register(){
+	public function index(){
 		try {
 			$this->content['view'] = 'register';
 			$this->content['data'] = null;
 			$this->navigation['view'] = null;
 			$this->banner['view'] = null;
+			$this->footer['view'] = null;
 			$this->_callView();
 		} catch (Exception $e) {
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());

@@ -92,6 +92,11 @@ function searchHelper(){
 	});
 }
 
+function changePassword(){
+	var target = base_url + 'index.php/settings/changePassWord';
+	submitForm('ChangePasswordForm', target);
+}
+
 function inviteHelper(){
 	var target = base_url + 'index.php/settings/inviteHelper/' + childInChange;
 	submitForm(inviteHelperForm, target);

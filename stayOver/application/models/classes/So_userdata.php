@@ -203,6 +203,15 @@ class SO_User implements IF_BASE_NAMED_OBJECT, IF_BASE_SAVEABLE{
 		}
 		self::$userModel->changeUserPasswordAdmin($this, $newPassword);
 	}
+	
+	public static function requestPasswordReset($email){
+		$token = self::$userModel->createPasswordResetToken($email);
+		return $token;
+	}
+	
+	public static function resetPasswordViaToken($email, $token, $pw){
+		self::$userModel->resetPasswordViaToken($email, $token, $pw);
+	}
 
 	public function getHelper(){
 		return $this->helper;

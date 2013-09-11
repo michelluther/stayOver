@@ -6,8 +6,6 @@ if(isset($header['data'])){
 	$this->load->view('header');
 }
 ?>
-
-
 <div id="content" class="container">
 	<?php
 	if ($navigation['view'] != null){
@@ -20,18 +18,14 @@ if(isset($header['data'])){
 		<div id="contentDiv">
 			<?php
 			$this->load->view('content/' . $content['view'], $content['data']);
-			if($content['view'] != 'login_screen'){
+			if($footer['view'] != null){
 				$this->load->view('footer/' . $footer['view'], $footer['data']);
 	}
 	?>
 		</div>
 	</div>
 </div>
-<div id="debugArea"></div>
 <?php
 $this->load->view('preloader');
 $this->load->view('popup');
-
 ?>
-
-

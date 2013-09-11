@@ -31,9 +31,11 @@
 			</td>
 			<td><?php 
 			$helpers = $date->getHelpers();
-			if (count($helpers) == 0){
+			$helpersPending = $date->getHelpersPending();
+			if (count($helpers) == 0 && count($helpersPending) == 0){
 				echo '&nbsp;';
-			} else {
+			} elseif(count($helpers) != 0) {
+				?><span class="text-success"><?php 
 				$iterator = 0;
 				foreach ($helpers as $helper) {
 					if ($iterator != 0){
@@ -42,6 +44,18 @@
 					echo $helper->getName();
 					$iterator += 1;
 				}
+				?></span><?php 
+			} else {
+				?><span class="muted"><?php
+				$iterator = 0;
+				foreach ($helpersPending as $helper) {
+					if ($iterator != 0){
+						echo ',<br />';
+					}
+					echo $helper->getName();
+					$iterator += 1;
+				}
+				?></span><?php
 			}
 			?></td>
 			<td>

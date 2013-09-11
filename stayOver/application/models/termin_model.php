@@ -62,7 +62,7 @@ class Termin_model extends CI_Model{
 
 	public function getOpenDatesByChild(IF_BASE_NAMED_OBJECT $child, IF_BASE_NAMED_OBJECT $helper = null, DateTime $periodBeginDate = null, DateTime $periodEndDate){
 		$where = array('so_date_child.child_id' => $child->getID(),
-				'so_dates.deleted' => false );
+					   'so_dates.deleted' => false );
 		if($periodBeginDate != null){
 			$beginDate = Mpm_Calendar::format_date_for_DataBase($periodBeginDate);
 			$where['begda >='] = $beginDate;
@@ -75,13 +75,14 @@ class Termin_model extends CI_Model{
 		$this->db->from('so_date_child');
 		$this->db->join('so_dates', 'so_date_child.date_id = so_dates.id');
 		$this->db->join('so_date_helper', 'so_dates.id = so_date_helper.date_id', 'left');
+		$this->db->join('so_date_helper_pending', 'so_dates.id = so_date_helper_pending.date_id', 'left');
 		$this->db->where($where);
 		$query = $this->db->get();
 		$returnDates = array();
 		if($query != false){
 			$result = $query->result();
 			foreach ($result as $value) {
-				if($value->helper_id == null){
+				if($value->helper_id == null && ($value->helper_id_pending == null || $value->helper_id_pending == $helper->getID())){
 					$returnDates[$value->begda . '_' . $value->id] = SO_DateFactory::getDate($value->id);
 				}
 			}
@@ -127,6 +128,10 @@ class Termin_model extends CI_Model{
 				foreach ($helpers as $helper) {
 					$date->addHelper($helper);
 				}
+				$helpersPending = $this->_getDateHelperPending($date);
+				foreach ($helpersPending as $helper) {
+					$date->addHelperPending($helper);
+				}
 				$date->setNote($value->note);
 			}
 		}
@@ -158,6 +163,22 @@ class Termin_model extends CI_Model{
 		if($query != null){
 			foreach ($query->result() as $value){
 				$helper = SO_PeopleFactory::getPerson($value->helper_id);
+				array_push($helpers, $helper);
+			}
+		}
+		return $helpers;
+	}
+	
+	private function _getDateHelperPending(SO_DateChild $date){
+		$where = array('date_id' => $date->getID());
+		$this->db->from('so_date_helper_pending');
+		$this->db->where($where);
+		$this->db->select('helper_id_pending');
+		$query = $this->db->get();
+		$helpers = array();
+		if($query != null){
+			foreach ($query->result() as $value){
+				$helper = SO_PeopleFactory::getPerson($value->helper_id_pending);
 				array_push($helpers, $helper);
 			}
 		}
@@ -289,7 +310,7 @@ class Termin_model extends CI_Model{
 		$this->db->trans_begin();
 		try{
 			// Base Data
-				
+
 			$dateData = array(
 					'title' => $date->getTitle(),
 					'begda' => $beginDate,
@@ -314,6 +335,12 @@ class Termin_model extends CI_Model{
 				}
 			}
 			// Helpers
+			$helpersPending = $date->getHelpersPending();
+			if($helpersPending != null){
+				foreach ($helpersPending as $helperPending) {
+					$this->assignDateToHelperPending($date, $helperPending->getID());
+				}
+			}
 			// ToDo: Helpers
 		} catch (Exception $ex){
 			$this->db->trans_complete();
@@ -359,10 +386,29 @@ class Termin_model extends CI_Model{
 		}
 	}
 
+	private function assignDateToHelperPending(IF_BASE_NAMED_OBJECT $date, $helperID){
+		$data = array('date_id' => $date->getID(),
+				'helper_id_pending' => $helperID,
+				'deleted' => false );
+		$query = $this->db->insert('so_date_helper_pending', $data);
+		if($query == false){
+			throw new Mpm_Exception('Fehler beim Anlegen des Helfers f&uumlr den Termin');
+		}
+	}
+	
 	private function removeDateToHelperAssignment($date, $helperID){
 		$where = array('date_id' => $date->getId(),
 				'helper_id' => $helperID);
 		$query = $this->db->delete('so_date_helper', $where);
+		if($query != true){
+			throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
+		}
+	}
+	
+	private function removeDateToHelperPendingAssignment($date, $helperID){
+		$where = array('date_id' => $date->getId(),
+				'helper_id_pending' => $helperID);
+		$query = $this->db->delete('so_date_helper_pending', $where);
 		if($query != true){
 			throw new Mpm_Exception('Fehler bei Speichern der Kindzuordnung');
 		}

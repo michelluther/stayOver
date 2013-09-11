@@ -6,7 +6,7 @@
 
 include_once 'so_base_controller.php';
 
-class Admin extends SO_BaseController{
+class Help extends SO_BaseController{
 
 	public function __construct(){
 		try {
@@ -14,24 +14,13 @@ class Admin extends SO_BaseController{
 			if($this->user == null){
 				return; // redirect to login done in parent!
 			}
-			if (!$this->user->hasRole('admin')) {
-				throw new Mpm_Exception('Du bist kein Administrator');
-			}
 		} catch(Mpm_Exception $e){
 			$this->_returnFeedback(BASE_MSG_ERROR, $e->getMessage());
 		}
 	}
 
-	protected function _init_navigation(){
-		if ($this->user != null){
-			$this->navigation_data = $this->Navigation_model->init_navigation($this->user, 'admin');
-			$this->navigation['view'] = 'navAreaIcons';
-		}
-	}
-	
 	public function index(){
-		$this->content['view'] = 'admin';
-		$this->header['data']['js'] = array('admin');
+		$this->content['view'] = 'help';
 		$this->content['data'] = null;
 		$this->_callView();
 	}

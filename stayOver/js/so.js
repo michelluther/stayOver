@@ -329,7 +329,7 @@ function submitLogin() {
 		var feedback = jsonObject[0]; // if successful, redirect, otherwise
 		// give feedback
 		var type = feedback.msgClass;
-		if (type == 'success') {
+		if (type != 'error') {
 			var redirectTarget = base_url + 'index.php/' + feedback.redirectTarget ;
 			window.location.replace(redirectTarget);
 		} else {
@@ -364,12 +364,22 @@ function submitUserRegistration(){
 		// give feedback
 		var type = feedback.msgClass;
 		if (type == 'success') {
-			var redirectTarget = base_url + 'index.php/stayOver/home';
+			var redirectTarget = base_url + 'index.php/stayOver';
 			window.location.replace(redirectTarget);
 		} else {
 			giveFeedback(feedback);
 		}
 	});
+}
+
+function submitPwResetRequest(){
+	var postTarget = base_url + 'index.php/forgot/submitResetRequest';
+	submitForm('resetPwRequestForm', postTarget);
+	//var requestData = form2js('resetPwRequestForm', '.');
+}
+
+function submitPwReset(){
+	
 }
 
 function openCalendarEntry(dateID) {
