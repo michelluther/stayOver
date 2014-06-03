@@ -1,0 +1,170 @@
+@CHARSET "UTF-8";
+
+/* General */
+
+body{
+	font-family: Ubuntu, sans-serif;
+	color: #888;
+	font-size:10pt;
+}
+
+h1{
+	color: #B2B2B2;
+	font-size: 18pt;
+	margin: 0 0 20px 0;
+	padding: 0;
+}
+
+h2{
+	color: #B2B2B2;
+	font-size: 14pt;
+	padding: 0;
+}
+
+h3{
+	color: #B2B2B2;
+	font-size: 11pt;
+	margin: 0 0 20px 0;
+	padding: 0;
+	font-weight: bold
+}
+
+h3 i {
+	margin: 1;
+}
+
+h4 {
+	font-weight: bold;
+	margin-bottom: 15px;
+}
+/* Tables */
+
+/* Content */
+
+#content_wrapper{
+	padding: 10px;
+	margin: 0 auto;
+}
+
+#content{
+
+}
+
+#feedbackArea{
+	padding-top: 50px;
+}
+
+.preloader{
+	display: none;
+	color: #888;
+}
+
+.preloader-large{
+	width: 100%;
+	background: url("../img/preloader_28x28.gif") no-repeat bottom center;
+	height: 50px;
+}
+
+.preloader-small{
+	width: 15px;
+	background: url("../img/preloader_14x14.gif") no-repeat bottom center;
+	height: 15px;
+	margin: 4px -40px;
+}
+
+.description {
+	float:left;
+}
+
+.open {
+	display: inline-block;
+}
+
+.date_list_entry_content{
+	width: 290px;
+	float: left;
+}
+
+.functionalArea{
+	background-color: #f9f9f9;
+	padding: 10px;
+	border-bottom: solid 2px #333;
+}
+
+.borderTopBlue{
+	border-top: solid 8px #4ECDC4;
+}
+
+.borderTopMighty{
+	border-top: solid 8px #556270;
+}
+
+/* form layout */
+input {
+	height: 25px;
+}
+
+form {
+	margin: 0;
+}
+
+/* Login specific */
+
+#login_wrapper{
+	text-align: left;
+	width: 700px;
+	margin: 100px auto;
+	padding: 20px;
+	border: 1px #eee solid;
+}
+
+#login_banner{
+	background: url("../img/logo_stayover.png") no-repeat;
+	width: 260px;
+	height: 150px;
+	float:left;
+	border-right: 1px solid #8CE474;
+	margin-right: 30px;
+}
+
+
+/* Tables */
+
+table{
+	border: none;
+	font-size: 10pt;
+}
+
+
+td{
+	padding: 3px 5px 5px 5px;
+	border: none;
+	vertical-align: top;
+}
+
+th{
+	border: 1px solid #999;
+	padding: 4px;
+}
+
+.loaderText {
+	margin: 15px;
+	font-size: 9px;
+	vertical-align: top;
+	float: right;
+}
+.highlight{
+	background: #f1f1f1;
+}
+
+.kidButtons {
+	vertical-align: middle;
+	padding-top: 7px; 
+}
+
+.plainwhite{
+	color: #fff;
+	text-decoration: none;
+	cursor: hand;
+	cursor: pointer;
+}
